@@ -3,5 +3,5 @@ from flask import Flask
 
 env = environ.get('GMW_APP_ENV', 'development').capitalize()
 
-application = Flask(__name__)
-application.config.from_object('gitmostwanted.config.Config' + env)
+app = Flask(__name__)
+app.config.from_object('gitmostwanted.config.Config' + env)
