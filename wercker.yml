@@ -5,10 +5,8 @@ build:
             name: setup virtual environment
             #install_wheel: false
             python_location: /usr/bin/python3.4
-        - pip-install
-            # clean_wheel_dir: true
+        - pip install pytest-pep8 pytest-cov
+        - pip install -r requirements.txt
         - script:
-            name: echo python information
-            code: |
-                echo "python version $(python --version) running"
-                echo "pip version $(pip --version) running"
+            name: py.test
+            code: "py.test --pep8 --clearcache --cov gitmostwanted tests/unit"
