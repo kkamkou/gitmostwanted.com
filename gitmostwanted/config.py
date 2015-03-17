@@ -1,5 +1,5 @@
 class Config:
-    SQLALCHEMY_DATABASE_URI = ''
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@localhost/gitmostwanted'
     SECRET_KEY = 'secret_key'
     DEBUG = False
     TESTING = False

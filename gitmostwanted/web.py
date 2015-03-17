@@ -1,6 +1,5 @@
-from gitmostwanted.app import app, github
-from flask import render_template, redirect, request, session, flash, url_for
-
+from gitmostwanted.app import app, db, github
+from flask import flash, render_template, redirect, request, session, url_for
 
 @app.route('/')
 def index():
