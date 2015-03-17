@@ -12,5 +12,5 @@ app.config.from_envvar('GMW_APP_SETTINGS', silent=True)
 db = SQLAlchemy(app)
 
 oauth = OAuth()
-github = oauth.remote_app('github', app_key='OAUTH_GITHUB')
+oauth.remote_app('github', app_key='OAUTH_GITHUB')
 oauth.init_app(app)
