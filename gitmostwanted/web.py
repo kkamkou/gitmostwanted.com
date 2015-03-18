@@ -1,5 +1,5 @@
-from gitmostwanted.app import app, db, oauth
-from flask import flash, render_template, redirect, request, session, url_for
+from gitmostwanted.app import app, oauth
+from flask import render_template, redirect, request, session, url_for
 
 
 @app.route('/')
@@ -20,12 +20,10 @@ def oauth_authorized():
 
     resp = oauth.github.authorized_response()
     if resp is None:
-        # flash(u'You denied the request to sign in.')
         return redirect(next_url)
 
     session['github_token'] = (resp['access_token'], '')
 
-    # flash('You were signed in')
     return redirect(next_url)
 
 

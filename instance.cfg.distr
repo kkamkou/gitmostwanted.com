@@ -1,3 +1,4 @@
+SECRET_KEY = 'secret_key'
 OAUTH_GITHUB = {
     'consumer_key': '',
     'consumer_secret': '',
