@@ -1,9 +1,16 @@
-from gitmostwanted.app import app, oauth
-from flask import render_template, redirect, request, session, url_for
+from gitmostwanted.app import app, db, oauth
+from gitmostwanted.models.user import User
+from flask import render_template, redirect, request, session, url_for, jsonify
 
 
 @app.route('/')
 def index():
+    if 'github_token' in session:
+        me = oauth.github.get('user')
+        if not User.query.filter_by(email=me.data['email']).count():
+            db.session.add(User(me.data['email'], me.data['login']))
+            db.session.commit()
+            return jsonify(me.data)
     return render_template('index.html')
 
 
@@ -32,4 +39,5 @@ def oauth_github_token():
     return session.get('github_token')
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(host='0.0.0.0')
