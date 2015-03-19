@@ -1,5 +1,4 @@
 class Config(object):
-    SQLALCHEMY_DATABASE_URI = ''
     SQLALCHEMY_ECHO = False
     SECRET_KEY = ''
     TESTING = False
