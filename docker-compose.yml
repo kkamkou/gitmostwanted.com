@@ -5,3 +5,10 @@ gitmostwanted:
     - "5000:5000"
   volumes:
     - ./gitmostwanted:/opt/gitmostwanted
+  links:
+    - db
+
+db:
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
