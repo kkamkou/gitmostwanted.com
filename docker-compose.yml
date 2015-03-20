@@ -4,7 +4,9 @@ gitmostwanted:
   ports:
     - "5000:5000"
   volumes:
-    - ./gitmostwanted:/opt/gitmostwanted
+    - ./:/opt
+  environment:
+    - GMW_APP_SETTINGS=/opt/instance.cfg
   links:
     - db
 
