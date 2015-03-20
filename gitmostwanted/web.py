@@ -16,14 +16,14 @@ def index():
 
 @app.route('/oauth/login')
 def oauth_login():
-    url_next = request.args.get('next') or request.referrer or None
-    url_cb = url_for('oauth_authorized', next=url_next, _external=True)
-    return oauth.github.authorize(callback=url_cb)
+    return oauth.github.authorize(
+        callback=url_for('oauth_authorized', next=url_next(), _external=True)
+    )
 
 
 @app.route('/oauth/authorized')
 def oauth_authorized():
-    next_url = request.args.get('next') or url_for('index')
+    next_url = url_next() or url_for('index')
 
     resp = oauth.github.authorized_response()
     if resp is None:
@@ -37,6 +37,10 @@ def oauth_authorized():
 @oauth.github.tokengetter
 def oauth_github_token():
     return session.get('github_token')
+
+
+def url_next():
+    return request.args.get('next') or request.referrer or None
 
 if __name__ == '__main__':
     db.create_all()
