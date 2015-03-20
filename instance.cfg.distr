@@ -1,4 +1,4 @@
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@localhost/gitmostwanted'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@db/gitmostwanted'
 SECRET_KEY = 'secret_key'
 OAUTH_GITHUB = {
     'consumer_key': '',
