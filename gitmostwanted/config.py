@@ -1,15 +1,14 @@
-class Config:
-    SQLALCHEMY_DATABASE_URI = ''
+class Config(object):
+    SQLALCHEMY_ECHO = False
     SECRET_KEY = ''
-    DEBUG = False
     TESTING = False
+    DEBUG = True
 
 
 class ConfigDevelopment(Config):
-    DEBUG = True
+    SQLALCHEMY_ECHO = True
+    TESTING = True
 
 
 class ConfigProduction(Config):
-    SQLALCHEMY_DATABASE_URI = ''
-    SECRET_KEY = ''
-    DEBUG = True
+    DEBUG = False

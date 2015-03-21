@@ -6,9 +6,12 @@
         <title>gitmostwanted</title>
 
         <link rel="stylesheet" href="//cdn.jsdelivr.net/foundation/5.5.1/css/foundation.min.css">
+        <style type="text/css">
+            .row {min-width:100% !important;}
+        </style>
     </head>
 
-    <body clas="container">
+    <body>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul class="messages">
@@ -18,6 +21,35 @@
                 </ul>
             {% endif %}
         {% endwith %}
+
+        <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="#">GitMostWanted</a></h1>
+                </li>
+            </ul>
+
+            <section class="top-bar-section">
+                <!-- Right Nav Section -->
+                <ul class="right">
+                    {% if not user %}
+                        <li><a href="{{ url_for('oauth_login') }}">Login via GitHub</a></li>
+                    {% else %}
+                        <li class="has-dropdown">
+                            <a href="#">Account</a>
+                            <ul class="dropdown">
+                                <li><a href="#">Change settings</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+
+                <!--
+                <ul class="left">
+                    <li><a href="#">Left Nav Button</a></li>
+                </ul>-->
+            </section>
+        </nav>
 
         {% block body %}{% endblock %}
     </body>
