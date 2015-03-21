@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, skipIf
 from gitmostwanted.web import app, url_next, oauth_login
 
 
@@ -13,7 +13,8 @@ class WebTestCase(TestCase):
         rv = self.app.get('/')
         assert '<title>gitmostwanted</title>' in rv.data.decode('utf-8')
 
-    def test_oauth_login(self):
+    @skipIf('OAUTH_GITHUB' not in app.config, "Requires GitHub auth")
+    def test_login_via_github(self):
         with app.test_request_context():
             resp = oauth_login()
             self.assertTrue(resp.headers['Location'].endswith('authorized'))
