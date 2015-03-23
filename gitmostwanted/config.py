@@ -1,3 +1,4 @@
+# pylint: disable=C1001
 class Config():
     CELERY_BROKER_URL = ''
     SQLALCHEMY_ECHO = False
