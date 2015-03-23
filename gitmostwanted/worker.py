@@ -1,4 +1,4 @@
-from .app import app, celery
+from gitmostwanted.app import app, celery
 
 
 class ContextTask(celery.Task):
@@ -9,3 +9,8 @@ class ContextTask(celery.Task):
             return super().__call__(*args, **kwargs)
 
 celery.Task = ContextTask
+
+
+@celery.task()
+def mock():
+    pass

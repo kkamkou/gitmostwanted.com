@@ -1,4 +1,5 @@
 class Config(object):
+    CELERY_BROKER_URL = ''
     SQLALCHEMY_ECHO = False
     SECRET_KEY = ''
     TESTING = False

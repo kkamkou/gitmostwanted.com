@@ -1,5 +1,5 @@
 bigquery-python
-celery
+celery[sqlalchemy]
 flask
 flask-wtf
 flask-sqlalchemy

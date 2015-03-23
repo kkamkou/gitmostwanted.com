@@ -1,5 +1,5 @@
-from .app import app, db, oauth
-from .models.user import User
+from gitmostwanted.app import app, db, oauth
+from gitmostwanted.models.user import User
 from flask import render_template, redirect, request, session, url_for, jsonify
 
 

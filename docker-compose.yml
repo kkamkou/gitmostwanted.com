@@ -1,16 +1,40 @@
-gitmostwanted:
+web:
   build: .
-  command: python web.py
+  user: gitmostwanted
+  #command: celery -A gitmostwanted.worker.celery worker
+  command: python -m gitmostwanted.web
   ports:
     - "5000:5000"
   volumes:
+    - ./gitmostwanted:/opt/gitmostwanted
     - ./:/opt
   environment:
     - GMW_APP_SETTINGS=/opt/instance.cfg
   links:
-    - db
+    - dbGmw
+    - dbCeleryBroker
+    - dbCeleryResult
 
-db:
+dbGmw:
   image: mysql:latest
   environment:
     - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=gitmostwanted
+    - MYSQL_USER=gitmostwanted
+    - MYSQL_PASSWORD=gitmostwanted_pwd
+
+dbCeleryBroker:
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=celery_broker
+    - MYSQL_USER=celery_broker
+    - MYSQL_PASSWORD=celery_broker_pwd
+
+dbCeleryResult:
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=celery_result
+    - MYSQL_USER=celery_result
+    - MYSQL_PASSWORD=celery_result_pwd
