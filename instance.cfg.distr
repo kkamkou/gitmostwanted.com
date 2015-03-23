@@ -1,5 +1,14 @@
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@db/gitmostwanted'
+# flask
 SECRET_KEY = 'secret_key'
+
+# SQLAlchemy
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@db/gitmostwanted'
+
+# celery
+CELERY_BROKER_URL='db+mysql://root:root@localhost/celery_broker',
+CELERY_RESULT_BACKEND='db+mysql://root:root@localhost/celery_result'
+
+# oauth
 OAUTH_GITHUB = {
     'consumer_key': '',
     'consumer_secret': '',
