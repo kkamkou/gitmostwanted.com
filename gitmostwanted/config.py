@@ -1,4 +1,4 @@
-class Config(object):
+class Config():
     CELERY_BROKER_URL = ''
     SQLALCHEMY_ECHO = False
     SECRET_KEY = ''

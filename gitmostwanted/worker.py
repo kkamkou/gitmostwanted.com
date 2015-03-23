@@ -1,3 +1,4 @@
+# pylint: disable=E1002
 from gitmostwanted.app import app, celery
 
 
