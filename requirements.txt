@@ -1,4 +1,3 @@
-bigquery-python
 celery[sqlalchemy]
 flask
 flask-wtf
