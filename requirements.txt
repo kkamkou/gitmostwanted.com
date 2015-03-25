@@ -3,4 +3,5 @@ flask
 flask-wtf
 flask-sqlalchemy
 flask-oauthlib
+google-api-python-client
 pymysql
