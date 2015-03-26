@@ -16,19 +16,20 @@ celery.Task = ContextTask
 
 
 def service_bigquery():
-    private_key = ''
-    email = ''
-    url = 'https://www.googleapis.com/auth/bigquery.readonly'
+    config = app.config['GOOGLE_BIGQUERY']
 
-    with open(private_key, 'rb') as f:
+    with open(config['private_key_path'], 'rb') as f:
         private_key = f.read()
 
-    http_auth = SignedJwtAssertionCredentials(email, private_key, url).authorize(Http())
+    http_auth = SignedJwtAssertionCredentials(config['email'], private_key, config['url'])
+    return build(config['service_name'], config['version'], http=http_auth.authorize(Http()))
 
-    return build('bigquery', 'v2', http=http_auth)
+# query_request = service_bigquery().jobs()
+# query_data = {'query': 'SELECT * FROM [githubarchive:month.201503] WHERE repo_id = 28922883;'}
+# query_response = query_request.query(projectId=app.config['GOOGLE_BIGQUERY']['project_id'],
+# body=query_data).execute()
 
 
 @celery.task()
 def mock():
-    print(service_bigquery().datasets().list(projectId='').execute())
     pass

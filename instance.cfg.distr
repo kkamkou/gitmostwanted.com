@@ -10,9 +10,19 @@ CELERY_RESULT_BACKEND='db+mysql+pymysql://celery_result:celery_result_pwd@dbCele
 
 # oauth
 OAUTH_GITHUB = {
-    'consumer_key': '',
-    'consumer_secret': '',
+    'consumer_key': None,
+    'consumer_secret': None,
     'access_token_url': 'https://github.com/login/oauth/access_token',
     'authorize_url': 'https://github.com/login/oauth/authorize',
     'base_url': 'https://api.github.com/'
+}
+
+# google
+GOOGLE_BIGQUERY = {
+    'private_key_path': None,
+    'service_name': 'bigquery',
+    'project_id': None,
+    'version': 'v2',
+    'email': None,
+    'url': 'https://www.googleapis.com/auth/bigquery.readonly'
 }
