@@ -1,12 +1,15 @@
 FROM python:3.4
 
-RUN mkdir /opt/gitmostwanted
-WORKDIR /opt/gitmostwanted
+RUN groupadd -r gitmostwanted \
+  && useradd -r -g gitmostwanted gitmostwanted \
+  && mkdir /opt/gitmostwanted
 
-ENV PYTHONPATH $PYTHONPATH:/opt
+WORKDIR /opt/gitmostwanted
 
 VOLUME ["/opt/gitmostwanted"]
 
-ADD requirements.txt /opt/gitmostwanted/
+ADD requirements.txt ./
+
+ENV PYTHONPATH /opt
 
 RUN pip install -r requirements.txt

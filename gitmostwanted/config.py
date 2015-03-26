@@ -1,4 +1,6 @@
-class Config(object):
+# pylint: disable=C1001
+class Config():
+    CELERY_BROKER_URL = ''
     SQLALCHEMY_ECHO = False
     SECRET_KEY = ''
     TESTING = False
