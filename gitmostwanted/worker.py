@@ -27,7 +27,7 @@ def service_bigquery():
 
 
 @celery.task()
-def most_starred_today(self):
+def most_starred_today():
     query_request = service_bigquery().jobs()
     query_data = {
         'query': """
@@ -44,7 +44,8 @@ def most_starred_today(self):
         query_response = query_request.query(
             projectId=app.config['GOOGLE_BIGQUERY']['project_id'], body=query_data
         ).execute()
-
-        result = Result(query_response)
+        return True
+        # result = Result(query_response)
     except errors.HttpError as e:
-        raise self.retry(exc=e)
+        return False
+        # raise self.retry(exc=e)

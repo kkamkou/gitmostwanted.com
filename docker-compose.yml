@@ -1,7 +1,7 @@
 web:
   build: .
   user: gitmostwanted
-  #command: celery -A gitmostwanted.worker.celery worker
+  #command: celery -A gitmostwanted.worker.celery worker -B
   command: python -m gitmostwanted.web
   ports:
     - "5000:5000"
