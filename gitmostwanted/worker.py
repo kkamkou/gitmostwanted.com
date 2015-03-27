@@ -1,6 +1,6 @@
 # pylint: disable=E1002
 from oauth2client.client import SignedJwtAssertionCredentials
-from gitmostwanted.bigdata.result import Result
+from gitmostwanted.bigquery.result import Result
 from gitmostwanted.app import app, celery
 from apiclient import discovery, errors
 from datetime import date
