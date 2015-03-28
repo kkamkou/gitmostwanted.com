@@ -1,10 +1,9 @@
 # pylint: disable=E1002
-from oauth2client.client import SignedJwtAssertionCredentials
-from gitmostwanted.bigquery.result import Result
-from gitmostwanted.app import app, celery
-from apiclient import discovery, errors
+from gitmostwanted.models.report_all_daily import ReportAllDaily
+from gitmostwanted.app import app, db, celery
+from gitmostwanted.bigquery.query import result
 from datetime import date
-from httplib2 import Http
+
 
 class ContextTask(celery.Task):
     abstract = True
@@ -16,20 +15,9 @@ class ContextTask(celery.Task):
 celery.Task = ContextTask
 
 
-def service_bigquery():
-    config = app.config['GOOGLE_BIGQUERY']
-
-    with open(config['private_key_path'], 'rb') as f:
-        private_key = f.read()
-
-    http_auth = SignedJwtAssertionCredentials(config['email'], private_key, config['url'])
-    return discovery.build(config['service_name'], config['version'], http=http_auth.authorize(Http()))
-
-
 @celery.task()
 def most_starred_today():
-    query_request = service_bigquery().jobs()
-    query_data = {
+    response = result({
         'query': """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
@@ -39,13 +27,9 @@ def most_starred_today():
             ORDER BY cnt DESC
             LIMIT 50
         """ % date.today().strftime('%Y%m%d')
-    }
-    try:
-        query_response = query_request.query(
-            projectId=app.config['GOOGLE_BIGQUERY']['project_id'], body=query_data
-        ).execute()
-        return True
-        # result = Result(query_response)
-    except errors.HttpError as e:
-        return False
-        # raise self.retry(exc=e)
+    })
+
+    for row in response:
+        db.session.add(ReportAllDaily(row[0], row[1], cnt_watch=row[2]))
+
+    db.session.commit()
