@@ -11,4 +11,4 @@ class ReportAllDaily(db.Model):
         self.repo_name = name
 
         for k in kwargs.keys():
-            self.__dict__['repo_' + k] = kwargs[k]
+            self.__dict__[k] = kwargs[k]

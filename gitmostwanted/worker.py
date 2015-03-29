@@ -1,8 +1,8 @@
 # pylint: disable=E1002
-from gitmostwanted.models.report_all_daily import ReportAllDaily
-from gitmostwanted.app import app, db, celery
-from gitmostwanted.bigquery.query import result
 from datetime import date
+from gitmostwanted.models.report_all_daily import ReportAllDaily
+from gitmostwanted.bigquery.query import fetch
+from gitmostwanted.app import app, db, celery
 
 
 class ContextTask(celery.Task):
@@ -17,7 +17,7 @@ celery.Task = ContextTask
 
 @celery.task()
 def most_starred_today():
-    response = result({
+    response = fetch({
         'query': """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
@@ -30,6 +30,6 @@ def most_starred_today():
     })
 
     for row in response:
-        db.session.add(ReportAllDaily(row[0], row[1], cnt_watch=row[2]))
+        db.session.add(ReportAllDaily(row[0], row[1], repo_cnt_watch=row[2]))
 
     db.session.commit()
