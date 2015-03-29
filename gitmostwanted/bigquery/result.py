@@ -6,15 +6,15 @@ class Result(Iterator, Sized):
     """Converts result of google-api-python-client"""
 
     def __init__(self, obj):
-        self.iter = 0
-        self.total_rows = int(obj['totalRows'])
-        self.rows = list(map(lambda x: x['f'], obj['rows']))
+        self.__iter = 0
+        self.__total_rows = int(obj['totalRows'])
+        self.__rows = list(map(lambda x: x['f'], obj['rows']))
 
     def __next__(self):
-        if self.iter >= self.total_rows:
+        if self.__iter >= self.__total_rows:
             raise StopIteration()
-        v, self.iter = list(map(lambda x: x['v'], self.rows[self.iter])), self.iter + 1
+        v, self.__iter = list(map(lambda x: x['v'], self.__rows[self.__iter])), self.__iter + 1
         return v
 
     def __len__(self):
-        return self.total_rows
+        return self.__total_rows
