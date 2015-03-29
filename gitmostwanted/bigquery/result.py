@@ -1,7 +1,8 @@
-from collections import Iterator
+from collections import Iterator, Sized
 
 
-class Result(Iterator):
+# @todo! add fields names from schema
+class Result(Iterator, Sized):
     __total_rows = 0
     __rows = []
     __iter = 0
@@ -15,3 +16,6 @@ class Result(Iterator):
             raise StopIteration()
         v, self.__iter = list(map(lambda x: x['v'], self.__rows[self.__iter])), self.__iter + 1
         return v
+
+    def __len__(self):
+        return self.__total_rows
