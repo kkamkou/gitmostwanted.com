@@ -32,8 +32,7 @@ def oauth_authorized():
 
     session['github_token'] = (resp['access_token'], '')
     me = oauth.github.get('user')
-    entity = User(me.data['email'], me.data['id'], me.data['login']).get_or_create()
-    session['user_id'] = entity.id
+    session['user_id'] = user_get_or_create(me.data['email'], me.data['id'], me.data['login']).id
 
     return redirect(next_url)
 
@@ -44,8 +43,19 @@ def oauth_github_token():
 
 
 @app.before_request
-def load_user():
-    g.user = User.query.get(session['user_id']) if 'user_id' in session else False
+def user_load_from_session():
+    g.user = User.query.get(session['user_id']) if 'user_id' in session else None
+
+
+def user_get_or_create(email, uid, login):
+    entity = User.query.filter_by(email=email).first()
+    if entity:
+        return entity
+
+    entity = User(email, uid, login)
+    db.session.add(entity)
+    db.session.commit()
+    return entity
 
 
 def url_next():

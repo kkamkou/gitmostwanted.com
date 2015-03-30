@@ -13,9 +13,3 @@ class User(db.Model):
         self.email = email
         self.github_id = github_id
         self.username = username
-
-    def get_or_create(self):
-        entry = self.query.filter_by(email=self.email).first()
-        if not entry:
-            db.session.add(entry)
-        return entry
