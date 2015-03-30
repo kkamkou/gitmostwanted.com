@@ -2,9 +2,20 @@
 
 {% block body %}
     <div class="row">
-        <div class="small-3 columns th">1</div>
-        <div class="small-3 columns th">2</div>
-        <div class="small-3 columns th">3</div>
-        <div class="small-3 columns th">3</div>
+        <div class="small-12 columns">
+            <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+                {% for n in range(24) %}
+                    <li>
+                        <div class="panel">
+                            <h4>facebook / react-native<small>JavaScript</small></h4>
+                            <p>
+                                A framework for building native apps with React.
+                                http://facebook.github.io/react-native/
+                            </p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}

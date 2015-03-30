@@ -5,9 +5,11 @@
 
         <title>gitmostwanted</title>
 
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/css/normalize.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/foundation/5.5.1/css/foundation.min.css">
+
         <style type="text/css">
-            .row {min-width:100% !important;}
+            .row {min-width: 100% !important;}
         </style>
     </head>
 
@@ -22,23 +24,22 @@
             {% endif %}
         {% endwith %}
 
-        <nav class="top-bar" data-topbar role="navigation">
+        <nav class="top-bar" data-topbar role="navigation" style="margin-bottom: 2px">
             <ul class="title-area">
                 <li class="name">
-                    <h1><a href="#">GitMostWanted</a></h1>
+                    <h1><a href="#">Git Most Wanted</a></h1>
                 </li>
             </ul>
 
             <section class="top-bar-section">
-                <!-- Right Nav Section -->
                 <ul class="right">
-                    {% if not user %}
+                    {% if not g.user %}
                         <li><a href="{{ url_for('oauth_login') }}">Login via GitHub</a></li>
                     {% else %}
                         <li class="has-dropdown">
-                            <a href="#">Account</a>
+                            <a href="#">{{ g.user.username }}</a>
                             <ul class="dropdown">
-                                <li><a href="#">Change settings</a></li>
+                                <li><a href="{{ url_for('logout') }}">Log-out</a></li>
                             </ul>
                         </li>
                     {% endif %}
@@ -53,4 +54,11 @@
 
         {% block body %}{% endblock %}
     </body>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/jquery.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/modernizr.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/foundation.min.js"></script>
+    <script type="text/javascript">
+        $(document).foundation();
+    </script>
 </html>

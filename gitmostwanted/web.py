@@ -1,17 +1,18 @@
 from gitmostwanted.app import app, db, oauth
 from gitmostwanted.models.user import User
-from flask import render_template, redirect, request, session, url_for, jsonify
+from flask import g, jsonify, render_template, redirect, request, session, url_for
 
 
 @app.route('/')
 def index():
-    if 'github_token' in session:
-        me = oauth.github.get('user')
-        if not User.query.filter_by(email=me.data['email']).count():
-            db.session.add(User(me.data['email'], me.data['login']))
-            db.session.commit()
-            return jsonify(me.data)
     return render_template('index.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('github_token', None)
+    session.pop('user_id', None)
+    return redirect(url_for('index'))
 
 
 @app.route('/oauth/login')
@@ -30,6 +31,8 @@ def oauth_authorized():
         return redirect(next_url)
 
     session['github_token'] = (resp['access_token'], '')
+    me = oauth.github.get('user')
+    session['user_id'] = user_get_or_create(me.data['email'], me.data['id'], me.data['login']).id
 
     return redirect(next_url)
 
@@ -37,6 +40,22 @@ def oauth_authorized():
 @oauth.github.tokengetter
 def oauth_github_token():
     return session.get('github_token')
+
+
+@app.before_request
+def user_load_from_session():
+    g.user = User.query.get(session['user_id']) if 'user_id' in session else None
+
+
+def user_get_or_create(email, uid, login):
+    entity = User.query.filter_by(email=email).first()
+    if entity:
+        return entity
+
+    entity = User(email, uid, login)
+    db.session.add(entity)
+    db.session.commit()
+    return entity
 
 
 def url_next():

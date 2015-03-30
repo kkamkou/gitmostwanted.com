@@ -1,8 +1,8 @@
 # pylint: disable=E1002
-from oauth2client.client import SignedJwtAssertionCredentials
-from gitmostwanted.app import app, celery
-from apiclient.discovery import build
-from httplib2 import Http
+from datetime import date
+from gitmostwanted.models.report_all_daily import ReportAllDaily
+from gitmostwanted.bigquery.query import fetch
+from gitmostwanted.app import app, db, celery
 
 
 class ContextTask(celery.Task):
@@ -15,21 +15,21 @@ class ContextTask(celery.Task):
 celery.Task = ContextTask
 
 
-def service_bigquery():
-    config = app.config['GOOGLE_BIGQUERY']
-
-    with open(config['private_key_path'], 'rb') as f:
-        private_key = f.read()
-
-    http_auth = SignedJwtAssertionCredentials(config['email'], private_key, config['url'])
-    return build(config['service_name'], config['version'], http=http_auth.authorize(Http()))
-
-# query_request = service_bigquery().jobs()
-# query_data = {'query': 'SELECT * FROM [githubarchive:month.201503] WHERE repo_id = 28922883;'}
-# query_response = query_request.query(projectId=app.config['GOOGLE_BIGQUERY']['project_id'],
-# body=query_data).execute()
-
-
 @celery.task()
-def mock():
-    pass
+def most_starred_today():
+    response = fetch({
+        'query': """
+            SELECT
+                repo.id, repo.name, COUNT(1) AS cnt
+            FROM [githubarchive:day.events_%s]
+            WHERE type = 'WatchEvent'
+            GROUP BY repo.id, repo.name
+            ORDER BY cnt DESC
+            LIMIT 50
+        """ % date.today().strftime('%Y%m%d')
+    })
+
+    for row in response:
+        db.session.merge(ReportAllDaily(row[0], row[1], repo_cnt_watch=row[2]))
+
+    db.session.commit()
