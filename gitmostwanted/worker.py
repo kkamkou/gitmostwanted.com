@@ -30,6 +30,6 @@ def most_starred_today():
     })
 
     for row in response:
-        db.session.merge(ReportAllDaily(row[0], row[1], repo_cnt_watch=row[2]))
+        db.session.merge(ReportAllDaily(row[0], row[2]))
 
     db.session.commit()
