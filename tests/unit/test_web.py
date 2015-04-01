@@ -1,5 +1,6 @@
 from unittest import TestCase, skipIf
 from gitmostwanted.web import app, url_next, oauth_login
+import flask
 
 
 class WebTestCase(TestCase):
@@ -10,8 +11,10 @@ class WebTestCase(TestCase):
         pass
 
     def test_homepage(self):
-        rv = self.app.get('/')
-        assert '<title>gitmostwanted</title>' in rv.data.decode('utf-8')
+        self.assertIn(
+            '<title>gitmostwanted</title>',
+            self.app.get('/').data.decode('utf-8')
+        )
 
     @skipIf('OAUTH_GITHUB' not in app.config, "Requires GitHub auth")
     def test_login_via_github(self):
@@ -28,3 +31,12 @@ class WebTestCase(TestCase):
             self.assertTrue(url_next().endswith('url_next'))
         with app.test_request_context():
             self.assertIsNone(url_next())
+
+    def test_logout(self):
+        with self.app as a:
+            with self.app.session_transaction() as session:
+                session['github_token'] = 'github_token'
+                session['user_id'] = 'user_id'
+            self.assertIsInstance(a.get('/logout'), flask.Response)
+            self.assertNotIn('github_token', flask.session)
+            self.assertNotIn('user_id', flask.session)
