@@ -44,6 +44,10 @@ def oauth_github_token():
 
 @app.before_request
 def user_load_from_session():
+    ignored = ['/logout']
+    if str(request.url_rule) in ignored:
+        return None
+
     g.user = User.query.get(session['user_id']) if 'user_id' in session else None
 
 
