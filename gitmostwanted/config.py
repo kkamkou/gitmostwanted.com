@@ -4,13 +4,18 @@ class Config():
     SQLALCHEMY_ECHO = False
     SECRET_KEY = ''
     TESTING = False
-    DEBUG = True
+    DEBUG = False
 
 
 class ConfigDevelopment(Config):
     SQLALCHEMY_ECHO = True
+    DEBUG = True
+
+
+class ConfigTesting(Config):
+    SECRET_KEY = 'testing'
     TESTING = True
 
 
 class ConfigProduction(Config):
-    DEBUG = False
+    pass
