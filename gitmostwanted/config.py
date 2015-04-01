@@ -13,7 +13,7 @@ class ConfigDevelopment(Config):
 
 
 class ConfigTesting(Config):
-    SECRET_KEY = 'testing'
+    SECRET_KEY = 'testing'  # noqa
     TESTING = True
 
 

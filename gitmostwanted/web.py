@@ -1,6 +1,6 @@
 from gitmostwanted.app import app, db, oauth
 from gitmostwanted.models.user import User
-from flask import g, jsonify, render_template, redirect, request, session, url_for
+from flask import g, render_template, redirect, request, session, url_for
 
 
 @app.route('/')
