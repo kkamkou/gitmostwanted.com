@@ -1,11 +1,13 @@
 from gitmostwanted.app import app, db, oauth
 from gitmostwanted.models.user import User
-from flask import g, jsonify, render_template, redirect, request, session, url_for
+from gitmostwanted.models.report import ReportAllDaily
+from flask import g, render_template, redirect, request, session, url_for
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    result = ReportAllDaily.query.order_by(ReportAllDaily.cnt_watch)
+    return render_template('index.html', entries=result)
 
 
 @app.route('/logout')
@@ -44,6 +46,10 @@ def oauth_github_token():
 
 @app.before_request
 def user_load_from_session():
+    ignored = ['/logout']
+    if str(request.url_rule) in ignored:
+        return None
+
     g.user = User.query.get(session['user_id']) if 'user_id' in session else None
 
 
@@ -62,5 +68,5 @@ def url_next():
     return request.args.get('next') or request.referrer or None
 
 if __name__ == '__main__':
-    db.create_all()
+    db.create_all()  # @todo remove it
     app.run(host='0.0.0.0')

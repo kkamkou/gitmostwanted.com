@@ -9,7 +9,8 @@ CELERY_BROKER_URL='sqla+mysql+pymysql://celery_broker:celery_broker_pwd@dbCelery
 CELERY_RESULT_BACKEND='db+mysql+pymysql://celery_result:celery_result_pwd@dbCeleryResult/celery_result'
 
 # oauth
-OAUTH_GITHUB = {
+GITHUB_AUTH = (None, None)
+GITHUB_OAUTH = {
     'consumer_key': None,
     'consumer_secret': None,
     'access_token_url': 'https://github.com/login/oauth/access_token',

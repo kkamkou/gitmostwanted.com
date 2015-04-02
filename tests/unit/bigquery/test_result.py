@@ -3,8 +3,6 @@ from gitmostwanted.bigquery.result import Result
 
 
 class BigQueryResultTestCase(TestCase):
-    result = None
-
     def setUp(self):
         self.result = Result(self.response_example())
 
