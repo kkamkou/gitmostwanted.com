@@ -6,11 +6,13 @@
             <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
                 {% for entry in entries %}
                     <li>
-                        <div class="panel">
+                        <div style="overflow: hidden">
                             <h4>
                                 {{ entry.repo.full_name }}
                                 {% if entry.repo.language %}
-                                    <small class="right">{{ entry.repo.language }}</small>
+                                    <small class="right" style="padding: 3px">
+                                        {{ entry.repo.language }}
+                                    </small>
                                 {% endif %}
                             </h4>
                             <p>{{ entry.repo.description }}</p>

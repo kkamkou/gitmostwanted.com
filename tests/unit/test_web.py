@@ -1,5 +1,5 @@
 from unittest import TestCase, skipIf
-from gitmostwanted.web import app, url_next, oauth_login
+from gitmostwanted.web import app, url_next, oauth_login, db
 import flask
 
 
@@ -9,6 +9,14 @@ class WebTestCase(TestCase):
 
     def tearDown(self):
         pass
+
+    @classmethod
+    def setUpClass(cls):
+        db.create_all()
+
+    @classmethod
+    def tearDownClass(cls):
+        db.drop_all()
 
     def test_homepage(self):
         self.assertIn(

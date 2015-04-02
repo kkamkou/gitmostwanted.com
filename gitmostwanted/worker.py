@@ -33,17 +33,16 @@ def most_starred_today():
 
     for row in response:
         info = repo_info(row[1])
-        db.session.merge(
-            Repo(
-                id=info['id'],
-                name=info['name'],
-                language=info['language'],
-                full_name=info['full_name'],
-                description=info['description']
-            )
+        repo = Repo(
+            id=info['id'],
+            name=info['name'],
+            language=info['language'],
+            full_name=info['full_name'],
+            description=info['description']
         )
-        db.session.merge(ReportAllDaily(row[0], row[2]))
 
-    db.session.commit()
+        db.session.merge(repo)
+        db.session.merge(ReportAllDaily(row[0], row[2]))
+        db.session.commit()
 
 db.create_all()  # @todo remove it
