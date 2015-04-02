@@ -6,8 +6,8 @@ from flask import g, render_template, redirect, request, session, url_for
 
 @app.route('/')
 def index():
-    list = ReportAllDaily.query.order_by(ReportAllDaily.cnt_watch)
-    return render_template('index.html', entries=list)
+    result = ReportAllDaily.query.order_by(ReportAllDaily.cnt_watch)
+    return render_template('index.html', entries=result)
 
 
 @app.route('/logout')
