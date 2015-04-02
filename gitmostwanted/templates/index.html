@@ -4,14 +4,16 @@
     <div class="row">
         <div class="small-12 columns">
             <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
-                {% for n in range(24) %}
+                {% for entry in entries %}
                     <li>
                         <div class="panel">
-                            <h4>facebook / react-native<small class="right">JavaScript</small></h4>
-                            <p>
-                                A framework for building native apps with React.
-                                http://facebook.github.io/react-native/
-                            </p>
+                            <h4>
+                                {{ entry.repo.full_name }}
+                                {% if entry.repo.language %}
+                                    <small class="right">{{ entry.repo.language }}</small>
+                                {% endif %}
+                            </h4>
+                            <p>{{ entry.repo.description }}</p>
                         </div>
                     </li>
                 {% endfor %}

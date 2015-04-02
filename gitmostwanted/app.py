@@ -13,7 +13,7 @@ app.config.from_envvar('GMW_APP_SETTINGS', silent=True)
 db = SQLAlchemy(app)
 
 oauth = OAuth()
-oauth.remote_app('github', app_key='OAUTH_GITHUB')
+oauth.remote_app('github', app_key='GITHUB_OAUTH')
 oauth.init_app(app)
 
 celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])

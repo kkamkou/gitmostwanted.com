@@ -1,8 +1,10 @@
 # pylint: disable=E1002
 from datetime import date
-from gitmostwanted.models.report_all_daily import ReportAllDaily
+from gitmostwanted.models.repo import Repo
+from gitmostwanted.models.report import ReportAllDaily
 from gitmostwanted.bigquery.query import fetch
 from gitmostwanted.app import app, db, celery
+from gitmostwanted.github.api import repo_info
 
 
 class ContextTask(celery.Task):
@@ -30,6 +32,18 @@ def most_starred_today():
     })
 
     for row in response:
+        info = repo_info(row[1])
+        db.session.merge(
+            Repo(
+                id=info['id'],
+                name=info['name'],
+                language=info['language'],
+                full_name=info['full_name'],
+                description=info['description']
+            )
+        )
         db.session.merge(ReportAllDaily(row[0], row[2]))
 
     db.session.commit()
+
+db.create_all()  # @todo remove it

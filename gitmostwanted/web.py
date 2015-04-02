@@ -1,11 +1,13 @@
 from gitmostwanted.app import app, db, oauth
 from gitmostwanted.models.user import User
+from gitmostwanted.models.report import ReportAllDaily
 from flask import g, render_template, redirect, request, session, url_for
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    list = ReportAllDaily.query.order_by(ReportAllDaily.cnt_watch)
+    return render_template('index.html', entries=list)
 
 
 @app.route('/logout')
@@ -66,5 +68,5 @@ def url_next():
     return request.args.get('next') or request.referrer or None
 
 if __name__ == '__main__':
-    db.create_all()
+    db.create_all()  # @todo remove it
     app.run(host='0.0.0.0')
