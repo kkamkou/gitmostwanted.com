@@ -11,9 +11,9 @@ web:
   environment:
     - GMW_APP_SETTINGS=/opt/instance.cfg
   links:
-    - dbGmw
-    - dbCeleryBroker
     - dbCeleryResult
+    - dbCeleryBroker
+    - dbGmw
 
 dbGmw:
   image: mysql:latest
