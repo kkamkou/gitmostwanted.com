@@ -8,6 +8,14 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@dbGmw
 CELERY_BROKER_URL='sqla+mysql+pymysql://celery_broker:celery_broker_pwd@dbCeleryBroker/celery_broker',
 CELERY_RESULT_BACKEND='db+mysql+pymysql://celery_result:celery_result_pwd@dbCeleryResult/celery_result'
 
+# celery beat
+CELERYBEAT_SCHEDULE = {
+    'most-starred-today': {
+        'task': 'gitmostwanted.worker.most_starred_today',
+        'schedule': 86400
+    }
+}
+
 # oauth
 GITHUB_AUTH = (None, None)
 GITHUB_OAUTH = {
