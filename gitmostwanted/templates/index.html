@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <div class="row">
+    <div class="row" id="gh-entries">
         <div class="small-12 columns">
             <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
                 {% for entry in entries %}
-                    <li>
-                        <div style="overflow: hidden">
+                    <li data-url="{{ entry.repo.html_url }}">
+                        <div>
                             <h4>
                                 {{ entry.repo.full_name }}
                                 {% if entry.repo.language %}
@@ -22,4 +22,15 @@
             </ul>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            $('#gh-entries ul > li').on('click', function () {
+                // $.gmw.checkout($(this));
+                return false;
+            });
+        });
+    </script>
 {% endblock %}

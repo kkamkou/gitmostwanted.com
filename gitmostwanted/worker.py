@@ -38,7 +38,8 @@ def most_starred_today():
             name=info['name'],
             language=info['language'],
             full_name=info['full_name'],
-            description=info['description']
+            description=info['description'],
+            html_url=info['html_url']
         )
 
         db.session.merge(repo)

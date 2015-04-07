@@ -9,7 +9,10 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/foundation/5.5.1/css/foundation.min.css">
 
         <style type="text/css">
-            .row {min-width: 100% !important;}
+            #gh-entries.row{ min-width: 100% !important; }
+            #gh-entries ul > li{ cursor: pointer; }
+            #gh-entries ul > li:hover{  }
+                #gh-entries ul > li > div{ overflow: hidden; }
         </style>
     </head>
 
@@ -53,7 +56,9 @@
         </nav>
 
         <dl class="sub-nav">
-          <dd class="active"><a href="#">Last</a></dd>
+          <dd class="active"><a href="{{ url_for('index', range='day') }}">Today</a></dd>
+          <dd><a href="{{ url_for('index', range='week') }}">Week</a></dd>
+          <dd><a href="{{ url_for('index', range='month') }}">Month</a></dd>
         </dl>
 
         {% block body %}{% endblock %}
@@ -65,4 +70,6 @@
     <script type="text/javascript">
         $(document).foundation();
     </script>
+
+    {% block js %}{% endblock %}
 </html>
