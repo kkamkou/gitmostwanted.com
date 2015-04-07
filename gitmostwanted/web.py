@@ -6,7 +6,7 @@ from flask import g, render_template, redirect, request, session, url_for
 
 @app.route('/')
 def index():
-    result = ReportAllDaily.query.order_by(ReportAllDaily.cnt_watch)
+    result = ReportAllDaily.query.order_by(db.desc(ReportAllDaily.cnt_watch))
     return render_template('index.html', entries=result)
 
 

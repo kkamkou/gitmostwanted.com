@@ -10,12 +10,13 @@
                             <h4>
                                 {{ entry.repo.full_name }}
                                 {% if entry.repo.language %}
-                                    <small class="right" style="padding: 3px">
-                                        {{ entry.repo.language }}
-                                    </small>
+                                    <small class="right">{{ entry.repo.language }}</small>
                                 {% endif %}
                             </h4>
                             <p>{{ entry.repo.description }}</p>
+                            <span class="label secondary">
+                                <i class="fi-star"></i> {{ entry.cnt_watch }}
+                            </span>
                         </div>
                     </li>
                 {% endfor %}
