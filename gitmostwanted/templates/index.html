@@ -8,7 +8,7 @@
                     <li data-url="{{ entry.repo.html_url }}">
                         <div>
                             <h4>
-                                {{ entry.repo.full_name }}
+                                <a href="{{ entry.repo.html_url }}" target="_blank">{{ entry.repo.full_name }}</a>
                                 {% if entry.repo.language %}
                                     <small class="right">{{ entry.repo.language }}</small>
                                 {% endif %}
