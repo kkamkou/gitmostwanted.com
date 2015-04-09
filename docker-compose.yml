@@ -1,7 +1,6 @@
 web:
   build: .
   user: gitmostwanted
-  #command: celery -A gitmostwanted.worker.celery worker -B
   command: python -m gitmostwanted.web
   ports:
     - "5000:5000"
@@ -11,9 +10,20 @@ web:
   environment:
     - GMW_APP_SETTINGS=/opt/instance.cfg
   links:
+    - dbGmw
+
+celery:
+  build: .
+  user: gitmostwanted
+  command: celery -A gitmostwanted.worker.celery worker -B -s /tmp/celerybeat-schedule.dat
+  environment:
+      - GMW_APP_SETTINGS=/opt/instance.cfg
+  volumes_from:
+    - web
+  links:
+    - dbGmw
     - dbCeleryResult
     - dbCeleryBroker
-    - dbGmw
 
 dbGmw:
   image: mysql:latest
