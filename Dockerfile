@@ -12,4 +12,6 @@ ADD requirements.txt ./
 
 ENV PYTHONPATH /opt
 
-RUN pip install -r requirements.txt
+RUN pip install -U pip \
+  && pip install git+https://github.com/jcgregorio/httplib2 \
+  && pip install -r requirements.txt
