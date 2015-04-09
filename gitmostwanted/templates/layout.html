@@ -6,10 +6,15 @@
         <title>gitmostwanted</title>
 
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/css/normalize.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/foundation/5.5.1/css/foundation.min.css">
 
         <style type="text/css">
-            .row {min-width: 100% !important;}
+            #gh-entries.row{ min-width: 100% !important; }
+            #gh-entries ul > li{ cursor: pointer; }
+            #gh-entries ul > li small{ padding: 3px; }
+            #gh-entries ul > li:hover{  }
+                #gh-entries ul > li > div{ overflow: hidden; }
         </style>
     </head>
 
@@ -27,7 +32,7 @@
         <nav class="top-bar" data-topbar role="navigation" style="margin-bottom: 2px">
             <ul class="title-area">
                 <li class="name">
-                    <h1><a href="#">Git Most Wanted</a></h1>
+                    <h1><a href="/">Git Most Wanted</a></h1>
                 </li>
             </ul>
 
@@ -44,16 +49,13 @@
                         </li>
                     {% endif %}
                 </ul>
-
-                <!--
-                <ul class="left">
-                    <li><a href="#">Left Nav Button</a></li>
-                </ul>-->
             </section>
         </nav>
 
         <dl class="sub-nav">
-          <dd class="active"><a href="#">Last</a></dd>
+          <dd><a href="{{ url_for('index', range='day') }}">Today</a></dd>
+          <dd><a href="{{ url_for('index', range='week') }}">Week</a></dd>
+          <dd><a href="{{ url_for('index', range='month') }}">Month</a></dd>
         </dl>
 
         {% block body %}{% endblock %}
@@ -65,4 +67,6 @@
     <script type="text/javascript">
         $(document).foundation();
     </script>
+
+    {% block js %}{% endblock %}
 </html>
