@@ -1,13 +1,26 @@
 from gitmostwanted.app import app, db, oauth
 from gitmostwanted.models.user import User
-from gitmostwanted.models.report import ReportAllDaily
+from gitmostwanted.models import report
 from flask import g, render_template, redirect, request, session, url_for
 
 
 @app.route('/')
 def index():
-    result = ReportAllDaily.query.order_by(db.desc(ReportAllDaily.cnt_watch))
-    return render_template('index.html', entries=result)
+    map_list = {
+        'day': 'ReportAllDaily',
+        'week': 'ReportAllWeekly',
+        'month': 'ReportAllMonthly'
+    }
+
+    rng = request.args.get('range', 'day')
+    if rng not in map_list:
+        rng = 'day'
+
+    model = getattr(report, map_list[rng])
+    return render_template(
+        'index.html',
+        entries=model.query.order_by(db.desc(model.cnt_watch))
+    )
 
 
 @app.route('/logout')

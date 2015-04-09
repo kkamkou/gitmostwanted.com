@@ -10,9 +10,17 @@ CELERY_RESULT_BACKEND='db+mysql+pymysql://celery_result:celery_result_pwd@dbCele
 
 # celery beat
 CELERYBEAT_SCHEDULE = {
-    'most-starred-today': {
-        'task': 'gitmostwanted.worker.most_starred_today',
+    'most-starred-day': {
+        'task': 'gitmostwanted.worker.most_starred_day',
         'schedule': 86400
+    },
+    'most-starred-week': {
+        'task': 'gitmostwanted.worker.most_starred_week',
+        'schedule': 604800
+    },
+    'most-starred-month': {
+        'task': 'gitmostwanted.worker.most_starred_month',
+        'schedule': 2628000
     }
 }
 
