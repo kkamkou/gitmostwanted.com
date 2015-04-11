@@ -12,7 +12,7 @@ class ReportBase(db.Model):
 
     @declared_attr
     def repo(self):
-        return db.relationship(Repo, uselist=False)
+        return db.relationship(Repo, uselist=False, lazy='joined')
 
     cnt_watch = db.Column(db.Integer)
 
