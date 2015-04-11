@@ -16,10 +16,6 @@ class ReportBase(db.Model):
 
     cnt_watch = db.Column(db.Integer)
 
-    def __init__(self, rid, cnt_watch):
-        self.id = rid
-        self.cnt_watch = cnt_watch
-
 
 class ReportAllDaily(ReportBase):
     __tablename__ = 'report_all_daily'

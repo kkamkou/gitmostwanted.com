@@ -10,6 +10,3 @@ class Repo(db.Model):
     full_name = db.Column(db.String(120))
     description = db.Column(db.String(250))
     html_url = db.Column(db.String(150))
-
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)

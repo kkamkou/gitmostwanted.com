@@ -86,7 +86,7 @@ def most_starred_sync(body, model_name):
         )
 
         db.session.merge(repo)
-        db.session.merge(getattr(report, model_name)(row[0], row[2]))
+        db.session.merge(getattr(report, model_name)(id=row[0], cnt_watch=row[2]))
         db.session.commit()
 
 
