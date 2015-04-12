@@ -9,6 +9,10 @@ build:
         - script:
             name: run py.test
             code: "py.test --pep8 --clearcache --cov gitmostwanted tests/unit"
+        - script:
+            name: copy artifacts
+            code: |-
+              rsync -avz "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
 deploy:
     steps:
         - add-to-known_hosts:
@@ -17,12 +21,12 @@ deploy:
             envvar: SSH_KEY_PATH
         - create-file:
             name: write key
-            filename: $SSH_KEY_PATH
             content: $SSH_KEY_PRIVATE
+            filename: $SSH_KEY_PATH
             overwrite: true
             hide-from-log: true
         - script:
-            name: update source-code
+            name: upload source-code
             code: |-
-              scp -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no -o UserKnownHostsFile=no -r "$WERCKER_OUTPUT_DIR/" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+              scp -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no -o UserKnownHostsFile=no -r "$WERCKER_OUTPUT_DIR" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               ssh -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no -o UserKnownHostsFile=no -l gitmostwanted gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.wsgi"
