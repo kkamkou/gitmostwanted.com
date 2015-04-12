@@ -2,12 +2,12 @@ box: wercker/python
 build:
     steps:
         - virtualenv:
-            name: Setup virtual environment
+            name: setup virtual environment
             python_location: /usr/bin/python3.4
         - pip-install:
             packages_list: pytest-pep8 pytest-cov
         - script:
-            name: Run py.test
+            name: run py.test
             code: "py.test --pep8 --clearcache --cov gitmostwanted tests/unit"
 deploy:
     steps:
@@ -16,13 +16,13 @@ deploy:
         - mktemp:
             envvar: SSH_KEY_PATH
         - create-file:
-            name: Write key
+            name: write key
             filename: $SSH_KEY_PATH
             content: $SSH_KEY_PROD_PRIVATE
             overwrite: true
             hide-from-log: true
         - script:
-            name: Update source-code
+            name: update source-code
             code: |-
               echo "pack/unpack"
               echo "touch gitmostwanted.wsgi"
