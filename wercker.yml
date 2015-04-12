@@ -18,11 +18,11 @@ deploy:
         - create-file:
             name: write key
             filename: $SSH_KEY_PATH
-            content: $SSH_KEY_PROD_PRIVATE
+            content: $SSH_KEY_PRIVATE
             overwrite: true
             hide-from-log: true
         - script:
             name: update source-code
             code: |-
-              scp -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no -o UserKnownHostsFile=no -r "$WERCKER_SOURCE_DIR" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+              scp -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no -o UserKnownHostsFile=no -r "$WERCKER_OUTPUT_DIR" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               ssh -i "$SSH_KEY_PATH" -o StrictHostKeyChecking=no -o UserKnownHostsFile=no -l gitmostwanted gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.wsgi"
