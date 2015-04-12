@@ -32,5 +32,5 @@ deploy:
         - script:
             name: upload source-code
             code: |-
-              scp -i "$SSH_KEY_PATH" -r "$WERCKER_SOURCE_DIR/" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+              scp -i "$SSH_KEY_PATH" -r "$WERCKER_SOURCE_DIR" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR/"
               ssh -i "$SSH_KEY_PATH" -l gitmostwanted gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.wsgi"
