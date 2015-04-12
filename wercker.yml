@@ -3,10 +3,34 @@ build:
     steps:
         - virtualenv:
             name: setup virtual environment
-            #install_wheel: false
             python_location: /usr/bin/python3.4
+        - script:
+            name: copy artifacts
+            code: |-
+              rsync -az "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
+              rsync -az "$WERCKER_SOURCE_DIR/Dockerfile" "$WERCKER_OUTPUT_DIR"
+              rsync -az "$WERCKER_SOURCE_DIR/docker-compose.yml" "$WERCKER_OUTPUT_DIR"
         - pip-install:
             packages_list: pytest-pep8 pytest-cov
         - script:
-            name: py.test
+            name: run py.test
             code: "py.test --pep8 --clearcache --cov gitmostwanted tests/unit"
+deploy:
+    steps:
+        - add-to-known_hosts:
+            local: true
+            hostname: gitmostwanted.com
+            fingerprint: 97:f6:e7:04:ad:fd:23:b9:70:af:cd:7e:c4:47:6a:8c
+        - mktemp:
+            envvar: SSH_KEY_PATH
+        - create-file:
+            name: write key
+            content: $SSH_KEY_PRIVATE
+            filename: $SSH_KEY_PATH
+            overwrite: true
+            hide-from-log: true
+        - script:
+            name: upload source-code
+            code: |-
+              scp -i "$SSH_KEY_PATH" -r . gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+              ssh -i "$SSH_KEY_PATH" -l gitmostwanted gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.wsgi"
