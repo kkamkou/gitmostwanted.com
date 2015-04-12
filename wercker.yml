@@ -4,15 +4,17 @@ build:
         - virtualenv:
             name: setup virtual environment
             python_location: /usr/bin/python3.4
+        - script:
+            name: copy artifacts
+            code: |-
+              rsync -avz "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
+              rsync -avz "$WERCKER_SOURCE_DIR/Dockerfile" "$WERCKER_OUTPUT_DIR"
+              rsync -avz "$WERCKER_SOURCE_DIR/docker-compose.yml" "$WERCKER_OUTPUT_DIR"
         - pip-install:
             packages_list: pytest-pep8 pytest-cov
         - script:
             name: run py.test
             code: "py.test --pep8 --clearcache --cov gitmostwanted tests/unit"
-        - script:
-            name: copy artifacts
-            code: |-
-              rsync -avz "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
 deploy:
     steps:
         - add-to-known_hosts:
