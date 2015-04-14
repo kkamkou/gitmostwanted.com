@@ -1,3 +1,6 @@
+# globals
+GMW_APP_ENV = 'production'
+
 # flask
 SECRET_KEY = 'secret_key'
 
