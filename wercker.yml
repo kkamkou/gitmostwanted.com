@@ -30,5 +30,5 @@ deploy:
         - script:
             name: upload source-code
             code: |-
-              rsync -avz --delete-after -e "ssh -i $SSH_KEY_PATH -l gitmostwanted" ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR/gitmostwanted"
-              ssh -i "$SSH_KEY_PATH" -l gitmostwanted gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.wsgi"
+              rsync -avz --delete-after -e "ssh -i $SSH_KEY_PATH" ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR/gitmostwanted"
+              ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
