@@ -80,15 +80,23 @@ def most_starred_sync(body, model_name):
 
     for row in response:
         info = repo_info(row[1])
-        meta = Repo(
-            id=info['id'],
-            name=info['name'],
-            language=info['language'],
-            full_name=info['full_name'],
-            description=info['description'],
-            html_url=info['html_url']
+        if not info:
+            continue
+
+        db.session.merge(
+            model(
+                id=row[0],
+                cnt_watch=row[2],
+                repo=Repo(
+                    id=info['id'],
+                    name=info['name'],
+                    language=info['language'],
+                    full_name=info['full_name'],
+                    description=info['description'],
+                    html_url=info['html_url']
+                )
+            )
         )
-        db.session.merge(model(id=row[0], cnt_watch=row[2], repo=meta))
 
     db.session.commit()
 

@@ -9,6 +9,7 @@ def fetch(uri):
         return result.json()
     except exceptions.HTTPError as e:
         app.logger.error('Request exception {0}: {1}'.format(e.errno, e.strerror))
+        return None
 
 
 def repo_info(full_name):
