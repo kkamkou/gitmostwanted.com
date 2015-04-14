@@ -52,12 +52,6 @@
             </section>
         </nav>
 
-        <dl class="sub-nav">
-          <dd><a href="{{ url_for('index', range='day') }}">Today</a></dd>
-          <dd><a href="{{ url_for('index', range='week') }}">Week</a></dd>
-          <dd><a href="{{ url_for('index', range='month') }}">Month</a></dd>
-        </dl>
-
         {% block body %}{% endblock %}
     </body>
 
