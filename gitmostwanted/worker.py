@@ -74,9 +74,13 @@ def most_starred_month():
 
 def most_starred_sync(body, model_name):
     response = fetch(body)
+    model = getattr(report, model_name)
+
+    db.session.query(model).delete()
+
     for row in response:
         info = repo_info(row[1])
-        repo = Repo(
+        meta = Repo(
             id=info['id'],
             name=info['name'],
             language=info['language'],
@@ -84,10 +88,9 @@ def most_starred_sync(body, model_name):
             description=info['description'],
             html_url=info['html_url']
         )
+        db.session.merge(model(id=row[0], cnt_watch=row[2], repo=meta))
 
-        db.session.merge(repo)
-        db.session.merge(getattr(report, model_name)(id=row[0], cnt_watch=row[2]))
-        db.session.commit()
+    db.session.commit()
 
 
 db.create_all()  # @todo remove it
