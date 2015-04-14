@@ -8,7 +8,7 @@ def fetch(uri):
         result.raise_for_status()
         return result.json()
     except exceptions.HTTPError as e:
-        app.logger.error('Request exception {0}: {1}'.format(e.errno, e.strerror))
+        app.logger.warning('Request exception {0}: {1}'.format(e.errno, e.strerror))
         return None
 
 
