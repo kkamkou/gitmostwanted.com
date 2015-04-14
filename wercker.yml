@@ -7,9 +7,7 @@ build:
         - script:
             name: copy artifacts
             code: |-
-              rsync -az "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
-              rsync -az "$WERCKER_SOURCE_DIR/Dockerfile" "$WERCKER_OUTPUT_DIR"
-              rsync -az "$WERCKER_SOURCE_DIR/docker-compose.yml" "$WERCKER_OUTPUT_DIR"
+              rsync -az --delete-after "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
         - pip-install:
             packages_list: pytest-pep8 pytest-cov
         - script:

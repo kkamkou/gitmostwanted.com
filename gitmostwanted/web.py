@@ -81,5 +81,6 @@ def url_next():
     return request.args.get('next') or request.referrer or None
 
 if __name__ == '__main__':
-    db.create_all()  # @todo remove it
     app.run(host='0.0.0.0')
+
+db.create_all()  # @todo remove it
