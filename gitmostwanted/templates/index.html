@@ -1,32 +1,32 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <dl class="sub-nav">
-        <dd><a href="{{ url_for('index', range='day') }}">Today</a></dd>
-        <dd><a href="{{ url_for('index', range='week') }}">Week</a></dd>
-        <dd><a href="{{ url_for('index', range='month') }}">Month</a></dd>
-    </dl>
+  <dl class="sub-nav">
+    {% for r in ['day', 'week', 'month'] %}
+      <dd {{ 'class=active' if range == r }}>
+        <a href="{{ url_for('index', range=r) }}">{{ r|capitalize() }}</a>
+      </dd>
+    {% endfor %}
+  </dl>
 
-    <div class="row" id="gh-entries">
-        <div class="small-12 columns">
-            <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
-                {% for entry in entries %}
-                    <li data-url="{{ entry.repo.html_url }}">
-                        <div>
-                            <h4>
-                                <a href="{{ entry.repo.html_url }}" target="_blank">{{ entry.repo.full_name }}</a>
-                                {% if entry.repo.language %}
-                                    <small class="right">{{ entry.repo.language }}</small>
-                                {% endif %}
-                            </h4>
-                            <p>{{ entry.repo.description }}</p>
-                            <span class="label secondary">
-                                +{{ entry.cnt_watch }} <i class="fi-star"></i>
-                            </span>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+  <div class="row" id="gh-entries">
+    <div class="small-12 columns">
+      <ul class="small-block-grid-2 medium-block-grid-2 large-block-grid-4">
+        {% for entry in entries %}
+          <li data-url="{{ entry.repo.html_url }}">
+            <div>
+              <h4>
+                <a href="{{ entry.repo.html_url }}" target="_blank">{{ entry.repo.full_name }}</a>
+                {% if entry.repo.language %}
+                  <small class="right">{{ entry.repo.language }}</small>
+                {% endif %}
+              </h4>
+              <p>{{ entry.repo.description }}</p>
+              <span class="label secondary">+{{ entry.cnt_watch }} <i class="fi-star"></i></span>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
+  </div>
 {% endblock %}

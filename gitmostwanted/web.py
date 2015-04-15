@@ -19,6 +19,7 @@ def index():
     model = getattr(report, map_list[rng])
     return render_template(
         'index.html',
+        range=rng,
         entries=model.query.order_by(db.desc(model.cnt_watch))
     )
 
