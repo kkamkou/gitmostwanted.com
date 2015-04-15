@@ -1,72 +1,67 @@
 <!DOCTYPE html>
 <html>
-    <head lang="en">
-        <meta charset="UTF-8">
+  <head lang="en">
+    <meta charset="UTF-8">
 
-        <title>gitmostwanted</title>
+    <title>gitmostwanted</title>
 
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/css/normalize.min.css">
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css">
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/foundation/5.5.1/css/foundation.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/css/normalize.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/foundation/5.5.1/css/foundation.min.css">
 
-        <style type="text/css">
-            #gh-entries.row{ min-width: 100% !important; }
-            #gh-entries ul > li{ cursor: pointer; }
-            #gh-entries ul > li small{ padding: 3px; }
-            #gh-entries ul > li:hover{  }
-                #gh-entries ul > li > div{ overflow: hidden; }
-        </style>
-    </head>
+    <style type="text/css">
+      #gh-entries.row{ min-width: 100% !important; }
+      #gh-entries ul > li{ cursor: pointer; }
+      #gh-entries ul > li small{ padding: 3px; }
+      #gh-entries ul > li:hover{  }
+        #gh-entries ul > li > div{ overflow: hidden; }
+    </style>
+  </head>
 
-    <body>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+  <body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-        <nav class="top-bar" data-topbar role="navigation" style="margin-bottom: 2px">
-            <ul class="title-area">
-                <li class="name">
-                    <h1><a href="/">Git Most Wanted<sup><small>alpha</small></sup></a></h1>
-                </li>
-            </ul>
+    <nav class="top-bar" data-topbar role="navigation" style="margin-bottom: 2px">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="/">Git Most Wanted<sup><small>alpha</small></sup></a></h1>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+      </ul>
 
-            <section class="top-bar-section">
-                <ul class="right">
-                    {% if not g.user %}
-                        <li><a href="{{ url_for('oauth_login') }}">Login via GitHub</a></li>
-                    {% else %}
-                        <li class="has-dropdown">
-                            <a href="#">{{ g.user.username }}</a>
-                            <ul class="dropdown">
-                                <li><a href="{{ url_for('logout') }}">Log-out</a></li>
-                            </ul>
-                        </li>
-                    {% endif %}
-                </ul>
-            </section>
-        </nav>
+      <section class="top-bar-section">
+        <ul class="right">
+          {% if not g.user %}
+            <li><a href="{{ url_for('oauth_login') }}">Login via GitHub</a></li>
+          {% else %}
+            <li class="has-dropdown">
+              <a href="#">{{ g.user.username }}</a>
+              <ul class="dropdown">
+                  <li><a href="{{ url_for('logout') }}">Log-out</a></li>
+              </ul>
+            </li>
+          {% endif %}
+        </ul>
+      </section>
+    </nav>
 
-        <dl class="sub-nav">
-          <dd><a href="{{ url_for('index', range='day') }}">Today</a></dd>
-          <dd><a href="{{ url_for('index', range='week') }}">Week</a></dd>
-          <dd><a href="{{ url_for('index', range='month') }}">Month</a></dd>
-        </dl>
+    {% block body %}{% endblock %}
+  </body>
 
-        {% block body %}{% endblock %}
-    </body>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/jquery.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/modernizr.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/foundation.min.js"></script>
+  <script type="text/javascript">
+    $(document).foundation();
+  </script>
 
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/jquery.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/modernizr.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/foundation.min.js"></script>
-    <script type="text/javascript">
-        $(document).foundation();
-    </script>
-
-    {% block js %}{% endblock %}
+  {% block js %}{% endblock %}
 </html>
