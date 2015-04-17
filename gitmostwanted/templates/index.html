@@ -22,7 +22,13 @@
                 {% endif %}
               </h4>
               <p>{{ entry.repo.description }}</p>
-              <span class="label secondary">+{{ entry.cnt_watch }} <i class="fi-star"></i></span>
+
+              <a class="label secondary info" title="Great" data-tooltip><i class="fi-like"></i></a>
+              <a class="label secondary info" title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+
+              <div class="right">
+                <span class="label secondary">+{{ entry.cnt_watch }} <i class="fi-star"></i></span>
+              </div>
             </div>
           </li>
         {% endfor %}
