@@ -4,7 +4,7 @@
   <dl class="sub-nav">
     {% for r in ['day', 'week', 'month'] %}
       <dd {{ 'class=active' if range == r }}>
-        <a href="{{ url_for('index', range=r) }}">{{ r|capitalize() }}</a>
+        <a href="{{ url_for('index', rng=r) }}">{{ r|capitalize() }}</a>
       </dd>
     {% endfor %}
   </dl>

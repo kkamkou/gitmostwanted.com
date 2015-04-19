@@ -7,15 +7,15 @@ from flask import g, render_template, redirect, request, session, url_for
 app.register_blueprint(user_attitude)
 
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'rng': 'day'})
+@app.route('/trending/<rng>/')
+def index(rng):
     map_list = {
         'day': 'ReportAllDaily',
         'week': 'ReportAllWeekly',
         'month': 'ReportAllMonthly'
     }
 
-    rng = request.args.get('range', 'day')
     if rng not in map_list:
         rng = 'day'
 
