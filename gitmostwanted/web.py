@@ -1,7 +1,10 @@
+from gitmostwanted.blueprints.user_attitude import user_attitude
 from gitmostwanted.app import app, db, oauth
 from gitmostwanted.models.user import User
 from gitmostwanted.models import report
 from flask import g, render_template, redirect, request, session, url_for
+
+app.register_blueprint(user_attitude)
 
 
 @app.route('/')

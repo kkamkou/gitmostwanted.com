@@ -15,19 +15,27 @@
         {% for entry in entries %}
           <li data-url="{{ entry.repo.html_url }}">
             <div>
+
               <h4>
                 <a href="{{ entry.repo.html_url }}" target="_blank">{{ entry.repo.full_name }}</a>
                 {% if entry.repo.language %}
                   <small class="right">{{ entry.repo.language }}</small>
                 {% endif %}
               </h4>
+
               <p>{{ entry.repo.description }}</p>
 
-              <a class="label secondary info" title="Great" data-tooltip><i class="fi-like"></i></a>
-              <a class="label secondary info" title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+              {% if g.user %}
+                <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='like') }}"
+                  class="label secondary info" title="Great" data-tooltip><i class="fi-like"></i></a>
+                <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='dislike') }}"
+                  class="label secondary info" title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+              {% endif %}
 
               <div class="right">
-                <span class="label secondary">+{{ entry.cnt_watch }} <i class="fi-star"></i></span>
+                <span class="label secondary">
+                  +{{ entry.cnt_watch }} <i class="fi-star"></i>
+                </span>
               </div>
             </div>
           </li>
