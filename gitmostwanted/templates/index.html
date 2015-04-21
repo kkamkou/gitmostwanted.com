@@ -12,10 +12,9 @@
   <div class="row" id="gh-entries">
     <div class="small-12 columns">
       <ul class="small-block-grid-2 medium-block-grid-2 large-block-grid-4">
-        {% for entry in entries %}
+        {% for (entry, attitude) in entries %}
           <li data-url="{{ entry.repo.html_url }}">
             <div>
-
               <h4>
                 <a href="{{ entry.repo.html_url }}" target="_blank">{{ entry.repo.full_name }}</a>
                 {% if entry.repo.language %}
@@ -27,9 +26,11 @@
 
               {% if g.user %}
                 <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='like') }}"
-                  class="label secondary info" title="Great" data-tooltip><i class="fi-like"></i></a>
+                  class="label {{ 'success' if attitude == 'like' else 'secondary' }}"
+                  title="Great" data-tooltip><i class="fi-like"></i></a>
                 <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='dislike') }}"
-                  class="label secondary info" title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+                  class="label {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
+                  title="Useless" data-tooltip><i class="fi-dislike"></i></a>
               {% endif %}
 
               <div class="right">
