@@ -3,7 +3,7 @@
   <head lang="en">
     <meta charset="UTF-8">
 
-    <title>gitmostwanted</title>
+    <title>Git Most Wanted (alpha)</title>
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/css/normalize.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css">
@@ -11,7 +11,6 @@
 
     <style type="text/css">
       #gh-entries.row{ min-width: 100% !important; }
-      #gh-entries ul > li{ cursor: pointer; }
       #gh-entries ul > li small{ padding: 3px; }
       #gh-entries ul > li:hover{  }
         #gh-entries ul > li > div{ overflow: hidden; }
@@ -39,6 +38,8 @@
 
       <section class="top-bar-section">
         <ul class="right">
+          <li><a href="https://github.com/Letscodeit/gitmostwanted.com"
+            target="_blank">Fork it!</a></li>
           {% if not g.user %}
             <li><a href="{{ url_for('oauth_login') }}">Login via GitHub</a></li>
           {% else %}

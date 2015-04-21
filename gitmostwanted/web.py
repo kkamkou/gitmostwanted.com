@@ -1,26 +1,44 @@
-from gitmostwanted.app import app, db, oauth
-from gitmostwanted.models.user import User
-from gitmostwanted.models import report
 from flask import g, render_template, redirect, request, session, url_for
+from gitmostwanted.blueprints.user_attitude import user_attitude
+from gitmostwanted.app import app, db, oauth
+from gitmostwanted.models.user import User, UserAttitude
+from gitmostwanted.models.repo import Repo
+from gitmostwanted.models import report
 
 
-@app.route('/')
-def index():
+app.register_blueprint(user_attitude)
+
+
+@app.route('/', defaults={'rng': 'day'})
+@app.route('/trending/<rng>/')
+def index(rng):
     map_list = {
         'day': 'ReportAllDaily',
         'week': 'ReportAllWeekly',
         'month': 'ReportAllMonthly'
     }
 
-    rng = request.args.get('range', 'day')
     if rng not in map_list:
         rng = 'day'
 
     model = getattr(report, map_list[rng])
+
+    if not g.user:
+        q = model.query.add_columns(db.null())
+    else:
+        q = model.query\
+            .join(Repo)\
+            .add_columns(UserAttitude.attitude)\
+            .outerjoin(
+                UserAttitude,
+                db.and_(
+                    UserAttitude.user_id == g.user.id,
+                    UserAttitude.repo_id == Repo.id
+                )
+            )
+
     return render_template(
-        'index.html',
-        range=rng,
-        entries=model.query.order_by(db.desc(model.cnt_watch))
+        'index.html', range=rng, entries=q.order_by(db.desc(model.cnt_watch))
     )
 
 

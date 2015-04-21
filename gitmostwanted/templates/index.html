@@ -4,7 +4,7 @@
   <dl class="sub-nav">
     {% for r in ['day', 'week', 'month'] %}
       <dd {{ 'class=active' if range == r }}>
-        <a href="{{ url_for('index', range=r) }}">{{ r|capitalize() }}</a>
+        <a href="{{ url_for('index', rng=r) }}">{{ r|capitalize() }}</a>
       </dd>
     {% endfor %}
   </dl>
@@ -12,7 +12,7 @@
   <div class="row" id="gh-entries">
     <div class="small-12 columns">
       <ul class="small-block-grid-2 medium-block-grid-2 large-block-grid-4">
-        {% for entry in entries %}
+        {% for (entry, attitude) in entries %}
           <li data-url="{{ entry.repo.html_url }}">
             <div>
               <h4>
@@ -21,8 +21,23 @@
                   <small class="right">{{ entry.repo.language }}</small>
                 {% endif %}
               </h4>
+
               <p>{{ entry.repo.description }}</p>
-              <span class="label secondary">+{{ entry.cnt_watch }} <i class="fi-star"></i></span>
+
+              {% if g.user %}
+                <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='like') }}"
+                  class="label {{ 'success' if attitude == 'like' else 'secondary' }}"
+                  title="Great" data-tooltip><i class="fi-like"></i></a>
+                <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='dislike') }}"
+                  class="label {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
+                  title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+              {% endif %}
+
+              <div class="right">
+                <span class="label secondary">
+                  +{{ entry.cnt_watch }} <i class="fi-star"></i>
+                </span>
+              </div>
             </div>
           </li>
         {% endfor %}

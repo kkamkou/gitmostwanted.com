@@ -20,7 +20,7 @@ class WebTestCase(TestCase):
 
     def test_homepage(self):
         self.assertIn(
-            '<title>gitmostwanted</title>',
+            '<title>Git Most Wanted (alpha)</title>',
             self.app.get('/').data.decode('utf-8')
         )
 
