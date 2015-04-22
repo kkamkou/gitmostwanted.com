@@ -7,6 +7,12 @@
         <a href="{{ url_for('index', rng=r) }}">{{ r|capitalize() }}</a>
       </dd>
     {% endfor %}
+
+    {% if g.user %}
+        <dd>
+            <a href="#">Unchecked</a>
+        </dd>
+    {% endif %}
   </dl>
 
   <div class="row" id="gh-entries">
