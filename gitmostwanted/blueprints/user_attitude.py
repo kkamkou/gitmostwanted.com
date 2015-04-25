@@ -19,4 +19,10 @@ def change(repo_id, attitude):
 
     return make_response(render_template_string('Ok'), 204)
 
+
+@user_attitude.route('/unchecked/')
+def unchecked():
+    pass
+
 db.create_all()  # @todo remove it
+

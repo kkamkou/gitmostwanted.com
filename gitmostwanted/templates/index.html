@@ -10,7 +10,7 @@
 
     {% if g.user %}
         <dd>
-            <a href="#">Unchecked</a>
+            <a href="{{ url_for('user_attitude.unchecked') }}">Unchecked</a>
         </dd>
     {% endif %}
   </dl>
