@@ -27,10 +27,10 @@
               {% if g.user %}
                 <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='like') }}"
                   class="label attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
-                  title="Great" data-tooltip><i class="fi-like"></i></a>
+                  title="Great"><i class="fi-like"></i></a>
                 <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='dislike') }}"
                   class="label attitude {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
-                  title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+                  title="Useless"><i class="fi-dislike"></i></a>
               {% endif %}
 
               <div class="right">

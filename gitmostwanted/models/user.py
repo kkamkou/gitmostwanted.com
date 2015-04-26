@@ -15,4 +15,4 @@ class UserAttitude(db.Model):
 
     user_id = db.Column(db.Integer, primary_key=True)
     repo_id = db.Column(db.BigInteger, primary_key=True)
-    attitude = db.Column(db.Enum('like', 'dislike'), nullable=False)
+    attitude = db.Column(db.Enum('like', 'dislike', 'neutral'), nullable=False)

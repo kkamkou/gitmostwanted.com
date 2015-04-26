@@ -3,7 +3,7 @@
 {% block body %}
   <div class="row" id="gh-entries">
     <div class="small-12 columns">
-      <ul class="small-block-grid-2 medium-block-grid-2 large-block-grid-4">
+      <ul class="small-block-grid-1 medium-block-grid-1 large-block-grid-3">
         {% for repo in repos %}
           <li data-url="{{ repo.html_url }}">
             <div>
@@ -18,10 +18,13 @@
 
               <a href="{{ url_for('user_attitude.change', repo_id=repo.id, attitude='like') }}"
                 class="label attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
-                title="Great" data-tooltip><i class="fi-like"></i></a>
+                title="Great"><i class="fi-like"></i></a>
+              <a href="{{ url_for('user_attitude.change', repo_id=repo.id, attitude='neutral') }}"
+                class="label attitude {{ 'success' if attitude == 'neutral' else 'secondary' }}"
+                title="Not sure"><i class="fi-check"></i></a>
               <a href="{{ url_for('user_attitude.change', repo_id=repo.id, attitude='dislike') }}"
                 class="label attitude {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
-                title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+                title="Useless"><i class="fi-dislike"></i></a>
             </div>
           </li>
         {% endfor %}
