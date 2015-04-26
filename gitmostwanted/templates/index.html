@@ -7,12 +7,6 @@
         <a href="{{ url_for('index', rng=r) }}">{{ r|capitalize() }}</a>
       </dd>
     {% endfor %}
-
-    {% if g.user %}
-        <dd>
-            <a href="{{ url_for('user_attitude.unchecked') }}">Unchecked</a>
-        </dd>
-    {% endif %}
   </dl>
 
   <div class="row" id="gh-entries">
@@ -32,10 +26,10 @@
 
               {% if g.user %}
                 <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='like') }}"
-                  class="label {{ 'success' if attitude == 'like' else 'secondary' }}"
+                  class="label attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
                   title="Great" data-tooltip><i class="fi-like"></i></a>
                 <a href="{{ url_for('user_attitude.change', repo_id=entry.repo.id, attitude='dislike') }}"
-                  class="label {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
+                  class="label attitude {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
                   title="Useless" data-tooltip><i class="fi-dislike"></i></a>
               {% endif %}
 

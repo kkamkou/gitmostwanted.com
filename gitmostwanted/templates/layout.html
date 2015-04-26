@@ -46,6 +46,7 @@
             <li class="has-dropdown">
               <a href="#">{{ g.user.username }}</a>
               <ul class="dropdown">
+                  <li><a href="{{ url_for('user_attitude.unchecked') }}">Unchecked</a></li>
                   <li><a href="{{ url_for('logout') }}">Log-out</a></li>
               </ul>
             </li>
@@ -73,6 +74,15 @@
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/foundation.min.js"></script>
   <script type="text/javascript">
     $(document).foundation();
+  </script>
+
+  <script type="text/javascript">
+    $('a.attitude').on('click', function () {
+      $.get($(this).attr('href'), function () {
+        window.location.reload();
+      });
+      return false;
+    })
   </script>
 
   {% block js %}{% endblock %}
