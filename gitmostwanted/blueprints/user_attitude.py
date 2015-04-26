@@ -6,9 +6,15 @@ from gitmostwanted.app import db
 user_attitude = Blueprint('user_attitude', __name__)
 
 
+@user_attitude.before_request
+def user_verify():
+    if not g.user:
+        return abort(403)
+
+
 @user_attitude.route('/attitude/<int:repo_id>/<attitude>')
 def change(repo_id, attitude):
-    if attitude not in ['like', 'dislike'] or not g.user:
+    if attitude not in ['like', 'dislike']:
         return abort(403)
 
     if not Repo.query.get(repo_id):
