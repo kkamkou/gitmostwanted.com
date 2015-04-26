@@ -1,4 +1,4 @@
-from flask import abort, Blueprint, g, make_response, render_template_string
+from flask import abort, Blueprint, g, make_response, render_template_string, render_template
 from gitmostwanted.models.user import UserAttitude
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.app import db
@@ -19,4 +19,19 @@ def change(repo_id, attitude):
 
     return make_response(render_template_string('Ok'), 204)
 
+
+@user_attitude.route('/unchecked/')
+def unchecked():
+    entries = Repo.query\
+        .filter(UserAttitude.repo_id.is_(None))\
+        .outerjoin(
+            UserAttitude,
+            db.and_(
+                UserAttitude.user_id == g.user.id,
+                UserAttitude.repo_id == Repo.id
+            )
+        )
+    return render_template('unchecked.html', repos=entries)
+
 db.create_all()  # @todo remove it
+

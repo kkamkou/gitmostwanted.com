@@ -5,7 +5,7 @@ GMW_APP_ENV = 'production'
 SECRET_KEY = 'secret_key'
 
 # SQLAlchemy
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@dbGmw/gitmostwanted'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@dbGmw/gitmostwanted?charset=utf8'
 
 # celery
 CELERY_BROKER_URL='sqla+mysql+pymysql://celery_broker:celery_broker_pwd@dbCeleryBroker/celery_broker',

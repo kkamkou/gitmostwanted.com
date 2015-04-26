@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="row" id="gh-entries">
+    <div class="small-12 columns">
+      <ul class="small-block-grid-2 medium-block-grid-2 large-block-grid-4">
+        {% for repo in repos %}
+          <li data-url="{{ repo.html_url }}">
+            <div>
+              <h4>
+                <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a>
+                {% if repo.language %}
+                  <small class="right">{{ repo.language }}</small>
+                {% endif %}
+              </h4>
+
+              <p>{{ repo.description }}</p>
+
+              <a href="{{ url_for('user_attitude.change', repo_id=repo.id, attitude='like') }}"
+                class="label attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
+                title="Great" data-tooltip><i class="fi-like"></i></a>
+              <a href="{{ url_for('user_attitude.change', repo_id=repo.id, attitude='dislike') }}"
+                class="label attitude {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
+                title="Useless" data-tooltip><i class="fi-dislike"></i></a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}
