@@ -1,3 +1,4 @@
+alembic
 celery[sqlalchemy]
 flask
 flask-wtf
