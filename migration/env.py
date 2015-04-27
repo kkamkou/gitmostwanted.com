@@ -21,6 +21,8 @@ target_metadata = None
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+from gitmostwanted.app import app
+config.set_main_option('sqlalchemy.url', app.config.get('SQLALCHEMY_DATABASE_URI'))
 
 
 def run_migrations_offline():
