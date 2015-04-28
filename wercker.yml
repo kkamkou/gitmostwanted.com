@@ -34,6 +34,6 @@ deploy:
             code: |-
               rsync -avz --delete-after -e "ssh -i $SSH_KEY_PATH" "./gitmostwanted" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               rsync -avz --delete-after -e "ssh -i $SSH_KEY_PATH" "./migration" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-              rsync -avz --delete-after -e "ssh -i $SSH_KEY_PATH" "./alembic.ini" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+              rsync -avz -e "ssh -i $SSH_KEY_PATH" "./alembic.ini" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com "cd $PROJECT_SOURCE_DIR; alembic upgrade head"
               ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
