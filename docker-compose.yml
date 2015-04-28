@@ -1,7 +1,7 @@
 web:
   build: .
   user: gitmostwanted
-  command: python -m gitmostwanted.web
+  entrypoint: /opt/entrypoint.sh
   ports:
     - "5000:5000"
   volumes:

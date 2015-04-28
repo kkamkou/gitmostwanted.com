@@ -8,6 +8,8 @@ build:
             name: copy artifacts
             code: |-
               rsync -az "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
+              rsync -az "$WERCKER_SOURCE_DIR/migration" "$WERCKER_OUTPUT_DIR"
+              rsync -az "$WERCKER_SOURCE_DIR/alembic.ini" "$WERCKER_OUTPUT_DIR"
         - pip-install:
             packages_list: pytest-pep8 pytest-cov
         - script:
@@ -31,4 +33,5 @@ deploy:
             name: upload source-code
             code: |-
               rsync -avz --delete-after -e "ssh -i $SSH_KEY_PATH" ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+              ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com "cd $PROJECT_SOURCE_DIR; alembic upgrade head"
               ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
