@@ -1,0 +1,15 @@
+{% macro pagination(pagination, endpoint) -%}
+  <ul class="pagination">
+    {% for page in pagination.iter_pages() -%}
+      {% if page %}
+        {% if page != pagination.page %}
+          <li><a href="{{ url_for(endpoint, page=page) }}" class="small button tiny secondary">{{ page }}</a></li>
+        {% else %}
+          <li class="current"><a href="javascript:void(0)" class="small button tiny disabled">{{ page }}</a></li>
+        {% endif %}
+      {% else %}
+        <li class="unavailable"><a href="javascript:void(0)" class="small button tiny secondary">&hellip;</a></li>
+      {% endif %}
+    {%- endfor %}
+  </ul>
+{%- endmacro %}
