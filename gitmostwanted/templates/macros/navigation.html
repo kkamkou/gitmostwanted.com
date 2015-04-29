@@ -1,0 +1,17 @@
+{% macro pagination(pagination, endpoint) -%}
+  <ul class="pagination">
+    <li class="arrow unavailable"><a href="{{ url_for(endpoint, page=1) }}">&laquo;</a></li>
+    {% for page in pagination.iter_pages() -%}
+      {% if page %}
+        {% if page != pagination.page %}
+          <li><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+        {% else %}
+          <li class="current"><a href="">{{ page }}</a></li>
+        {% endif %}
+      {% else %}
+        <li class="unavailable"><a href="">&hellip;</a></li>
+      {% endif %}
+    {%- endfor %}
+    <li class="arrow"><a href="{{ url_for(endpoint, page=pagination.pages) }}">&raquo;</a></li>
+  </ul>
+{%- endmacro %}

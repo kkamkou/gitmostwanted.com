@@ -26,8 +26,9 @@ def change(repo_id, attitude):
     return make_response(render_template_string('Ok'), 204)
 
 
-@user_attitude.route('/unchecked/')
-def unchecked():
+@user_attitude.route('/unchecked/', defaults={'page': 1})
+@user_attitude.route('/unchecked/<int:page>')
+def unchecked(page):
     entries = Repo.query\
         .filter(UserAttitude.repo_id.is_(None))\
         .outerjoin(
@@ -36,7 +37,8 @@ def unchecked():
                 UserAttitude.user_id == g.user.id,
                 UserAttitude.repo_id == Repo.id
             )
-        )
+        )\
+        .paginate(page, per_page=20)
     return render_template('unchecked.html', repos=entries)
 
 db.create_all()  # @todo remove it
