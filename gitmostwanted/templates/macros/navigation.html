@@ -1,6 +1,6 @@
 {% macro pagination(pagination, endpoint) -%}
   <ul class="pagination">
-    {% for page in pagination.iter_pages(left_current=1, right_current=1) -%}
+    {% for page in pagination.iter_pages(left_current=1, right_current=2) -%}
       {% if page %}
         {% if page != pagination.page %}
           <li><a href="{{ url_for(endpoint, page=page) }}" class="small button tiny secondary">{{ page }}</a></li>
