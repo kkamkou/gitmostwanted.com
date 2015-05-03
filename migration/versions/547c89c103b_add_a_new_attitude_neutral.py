@@ -1,14 +1,14 @@
 """add a new attitude - neutral
 
-Revision ID: 56f14840f6d
+Revision ID: 547c89c103b
 Revises:
-Create Date: 2015-04-27 21:10:08.934165
+Create Date: 2015-05-03 23:27:19.816976
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '56f14840f6d'
-down_revision = None
+revision = '547c89c103b'
+down_revision = '56f14840f6d'
 branch_labels = None
 depends_on = None
 

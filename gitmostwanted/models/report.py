@@ -14,7 +14,7 @@ class ReportBase(db.Model):
     def repo(self):
         return db.relationship(Repo, uselist=False, lazy='joined')
 
-    cnt_watch = db.Column(db.Integer)
+    cnt_watch = db.Column(db.Integer, nullable=False)
 
 
 class ReportAllDaily(ReportBase):
