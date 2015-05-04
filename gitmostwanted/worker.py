@@ -99,6 +99,3 @@ def most_starred_sync(body, model_name):
         )
 
     db.session.commit()
-
-
-db.create_all()  # @todo remove it
