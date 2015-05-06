@@ -29,7 +29,7 @@ def upgrade():
 
 def downgrade():
     ua = sa.sql.table('users_attitude', sa.Column('attitude', type_new))
-    op.execute(ua.delete().where(ua.c.attitude=='neutral'))
+    op.execute(ua.delete().where(ua.c.attitude == 'neutral'))
 
     op.alter_column(
         'users_attitude', 'attitude',
