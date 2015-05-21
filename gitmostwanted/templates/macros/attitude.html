@@ -4,7 +4,7 @@
     title="Like it"><i class="fi-like"></i></a>
 
   <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='neutral') }}"
-    class="button tiny attitude {{ 'success' if attitude == 'neutral' else 'secondary' }}"
+    class="button tiny attitude {{ 'info' if attitude == 'neutral' else 'secondary' }}"
     title="Not sure"><i class="fi-check"></i></a>
 
   <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='dislike') }}"
