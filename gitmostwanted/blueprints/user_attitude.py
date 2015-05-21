@@ -14,7 +14,7 @@ def user_verify():
 
 @user_attitude.route('/attitude/<int:repo_id>/<attitude>')
 def change(repo_id, attitude):
-    if attitude not in ['dislike', 'neutral']:
+    if attitude not in ['like', 'dislike', 'neutral']:
         return abort(403)
 
     if not Repo.query.get(repo_id):
