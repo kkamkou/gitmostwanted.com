@@ -38,7 +38,11 @@ def unchecked(page):
                 UserAttitude.repo_id == Repo.id
             )
         )\
-        .paginate(page, per_page=20)
+        .paginate(page if page > 0 else 1, per_page=20, error_out=False)
+
+    if entries.pages < entries.page:
+        return unchecked(entries.pages)
+
     return render_template('unchecked.html', repos=entries)
 
 db.create_all()  # @todo remove it
