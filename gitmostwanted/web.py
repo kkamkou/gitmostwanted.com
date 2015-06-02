@@ -64,6 +64,7 @@ def oauth_authorized():
     if resp is None:
         return redirect(next_url)
 
+    session.permanent = True
     session['github_token'] = (resp['access_token'], '')
     me = oauth.github.get('user')
     session['user_id'] = user_get_or_create(me.data['email'], me.data['id'], me.data['login']).id
