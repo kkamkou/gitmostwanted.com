@@ -1,9 +1,13 @@
-{% macro pagination(pagination, endpoint) -%}
+{% macro pagination(paginator) -%}
+
+  {% set view_args = request.view_args %}
+  {% do view_args.pop('page') %}
+
   <ul class="pagination">
-    {% for page in pagination.iter_pages(left_current=1, right_current=2) -%}
+    {% for page in paginator.iter_pages(left_current=1, right_current=2) -%}
       {% if page %}
-        {% if page != pagination.page %}
-          <li><a href="{{ url_for(endpoint, page=page) }}" class="small button tiny secondary">{{ page }}</a></li>
+        {% if page != paginator.page %}
+          <li><a href="{{ url_for(request.endpoint, page=page, **view_args) }}" class="small button tiny secondary">{{ page }}</a></li>
         {% else %}
           <li class="current"><a href="javascript:void(0)" class="small button tiny disabled">{{ page }}</a></li>
         {% endif %}

@@ -7,6 +7,7 @@ from gitmostwanted.models import report
 
 
 app.register_blueprint(user_attitude)
+app.jinja_env.add_extension('jinja2.ext.do')
 
 
 @app.route('/', defaults={'rng': 'day'})

@@ -5,13 +5,16 @@ from gitmostwanted.app import db
 
 user_attitude = Blueprint('user_attitude', __name__)
 
+
 def verify_attitude(attitude):
     return attitude in ['like', 'dislike', 'neutral']
+
 
 @user_attitude.before_request
 def verify_user():
     if not g.user:
         return abort(403)
+
 
 def query(filter_by):
     return Repo.query.filter(filter_by).outerjoin(
@@ -21,6 +24,7 @@ def query(filter_by):
             UserAttitude.repo_id == Repo.id
         )
     )
+
 
 @user_attitude.route('/attitude/<int:repo_id>/<attitude>')
 def change(repo_id, attitude):
@@ -35,16 +39,18 @@ def change(repo_id, attitude):
 
     return make_response(render_template_string('Ok'), 204)
 
+
 @user_attitude.route('/unchecked/', defaults={'page': 1})
 @user_attitude.route('/unchecked/<int:page>')
 def unchecked(page):
-    entries = query(UserAttitude.repo_id.is_(None)) \
+    entries = query(UserAttitude.repo_id.is_(None))\
         .add_columns(db.null())\
         .paginate(page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages < entries.page:
         return unchecked(entries.pages)
 
     return render_template('attitude.html', repos=entries)
+
 
 @user_attitude.route('/attitude/<attitude>', defaults={'page': 1})
 @user_attitude.route('/attitude/<attitude>/<int:page>')
