@@ -1,13 +1,18 @@
 {% extends "layout.html" %}
 
-{% set pageTitle = 'Unchecked' %}
+{% set page_title = 'Attitude' %}
 
 {% from "macros/navigation.html" import pagination %}
 {% from "macros/attitude.html" import user_attitude %}
 
 {% block body %}
   <dl class="sub-nav">
-    <dd class="active"><a href="#">Unchecked</a></dd>
+    <dd {{ 'class=active' if not attitude }}><a href="{{ url_for('user_attitude.unchecked') }}">Unchecked</a></dd>
+    {% for r in ['like', 'dislike', 'neutral'] %}
+      <dd {{ 'class=active' if attitude == r }}>
+        <a href="{{ url_for('user_attitude.list_by_attitude', attitude=r) }}">{{ r|capitalize() }}</a>
+      </dd>
+    {% endfor %}
     <dd><a href="/">Trending</a></dd>
   </dl>
 

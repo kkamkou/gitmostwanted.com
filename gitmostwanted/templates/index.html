@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% set pageTitle = 'Trending' %}
+{% set page_title = 'Trending' %}
 
 {% from "macros/attitude.html" import user_attitude %}
 
@@ -13,7 +13,7 @@
     {% endfor %}
 
     {% if g.user %}
-      <dd><a href="{{ url_for('user_attitude.unchecked') }}">Unchecked</a></dd>
+      <dd><a href="{{ url_for('user_attitude.unchecked') }}">Attitude</a></dd>
     {% endif %}
   </dl>
 
