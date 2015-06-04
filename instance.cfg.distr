@@ -3,6 +3,7 @@ GMW_APP_ENV = 'production'
 
 # flask
 SECRET_KEY = 'secret_key'
+PERMANENT_SESSION_LIFETIME = 1209600 # 14 days
 
 # SQLAlchemy
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@dbGmw/gitmostwanted?charset=utf8'
