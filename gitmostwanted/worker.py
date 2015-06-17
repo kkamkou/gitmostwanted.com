@@ -93,7 +93,8 @@ def most_starred_sync(body, model_name):
                     language=info['language'],
                     full_name=info['full_name'],
                     description=info['description'],
-                    html_url=info['html_url']
+                    html_url=info['html_url'],
+                    homepage=info['homepage'] if info['homepage'] else None
                 )
             )
         )
