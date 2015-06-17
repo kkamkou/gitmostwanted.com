@@ -30,6 +30,10 @@
                 {% endif %}
               </h4>
 
+              {% if entry.repo.homepage %}
+                <a href="{{ entry.repo.homepage }}" target="_blank">{{ entry.repo.homepage }}</a>
+              {% endif %}
+
               <p>{{ entry.repo.description }}</p>
 
               {% if g.user %}

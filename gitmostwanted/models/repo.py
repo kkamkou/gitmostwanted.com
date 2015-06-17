@@ -15,3 +15,4 @@ class Repo(db.Model):
     full_name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(250))
     html_url = db.Column(db.String(150), nullable=False)
+    homepage = db.Column(db.String(150))
