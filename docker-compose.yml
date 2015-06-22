@@ -1,12 +1,12 @@
 web:
   build: .
   user: gitmostwanted
-  entrypoint: /opt/entrypoint.sh
+  entrypoint: ["/opt/entrypoint.sh"]
   ports:
     - "5000:5000"
   volumes:
     - ./gitmostwanted:/opt/gitmostwanted
-    - ./:/opt
+    - .:/opt
   environment:
     - GMW_APP_SETTINGS=/opt/instance.cfg
   links:
