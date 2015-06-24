@@ -84,7 +84,7 @@ def most_starred_sync(body, model_name):
             continue
 
         homepage = info['homepage'] or None
-        if homepage and homepage.find('http') == -1:
+        if homepage and homepage.find('http') != 0:
             homepage = 'http://' + homepage
 
         db.session.merge(
