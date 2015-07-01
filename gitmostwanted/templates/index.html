@@ -19,6 +19,15 @@
 
   <div class="row" id="gh-entries">
     <div class="small-12 columns">
+      <form>
+        <select name="lang" onchange="$(this).closest('form').submit();">
+          <option>All</option>
+          {% for (lang,) in languages %}
+            <option{{ ' selected="selected"' if request.args.get('lang') == lang }}>{{ lang }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
       <ul class="small-block-grid-1 medium-block-grid-1 large-block-grid-3">
         {% for (entry, attitude) in entries %}
           <li data-url="{{ entry.repo.html_url }}">

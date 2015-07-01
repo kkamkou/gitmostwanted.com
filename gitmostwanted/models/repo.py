@@ -1,6 +1,5 @@
 from gitmostwanted.app import db
 
-
 class Repo(db.Model):
     __tablename__ = 'repos'
     __table_args__ = {
@@ -16,3 +15,10 @@ class Repo(db.Model):
     description = db.Column(db.String(250))
     html_url = db.Column(db.String(150), nullable=False)
     homepage = db.Column(db.String(150))
+
+    @staticmethod
+    def language_distinct():
+        if not hasattr(Repo.language_distinct, 'memoize'):
+            q = db.session.query(Repo.language).distinct().filter(Repo.language.isnot(None))
+            setattr(Repo.language_distinct, 'memoize', q.all())
+        return getattr(Repo.language_distinct, 'memoize')
