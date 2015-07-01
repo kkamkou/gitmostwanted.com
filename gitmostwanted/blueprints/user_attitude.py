@@ -55,7 +55,7 @@ def unchecked(page):
     entries = query(UserAttitude.repo_id.is_(None))\
         .add_columns(db.null())\
         .paginate(page if page > 0 else 1, per_page=20, error_out=False)
-    if entries.pages < entries.page:
+    if entries.pages and entries.pages < entries.page:
         return unchecked(entries.pages)
     return render_template(
         'attitude.html', repos=entries, languages=Repo.language_distinct()
@@ -71,7 +71,7 @@ def list_by_attitude(attitude, page):
     entries = query(UserAttitude.attitude == attitude) \
         .add_columns(UserAttitude.attitude)\
         .paginate(page if page > 0 else 1, per_page=20, error_out=False)
-    if entries.pages < entries.page:
+    if entries.pages and entries.pages < entries.page:
         return list_by_attitude(attitude, entries.pages)
 
     return render_template('attitude.html', repos=entries, attitude=attitude)
