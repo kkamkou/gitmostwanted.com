@@ -25,7 +25,7 @@ def index(rng):
     model = getattr(report, map_list[rng])
 
     if not g.user:
-        q = model.query.add_columns(db.null())
+        q = model.query.join(Repo).add_columns(db.null())
     else:
         q = model.query\
             .join(Repo)\
@@ -38,8 +38,14 @@ def index(rng):
                 )
             )
 
+    languages = Repo.language_distinct()
+
+    lang = request.args.get('lang')
+    if lang != 'All' and (lang,) in languages:
+        q = q.filter(Repo.language == lang)
+
     return render_template(
-        'index.html', range=rng, entries=q.order_by(db.desc(model.cnt_watch))
+        'index.html', range=rng, entries=q.order_by(db.desc(model.cnt_watch)), languages=languages
     )
 
 

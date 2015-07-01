@@ -1,4 +1,5 @@
-from flask import abort, Blueprint, g, make_response, render_template_string, render_template
+from flask import\
+    abort, Blueprint, g, make_response, request, render_template_string, render_template
 from gitmostwanted.models.user import UserAttitude
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.app import db
@@ -17,13 +18,21 @@ def verify_user():
 
 
 def query(filter_by):
-    return Repo.query.filter(filter_by).outerjoin(
+    q = Repo.query.filter(filter_by).outerjoin(
         UserAttitude,
         db.and_(
             UserAttitude.user_id == g.user.id,
             UserAttitude.repo_id == Repo.id
         )
     )
+
+    languages = Repo.language_distinct()
+
+    lang = request.args.get('lang')
+    if lang != 'All' and (lang,) in languages:
+        q = q.filter(Repo.language == lang)
+
+    return q
 
 
 @user_attitude.route('/attitude/<int:repo_id>/<attitude>')
@@ -48,8 +57,9 @@ def unchecked(page):
         .paginate(page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages < entries.page:
         return unchecked(entries.pages)
-
-    return render_template('attitude.html', repos=entries)
+    return render_template(
+        'attitude.html', repos=entries, languages=Repo.language_distinct()
+    )
 
 
 @user_attitude.route('/attitude/<attitude>', defaults={'page': 1})
