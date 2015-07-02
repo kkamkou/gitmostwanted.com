@@ -1,7 +1,12 @@
 [![wercker status](https://app.wercker.com/status/7767a5325ebf378ede0ac3016c992ebc/s "wercker status")](https://app.wercker.com/project/bykey/7767a5325ebf378ede0ac3016c992ebc)
 [![Code Health](https://landscape.io/github/Letscodeit/gitmostwanted.com/master/landscape.svg?style=flat-square)](https://landscape.io/github/Letscodeit/gitmostwanted.com/master)
 # gitmostwanted
-More advanced explore for the github.com
+Advanced explore for the github.com
+
+## Donation
+If you would like to help the project, please consider these topics:
+- GMW uses [Google BigQuery](https://cloud.google.com/bigquery/pricing) and the service is pretty expensive.
+- GMW is located on a private machine and hosted by [ProfitBricks](https://www.profitbricks.de/).
 
 ## Run
 
