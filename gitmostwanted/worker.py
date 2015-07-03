@@ -1,5 +1,5 @@
 # pylint: disable=E1002
-from datetime import date
+from datetime import date, datetime
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.models import report
 from gitmostwanted.bigquery.query import fetch
@@ -96,9 +96,10 @@ def most_starred_sync(body, model_name):
                     name=info['name'],
                     language=info['language'],
                     full_name=info['full_name'],
-                    description=info['description'],
+                    description=info['description'][:250] if info['description'] else None,
                     html_url=info['html_url'],
-                    homepage=homepage
+                    homepage=homepage,
+                    created_at=datetime.strptime(info['created_at'], '%Y-%m-%dT%H:%M:%SZ')
                 )
             )
         )

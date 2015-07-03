@@ -15,6 +15,7 @@ class Repo(db.Model):
     description = db.Column(db.String(250))
     html_url = db.Column(db.String(150), nullable=False)
     homepage = db.Column(db.String(150))
+    created_at = db.Column(db.DateTime, nullable=False)
 
     @staticmethod
     def language_distinct():
