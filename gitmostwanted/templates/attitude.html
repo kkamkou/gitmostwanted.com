@@ -42,7 +42,9 @@
                 <a href="{{ repo.homepage }}" target="_blank">{{ repo.homepage }}</a>
               {% endif %}
 
-              <p>{{ repo.description }}</p>
+              {% if repo.description %}
+                <p>{{ repo.description }}</p>
+              {% endif %}
 
               {{ user_attitude(repo.id, attitude) }}
             </div>
