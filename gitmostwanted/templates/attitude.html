@@ -17,16 +17,21 @@
   </dl>
 
   <div class="row" id="gh-entries">
-    <div class="small-12 columns">
-      <form>
-        <select name="lang" onchange="$(this).closest('form').submit();">
+    <form class="filterGhEntries">
+      <div class="small-9 medium-10 large-11 columns">
+        <select name="lang">
           <option>All</option>
             {% for (lang,) in languages %}
               <option{{ ' selected="selected"' if request.args.get('lang') == lang }}>{{ lang }}</option>
             {% endfor %}
         </select>
-      </form>
+      </div>
+      <div class="small-3 medium-2 large-1 columns">
+        <a href="#" class="button tiny">Reset</a>
+      </div>
+    </form>
 
+    <div class="small-12 columns">
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         {% for (repo, attitude) in repos.items %}
           <li data-url="{{ repo.html_url }}">
