@@ -72,14 +72,5 @@
     $(document).foundation();
   </script>
 
-  <script type="text/javascript">
-    $('a.attitude').on('click', function () {
-      $.get($(this).attr('href'), function () {
-        window.location.reload();
-      });
-      return false;
-    })
-  </script>
-
   {% block js %}{% endblock %}
 </html>

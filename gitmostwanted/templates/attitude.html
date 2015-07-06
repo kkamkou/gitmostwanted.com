@@ -21,9 +21,9 @@
       <div class="small-8 medium-10 large-11 columns">
         <select name="lang">
           <option>All</option>
-            {% for (lang,) in languages %}
-              <option{{ ' selected="selected"' if request.args.get('lang') == lang }}>{{ lang }}</option>
-            {% endfor %}
+          {% for (lang,) in languages %}
+            <option{{ ' selected="selected"' if request.args.get('lang') == lang }}>{{ lang }}</option>
+          {% endfor %}
         </select>
       </div>
       <div class="small-4 medium-2 large-1 columns">
