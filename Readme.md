@@ -1,7 +1,7 @@
 [![wercker status](https://app.wercker.com/status/7767a5325ebf378ede0ac3016c992ebc/s "wercker status")](https://app.wercker.com/project/bykey/7767a5325ebf378ede0ac3016c992ebc)
-[![Code Health](https://landscape.io/github/Letscodeit/gitmostwanted.com/master/landscape.svg?style=flat-square)](https://landscape.io/github/Letscodeit/gitmostwanted.com/master)
+[![Code Health](https://landscape.io/github/kkamkou/gitmostwanted.com/master/landscape.svg)](https://landscape.io/github/kkamkou/gitmostwanted.com/master)
 # gitmostwanted
-Advanced explore for the github.com
+Advanced explorer of github.com
 
 ## Donation
 If you would like to help the project, please consider these topics:
