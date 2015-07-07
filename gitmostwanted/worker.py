@@ -83,7 +83,7 @@ def most_starred_sync(body, model_name):
         if not info:
             continue
 
-        homepage = info['homepage'] or None
+        homepage = info['homepage'].strip() if info['homepage'] else None
         if homepage and homepage.find('http') != 0:
             homepage = 'http://' + homepage
 
