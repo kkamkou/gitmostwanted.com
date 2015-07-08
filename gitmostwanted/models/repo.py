@@ -1,4 +1,6 @@
 from gitmostwanted.app import db
+from datetime import datetime, timedelta
+
 
 class Repo(db.Model):
     __tablename__ = 'repos'
@@ -16,6 +18,11 @@ class Repo(db.Model):
     html_url = db.Column(db.String(150), nullable=False)
     homepage = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, nullable=False)
+
+    def is_newbie(self):
+        if not self.created_at:
+            return True  # @todo! #52 remove me
+        return self.created_at > datetime.now() + timedelta(days=-180)  # 6 months
 
     @staticmethod
     def language_distinct():
