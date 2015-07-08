@@ -105,3 +105,13 @@ def most_starred_sync(body, model_name):
         )
 
     db.session.commit()
+
+"""
+    SELECT COUNT(1), DAYOFYEAR(created_at) AS doy FROM
+        TABLE_DATE_RANGE(
+            githubarchive:day.events_,
+            TIMESTAMP('2015-05-01'),
+            TIMESTAMP('2015-06-30')
+        )
+    WHERE repo.id = 458058 AND type = 'WatchEvent' GROUP BY doy
+"""
