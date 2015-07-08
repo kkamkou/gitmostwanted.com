@@ -13,12 +13,7 @@ app.jinja_env.add_extension('jinja2.ext.do')
 @app.route('/', defaults={'rng': 'day'})
 @app.route('/trending/<rng>/')
 def index(rng):
-    map_list = {
-        'day': 'ReportAllDaily',
-        'week': 'ReportAllWeekly',
-        'month': 'ReportAllMonthly'
-    }
-
+    map_list = {'day': 'ReportAllDaily', 'week': 'ReportAllWeekly', 'month': 'ReportAllMonthly'}
     if rng not in map_list:
         rng = 'day'
 

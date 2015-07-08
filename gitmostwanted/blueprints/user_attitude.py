@@ -17,24 +17,6 @@ def verify_user():
         return abort(403)
 
 
-def query(filter_by):
-    q = Repo.query.filter(filter_by).outerjoin(
-        UserAttitude,
-        db.and_(
-            UserAttitude.user_id == g.user.id,
-            UserAttitude.repo_id == Repo.id
-        )
-    )
-
-    languages = Repo.language_distinct()
-
-    lang = request.args.get('lang')
-    if lang != 'All' and (lang,) in languages:
-        q = q.filter(Repo.language == lang)
-
-    return q
-
-
 @user_attitude.route('/attitude/<int:repo_id>/<attitude>')
 def change(repo_id, attitude):
     if not verify_attitude(attitude):
@@ -51,29 +33,37 @@ def change(repo_id, attitude):
 
 @user_attitude.route('/unchecked/', defaults={'page': 1})
 @user_attitude.route('/unchecked/<int:page>')
-def unchecked(page):
-    entries = query(UserAttitude.repo_id.is_(None))\
-        .add_columns(db.null())\
-        .paginate(page if page > 0 else 1, per_page=20, error_out=False)
-    if entries.pages and entries.pages < entries.page:
-        return unchecked(entries.pages)
-    return render_template(
-        'attitude.html', repos=entries, languages=Repo.language_distinct()
-    )
+def list_unchecked(page):
+    return list_by_attitude(None, page)
 
 
 @user_attitude.route('/attitude/<attitude>', defaults={'page': 1})
 @user_attitude.route('/attitude/<attitude>/<int:page>')
-def list_by_attitude(attitude, page):
+def list_attitude(attitude, page):
     if not verify_attitude(attitude):
         return abort(403)
+    return list_by_attitude(attitude, page)
 
-    entries = query(UserAttitude.attitude == attitude) \
-        .add_columns(UserAttitude.attitude)\
-        .paginate(page if page > 0 else 1, per_page=20, error_out=False)
+
+def list_by_attitude(attitude, page):
+    q = Repo.query.filter(UserAttitude.attitude == attitude)\
+        .outerjoin(
+            UserAttitude,
+            db.and_(
+                UserAttitude.user_id == g.user.id,
+                UserAttitude.repo_id == Repo.id
+            )
+        )\
+        .add_columns(UserAttitude.attitude if attitude else db.null())
+
+    languages = Repo.language_distinct()
+
+    lang = request.args.get('lang')
+    if lang != 'All' and (lang,) in languages:
+        q = q.filter(Repo.language == lang)
+
+    entries = q.paginate(page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:
         return list_by_attitude(attitude, entries.pages)
 
-    return render_template(
-        'attitude.html', repos=entries, attitude=attitude, languages=Repo.language_distinct()
-    )
+    return render_template('attitude.html', repos=entries, attitude=attitude, languages=languages)
