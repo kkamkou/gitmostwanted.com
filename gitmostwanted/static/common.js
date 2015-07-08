@@ -1,5 +1,5 @@
 $(function () {
-  $('form.filterGhEntries')
+  $('form.repository_filter')
     .find('select').on('change', function () {
       $(this).closest('form').submit();
     })
@@ -8,4 +8,11 @@ $(function () {
       $(this).closest('form').find('select').val('All').trigger('change');
       return false;
     });
+
+  $('a.attitude').on('click', function () {
+    $.get($(this).attr('href'), function () {
+      window.location.reload();
+    });
+    return false;
+  });
 });

@@ -1,0 +1,38 @@
+{% macro repository(repo) -%}
+  <li data-url="{{ repo.html_url }}">
+    <div>
+      <h4>
+        <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a>
+        {% if repo.language %}
+          <small class="right">{{ repo.language }}</small>
+        {% endif %}
+      </h4>
+
+      {% if repo.homepage %}
+        <a href="{{ repo.homepage }}" target="_blank">{{ repo.homepage }}</a>
+      {% endif %}
+
+      {% if repo.description %}
+        <p>{{ repo.description }}</p>
+      {% endif %}
+
+      {{ caller(repo) }}
+    </div>
+  </li>
+{%- endmacro %}
+
+{% macro repository_filter(languages, language) -%}
+  <form class="repository_filter">
+    <div class="small-8 medium-10 large-11 columns">
+      <select name="lang">
+        <option>All</option>
+        {% for (lang,) in languages %}
+          <option{{ ' selected="selected"' if language == lang }}>{{ lang }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="small-4 medium-2 large-1 columns">
+      <a href="#" class="button tiny">Reset</a>
+    </div>
+  </form>
+{%- endmacro %}
