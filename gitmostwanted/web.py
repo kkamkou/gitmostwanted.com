@@ -69,7 +69,7 @@ def oauth_authorized():
     session.permanent = True
     session['github_token'] = (resp['access_token'], '')
     me = oauth.github.get('user')
-    session['user_id'] = user_get_or_create(me.data['email'], me.data['id'], me.data['login']).id
+    session['user_id'] = user_get_or_create(me.data['id'], me.data['email'], me.data['login']).id
 
     return redirect(next_url)
 
@@ -88,12 +88,11 @@ def user_load_from_session():
     g.user = User.query.get(session['user_id']) if 'user_id' in session else None
 
 
-def user_get_or_create(uemail, uid, uname):
-    entity = User.query.filter_by(email=uemail).first()
+def user_get_or_create(uid, uemail, uname):
+    entity = User.query.filter_by(github_id=uid).first()
     if entity:
         return entity
-
-    entity = User(email=uemail, github_id=uid, username=uname)
+    entity = User(github_id=uid, username=uname, email=uemail or None)
     db.session.add(entity)
     db.session.commit()
     return entity
