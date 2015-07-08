@@ -1,13 +1,15 @@
 {% macro user_attitude(repo_id, attitude=None) -%}
-  <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='like') }}"
-    class="button tiny attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
-    title="Like it"><i class="fi-like"></i></a>
+  <div class="user_attitude">
+    <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='like') }}"
+      class="button tiny attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
+      title="Like it"><i class="fi-like"></i></a>
 
-  <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='neutral') }}"
-    class="button tiny attitude {{ 'info' if attitude == 'neutral' else 'secondary' }}"
-    title="Not sure"><i class="fi-check"></i></a>
+    <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='neutral') }}"
+      class="button tiny attitude {{ 'info' if attitude == 'neutral' else 'secondary' }}"
+      title="Not sure"><i class="fi-check"></i></a>
 
-  <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='dislike') }}"
-    class="button tiny attitude {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
-    title="Useless"><i class="fi-dislike"></i></a>
+    <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='dislike') }}"
+      class="button tiny attitude {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
+      title="Useless"><i class="fi-dislike"></i></a>
+  </div>
 {%- endmacro %}
