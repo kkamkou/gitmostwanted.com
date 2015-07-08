@@ -1,5 +1,5 @@
 $(function () {
-  $('form.filterGhEntries')
+  $('form.repository_filter')
     .find('select').on('change', function () {
       $(this).closest('form').submit();
     })
