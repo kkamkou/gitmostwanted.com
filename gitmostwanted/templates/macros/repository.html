@@ -5,7 +5,7 @@
         <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a>
 
         {% if not repo.is_newbie() %}
-          <sup class="success label" title="Mature enough (Older than 6 months)">m</sup>
+          <sup class="secondary label" title="Mature enough (Older than 6 months)">m</sup>
         {% endif %}
 
         {% if repo.language %}
