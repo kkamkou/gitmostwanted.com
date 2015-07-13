@@ -38,8 +38,9 @@ class RepoStars(db.Model):
 
     repo_id = db.Column(
         db.BigInteger,
-        db.ForeignKey('repos.id', name='fk_repos_stars_repo_id', ondelete='CASCADE')
+        db.ForeignKey('repos.id', name='fk_repos_stars_repo_id', ondelete='CASCADE'),
+        primary_key=True
     )
-    stars = db.Column(SMALLINT(display_width=4, unsigned=True), nullable=False, primary_key=True)
+    stars = db.Column(SMALLINT(display_width=4, unsigned=True), nullable=False)
     year = db.Column(SMALLINT(display_width=4, unsigned=True), nullable=False, primary_key=True)
     day = db.Column(SMALLINT(display_width=3, unsigned=True), nullable=False, primary_key=True)
