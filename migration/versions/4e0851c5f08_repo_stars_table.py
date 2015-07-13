@@ -21,13 +21,22 @@ def upgrade():
     op.create_table(
         'repos_stars',
         sa.Column('repo_id', sa.BigInteger(), nullable=False),
-        sa.Column('stars', mysql.SMALLINT(display_width=4, unsigned=True), nullable=False),
-        sa.Column('year', mysql.SMALLINT(display_width=4, unsigned=True), nullable=False),
-        sa.Column('day', mysql.SMALLINT(display_width=3, unsigned=True), nullable=False),
+        sa.Column(
+            'stars',
+            mysql.SMALLINT(display_width=4, unsigned=True),
+            nullable=False, primary_key=True
+        ),
+        sa.Column(
+            'year',
+            mysql.SMALLINT(display_width=4, unsigned=True),
+            nullable=False, primary_key=True
+        ),
+        sa.Column(
+            'day', mysql.SMALLINT(display_width=3, unsigned=True), nullable=False, primary_key=True
+        ),
         sa.ForeignKeyConstraint(
             ['repo_id'], ['repos.id'], name='fk_repos_stars_repo_id', ondelete='CASCADE'
-        ),
-        sa.PrimaryKeyConstraint('repo_id', 'year', 'day', name='ix_unique')
+        )
     )
 
 
