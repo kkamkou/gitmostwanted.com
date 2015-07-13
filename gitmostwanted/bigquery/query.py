@@ -19,5 +19,6 @@ def fetch(body):
     try:
         pid = app.config['GOOGLE_BIGQUERY']['project_id']
         return Result(service().jobs().query(projectId=pid, body=body).execute())
-    except errors.HttpError:
+    except errors.HttpError as e:
+        app.logger.warning(e)
         return False

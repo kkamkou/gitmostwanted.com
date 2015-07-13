@@ -24,7 +24,11 @@ CELERYBEAT_SCHEDULE = {
     },
     'most-starred-month': {
         'task': 'gitmostwanted.worker.most_starred_month',
-        'schedule': 2628000
+        'schedule': 2592000
+    },
+    'repos_stars': {
+        'task': 'gitmostwanted.worker.repos_stars',
+        'schedule': 604800
     }
 }
 
