@@ -1,15 +1,14 @@
 # pylint: disable=C1001
-class Config():
+class Config:
     CELERY_BROKER_URL = ''
     SQLALCHEMY_ECHO = False
     SECRET_KEY = ''
     TESTING = False
-    DEBUG = False
+    DEBUG = True
 
 
 class ConfigDevelopment(Config):
     SQLALCHEMY_ECHO = True
-    DEBUG = True
 
 
 class ConfigTesting(Config):
@@ -18,4 +17,4 @@ class ConfigTesting(Config):
 
 
 class ConfigProduction(Config):
-    pass
+    DEBUG = False
