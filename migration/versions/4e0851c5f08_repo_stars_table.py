@@ -20,12 +20,8 @@ import sqlalchemy as sa
 def upgrade():
     op.create_table(
         'repos_stars',
-        sa.Column('repo_id', sa.BigInteger(), nullable=False),
-        sa.Column(
-            'stars',
-            mysql.SMALLINT(display_width=4, unsigned=True),
-            nullable=False, primary_key=True
-        ),
+        sa.Column('repo_id', sa.BigInteger(), nullable=False, primary_key=True),
+        sa.Column('stars', mysql.SMALLINT(display_width=4, unsigned=True), nullable=False),
         sa.Column(
             'year',
             mysql.SMALLINT(display_width=4, unsigned=True),
