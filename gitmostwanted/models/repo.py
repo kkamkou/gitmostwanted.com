@@ -35,7 +35,7 @@ class Repo(db.Model):
 
 class RepoStars(db.Model):
     __tablename__ = 'repos_stars'
-    __table_args__ = (db.UniqueConstraint('repo_id', 'year', 'day', name='ix_unique'),)
+    __table_args__ = (db.PrimaryKeyConstraint('repo_id', 'year', 'day', name='ix_unique'),)
 
     repo_id = db.Column(
         db.BigInteger,
