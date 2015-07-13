@@ -27,7 +27,6 @@ def upgrade():
         sa.ForeignKeyConstraint(
             ['repo_id'], ['repos.id'], name='fk_repos_stars_repo_id', ondelete='CASCADE'
         ),
-        sa.PrimaryKeyConstraint('repo_id'),
         sa.UniqueConstraint('repo_id', 'year', 'day', name='ix_unique')
     )
 
