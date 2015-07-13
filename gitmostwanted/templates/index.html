@@ -25,15 +25,15 @@
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         {% for (entry, attitude) in entries %}
           {% call(repo) repository(entry.repo) %}
-            {% if g.user %}
-                {{ user_attitude(repo.id, attitude) }}
-            {% endif %}
-
             <div class="right">
               <span class="label secondary">
                 +{{ entry.cnt_watch }} <i class="fi-star"></i>
               </span>
             </div>
+
+            {% if g.user %}
+                {{ user_attitude(repo.id, attitude) }}
+            {% endif %}
           {% endcall %}
         {% endfor %}
       </ul>
