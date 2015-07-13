@@ -1,6 +1,6 @@
 # pylint: disable=E1002
-from datetime import date, datetime
-from gitmostwanted.models.repo import Repo
+from datetime import date, datetime, timedelta
+from gitmostwanted.models.repo import Repo, RepoStars
 from gitmostwanted.models import report
 from gitmostwanted.bigquery.query import fetch
 from gitmostwanted.app import app, db, celery
@@ -105,3 +105,30 @@ def most_starred_sync(body, model_name):
         )
 
     db.session.commit()
+
+
+@celery.task()
+def repos_stars():
+    date_from = (datetime.now() + timedelta(days=-8)).strftime('%Y-%m-%d')
+    date_to = (datetime.now() + timedelta(days=-1)).strftime('%Y-%m-%d')
+    query = """
+        SELECT
+            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
+        FROM
+            TABLE_DATE_RANGE(
+                githubarchive:day.events_,
+                TIMESTAMP('{date_from}'),
+                TIMESTAMP('{date_to}')
+            )
+        WHERE repo.id = {id} AND type = 'WatchEvent'
+        GROUP BY y, doy
+    """
+
+    repos = Repo.query.with_entities(Repo.id)\
+        .filter(Repo.created_at >= date_from)\
+        .filter(Repo.created_at <= date_to)
+    for repo in repos:
+        response = fetch({'query': query.format(id=repo.id, date_from=date_from, date_to=date_to)})
+        for row in response:
+            db.session.merge(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
+        db.session.commit()

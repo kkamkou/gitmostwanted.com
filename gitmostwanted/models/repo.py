@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.mysql import SMALLINT
 from gitmostwanted.app import db
 from datetime import datetime, timedelta
 
@@ -30,3 +31,17 @@ class Repo(db.Model):
             q = db.session.query(Repo.language).distinct().filter(Repo.language.isnot(None))
             setattr(Repo.language_distinct, 'memoize', q.all())
         return getattr(Repo.language_distinct, 'memoize')
+
+
+class RepoStars(db.Model):
+    __tablename__ = 'repos_stars'
+    __table_args__ = (db.UniqueConstraint('repo_id', 'year', 'day', name='ix_unique'),)
+
+    repo_id = db.Column(
+        db.BigInteger,
+        db.ForeignKey('repos.id', name='fk_repos_stars_repo_id', ondelete='CASCADE'),
+        primary_key=True
+    )
+    stars = db.Column(SMALLINT(display_width=4, unsigned=True), nullable=False)
+    year = db.Column(SMALLINT(display_width=4, unsigned=True), nullable=False)
+    day = db.Column(SMALLINT(display_width=3, unsigned=True), nullable=False)
