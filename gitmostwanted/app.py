@@ -18,3 +18,9 @@ oauth.init_app(app)
 
 celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
+
+if not app.debug:
+    from logging import handlers, INFO
+    handler = handlers.TimedRotatingFileHandler(app.config['DEBUG_FILE'], when='d', backupCount=1)
+    handler.setLevel(INFO)
+    app.logger.addHandler(handler)
