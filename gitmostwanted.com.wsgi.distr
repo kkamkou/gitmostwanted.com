@@ -1,9 +1,7 @@
 import os
 import sys
-import logging
 
 os.environ['GMW_APP_SETTINGS'] = '/path/to/instance.cfg'
-
-logging.basicConfig(stream=sys.stderr)
+os.environ['GMW_APP_ENV'] = 'production'
 
 from gitmostwanted.web import app as application
