@@ -7,10 +7,14 @@ class BigQueryResultTestCase(TestCase):
         self.result = Result(self.response_example())
 
     def test_convert_incoming_obj(self):
-        self.assertEquals(len(self.result), 1)
+        self.assertEquals(len(self.result), 2)
         self.assertEquals(
             next(self.result),
             ['29028775', 'facebook/react-native', '225']
+        )
+        self.assertEquals(
+            next(self.result),
+            ['29028776', 'facebook/react-native2', '226']
         )
         self.assertRaises(StopIteration, next, self.result)
 
@@ -29,6 +33,13 @@ class BigQueryResultTestCase(TestCase):
                         {'v': '29028775'},
                         {'v': 'facebook/react-native'},
                         {'v': '225'}
+                    ]
+                },
+                {
+                    'f': [
+                        {'v': '29028776'},
+                        {'v': 'facebook/react-native2'},
+                        {'v': '226'}
                     ]
                 }
             ],
@@ -52,5 +63,5 @@ class BigQueryResultTestCase(TestCase):
                 ]
             },
             'totalBytesProcessed': '5568164',
-            'totalRows': '1'
+            'totalRows': '2'
         }
