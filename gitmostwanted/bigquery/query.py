@@ -1,24 +1,25 @@
-from apiclient import discovery, errors
-from gitmostwanted.bigquery.result import Result
-from gitmostwanted.app import app
-from httplib2 import Http
-from oauth2client.client import SignedJwtAssertionCredentials
+from uuid import uuid4
+from gitmostwanted.bigquery.service import ServiceGmw
 
 
-def service():
-    config = app.config['GOOGLE_BIGQUERY']
+class Query:
+    def __init__(self, service: ServiceGmw, query_str: str, num_retries: int=3):
+        self.num_retries = num_retries
+        self.service = service
+        self.query = query_str
 
-    with open(config['private_key_path'], 'rb') as f:
-        private_key = f.read()
-
-    auth = SignedJwtAssertionCredentials(config['email'], private_key, config['url'])
-    return discovery.build(config['service_name'], config['version'], http=auth.authorize(Http()))
-
-
-def fetch(body):
-    try:
-        pid = app.config['GOOGLE_BIGQUERY']['project_id']
-        return Result(service().jobs().query(projectId=pid, body=body).execute())
-    except errors.HttpError as e:
-        app.logger.warning(e)
-        return False
+    def async(self, batch=False):
+        body = {
+            'jobReference': {
+                'projectId': self.service.project_id,
+                'job_id': str(uuid4())
+            },
+            'configuration': {
+                'query': {
+                    'query': self.query,
+                    'priority': 'BATCH' if batch else 'INTERACTIVE'
+                }
+            }
+        }
+        return self.service.resource.jobs().insert(projectId=self.service.project_id, body=body)\
+            .execute(num_retries=self.num_retries)

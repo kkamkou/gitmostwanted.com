@@ -46,9 +46,6 @@ GITHUB_OAUTH = {
 # google
 GOOGLE_BIGQUERY = {
     'private_key_path': None,
-    'service_name': 'bigquery',
-    'project_id': None,
-    'version': 'v2',
-    'email': None,
-    'url': 'https://www.googleapis.com/auth/bigquery.readonly'
+    'account_name': None,
+    'project_id': None
 }

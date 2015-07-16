@@ -1,11 +1,11 @@
 from collections import Iterator, Sized
 
 
-# @todo! add fields names from schema
+# @todo! add field names from schema
 class Result(Iterator, Sized):
     """Converts result of google-api-python-client"""
 
-    def __init__(self, obj):
+    def __init__(self, obj: str):
         self.__iter = 0
         self.__total_rows = int(obj['totalRows'])
         self.__rows = list(map(lambda x: x['f'], obj['rows']))
