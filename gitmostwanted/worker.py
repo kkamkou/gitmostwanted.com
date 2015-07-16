@@ -130,11 +130,5 @@ def repos_stars(days_from, days_to):
     for repo in repos:
         response = fetch({'query': query.format(id=repo.id, date_from=date_from, date_to=date_to)})
         for row in response:
-            try:
-                db.session.add(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
-                db.session.commit()
-            except IntegrityError:
-                app.logger.info(
-                    'The entry exists for {0} ({1}, {2})'.format(repo.id, row[1], row[2])
-                )
-                db.session.rollback()
+            db.session.merge(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
+        db.session.commit()
