@@ -1,3 +1,5 @@
+from celery.schedules import crontab
+
 # flask
 SECRET_KEY = 'secret_key'
 DEBUG_FILE = '/tmp/gmw.log'
@@ -14,19 +16,20 @@ CELERY_RESULT_BACKEND='db+mysql+pymysql://celery_result:celery_result_pwd@dbCele
 CELERYBEAT_SCHEDULE = {
     'most-starred-day': {
         'task': 'gitmostwanted.worker.most_starred_day',
-        'schedule': 86400
+        'schedule': crontab(hour=2)
     },
     'most-starred-week': {
         'task': 'gitmostwanted.worker.most_starred_week',
-        'schedule': 604800
+        'schedule': crontab(hour=3, day_of_week=0)
     },
     'most-starred-month': {
         'task': 'gitmostwanted.worker.most_starred_month',
-        'schedule': 2592000
+        'schedule': crontab(hour=4, day_of_month=1)
     },
     'repos_stars': {
         'task': 'gitmostwanted.worker.repos_stars',
-        'schedule': 604800
+        'schedule': crontab(hour=5, day_of_week=1),
+        'args': (-8, -1)
     }
 }
 
