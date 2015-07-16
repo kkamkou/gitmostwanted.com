@@ -1,11 +1,11 @@
 # pylint: disable=E1002
-from datetime import date, datetime, timedelta
 from gitmostwanted.models.repo import Repo, RepoStars
 from gitmostwanted.models import report
 from gitmostwanted.bigquery.query import fetch
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.github.api import repo_info
-
+from sqlalchemy.exc import IntegrityError
+from datetime import date, datetime, timedelta
 
 class ContextTask(celery.Task):
     abstract = True
@@ -130,5 +130,11 @@ def repos_stars(days_from, days_to):
     for repo in repos:
         response = fetch({'query': query.format(id=repo.id, date_from=date_from, date_to=date_to)})
         for row in response:
-            db.session.merge(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
-        db.session.commit()
+            try:
+                db.session.add(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
+                db.session.commit()
+            except IntegrityError:
+                app.logger.info(
+                    'The entry exists for {0} ({1}, {2})'.format(repo.id, row[1], row[2])
+                )
+                db.session.rollback()
