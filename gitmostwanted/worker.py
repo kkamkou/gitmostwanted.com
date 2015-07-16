@@ -108,9 +108,9 @@ def most_starred_sync(body, model_name):
 
 
 @celery.task()
-def repos_stars():
-    date_from = (datetime.now() + timedelta(days=-8)).strftime('%Y-%m-%d')
-    date_to = (datetime.now() + timedelta(days=-1)).strftime('%Y-%m-%d')
+def repos_stars(days_from, days_to):
+    date_from = (datetime.now() + timedelta(days=days_from)).strftime('%Y-%m-%d')
+    date_to = (datetime.now() + timedelta(days=days_to)).strftime('%Y-%m-%d')
     query = """
         SELECT
             COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
