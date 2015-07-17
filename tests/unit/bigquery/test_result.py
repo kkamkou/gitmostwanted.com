@@ -1,10 +1,10 @@
 from unittest import TestCase
-from gitmostwanted.bigquery.result import Result
+from gitmostwanted.bigquery.result import ResultJob
 
 
 class BigQueryResultTestCase(TestCase):
     def setUp(self):
-        self.result = Result(self.response_example())
+        self.result = ResultJob(self.response_example())
 
     def test_convert_incoming_obj(self):
         self.assertEquals(len(self.result), 2)
