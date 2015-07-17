@@ -146,7 +146,7 @@ def repos_stars(days_from, days_to):
         .filter(Repo.created_at >= date_from)\
         .filter(Repo.created_at <= date_to)
     for repo in repos:
-        job = Job(bigquery, query.format(id=repo.id, date_from=date_from, date_to=date_to), batch=True)
+        job = Job(bigquery, query.format(id=repo.id, date_from=date_from, date_to=date_to))
         for row in job_results(job):
             db.session.merge(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
         db.session.commit()
