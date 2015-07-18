@@ -1,14 +1,16 @@
 [![wercker status](https://app.wercker.com/status/7767a5325ebf378ede0ac3016c992ebc/s "wercker status")](https://app.wercker.com/project/bykey/7767a5325ebf378ede0ac3016c992ebc)
-[![Code Health](https://landscape.io/github/kkamkou/gitmostwanted.com/master/landscape.svg)](https://landscape.io/github/kkamkou/gitmostwanted.com/master)
+<!--
+  [![Code Health](https://landscape.io/github/kkamkou/gitmostwanted.com/master/landscape.svg)](https://landscape.io/github/kkamkou/gitmostwanted.com/master)
+-->
 # gitmostwanted
-Advanced explorer of github.com
+Advanced explorer of github.com. The main goal is to highlight the most interesting repositories and exclude others.
 
 ## Donation
 If you would like to help the project, please consider these topics:
 - GMW uses [Google BigQuery](https://cloud.google.com/bigquery/pricing) and the service is pretty expensive.
 - GMW is located on a private machine and hosted by [ProfitBricks](https://www.profitbricks.de/).
 
-## Run
+## Run (Python3)
 
 ```bash
 # export PYTHONPATH="`pwd`:${PYTHONPATH}"
