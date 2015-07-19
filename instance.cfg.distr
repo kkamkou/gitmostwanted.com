@@ -2,8 +2,6 @@ from celery.schedules import crontab
 
 # flask
 SECRET_KEY = 'secret_key'
-DEBUG_FILE = '/tmp/gmw.log'
-PERMANENT_SESSION_LIFETIME = 1209600 # 14 days
 
 # SQLAlchemy
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@dbGmw/gitmostwanted?charset=utf8'
@@ -11,9 +9,6 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@dbGmw
 # celery
 CELERY_BROKER_URL = 'sqla+mysql+pymysql://celery_broker:celery_broker_pwd@dbCeleryBroker/celery_broker',
 CELERY_RESULT_BACKEND = 'db+mysql+pymysql://celery_result:celery_result_pwd@dbCeleryResult/celery_result'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']
 
 # celery beat
 CELERY_INCLUDE = ('gitmostwanted.tasks.repo_most_starred', 'gitmostwanted.tasks.repo_stars')
