@@ -9,25 +9,29 @@ PERMANENT_SESSION_LIFETIME = 1209600 # 14 days
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@dbGmw/gitmostwanted?charset=utf8'
 
 # celery
-CELERY_BROKER_URL='sqla+mysql+pymysql://celery_broker:celery_broker_pwd@dbCeleryBroker/celery_broker',
-CELERY_RESULT_BACKEND='db+mysql+pymysql://celery_result:celery_result_pwd@dbCeleryResult/celery_result'
+CELERY_BROKER_URL = 'sqla+mysql+pymysql://celery_broker:celery_broker_pwd@dbCeleryBroker/celery_broker',
+CELERY_RESULT_BACKEND = 'db+mysql+pymysql://celery_result:celery_result_pwd@dbCeleryResult/celery_result'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
 
 # celery beat
+CELERY_INCLUDE = ('gitmostwanted.tasks.repo_most_starred', 'gitmostwanted.tasks.repo_stars')
 CELERYBEAT_SCHEDULE = {
     'most-starred-day': {
-        'task': 'gitmostwanted.worker.most_starred_day',
+        'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_day',
         'schedule': crontab(hour=2)
     },
     'most-starred-week': {
-        'task': 'gitmostwanted.worker.most_starred_week',
+        'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_week',
         'schedule': crontab(hour=3, day_of_week=0)
     },
     'most-starred-month': {
-        'task': 'gitmostwanted.worker.most_starred_month',
+        'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_month',
         'schedule': crontab(hour=4, day_of_month=1)
     },
-    'repos_stars': {
-        'task': 'gitmostwanted.worker.repos_stars',
+    'repos-stars': {
+        'task': 'gitmostwanted.tasks.repo_stars.repos_stars',
         'schedule': crontab(hour=5, day_of_week=1),
         'args': (-8, -1)
     }

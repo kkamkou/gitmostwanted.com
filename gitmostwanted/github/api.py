@@ -4,7 +4,7 @@ from requests import get, exceptions
 
 def fetch(uri):
     try:
-        result = get('https://api.github.com/%s' % uri, auth=app.config['GITHUB_AUTH'])
+        result = get('https://api.github.com/{0}'.format(uri), auth=app.config['GITHUB_AUTH'])
         result.raise_for_status()
         return result.json()
     except exceptions.HTTPError as e:
@@ -13,7 +13,7 @@ def fetch(uri):
 
 
 def repo_info(full_name):
-    return fetch('repos/%s' % full_name)
+    return fetch('repos/{0}'.format(full_name))
 
 
 def rate_limit():
