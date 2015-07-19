@@ -15,7 +15,7 @@ web:
 celery:
   build: .
   user: gitmostwanted
-  command: celery -A gitmostwanted.worker.celery worker -B -s /tmp/celerybeat-schedule.dat --autoreload
+  command: celery -A gitmostwanted.app.celery worker -B -s /tmp/celerybeat-schedule.dat --autoreload --loglevel=DEBUG
   environment:
       - GMW_APP_SETTINGS=/opt/instance.cfg
   volumes_from:

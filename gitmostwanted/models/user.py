@@ -27,4 +27,4 @@ class UserAttitude(db.Model):
         db.ForeignKey('repos.id', name='fk_repos_id', ondelete='CASCADE'),
         primary_key=True, index=True
     )
-    attitude = db.Column(db.Enum('dislike', 'neutral'), nullable=False)
+    attitude = db.Column(db.Enum('like', 'dislike', 'neutral'), nullable=False)

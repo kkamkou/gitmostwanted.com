@@ -1,26 +1,26 @@
 # pylint: disable=E1002
-from gitmostwanted.models.repo import Repo, RepoStars
-from gitmostwanted.models import report
-from gitmostwanted.bigquery.query import fetch
-from gitmostwanted.app import app, db, celery
 from gitmostwanted.github.api import repo_info
-from sqlalchemy.exc import IntegrityError
-from datetime import date, datetime, timedelta
+from gitmostwanted.app import app, db, celery
+from gitmostwanted.services import bigquery
+from gitmostwanted.bigquery.job import Job
+from gitmostwanted.models.repo import Repo
+from gitmostwanted.models import report
+from datetime import date, datetime
+from time import sleep
 
-class ContextTask(celery.Task):
-    abstract = True
 
-    def __call__(self, *args, **kwargs):
-        with app.app_context():
-            return super().__call__(*args, **kwargs)
-
-celery.Task = ContextTask
+def job_results(j: Job):
+    while not j.complete:
+        app.logger.debug('The job is not complete, waiting...')
+        sleep(10)
+    return j.results
 
 
 @celery.task()
 def most_starred_day():
-    most_starred_sync({
-        'query': """
+    most_starred_sync(
+        'ReportAllDaily',
+        """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM [githubarchive:day.events_{0}]
@@ -29,13 +29,14 @@ def most_starred_day():
             ORDER BY cnt DESC
             LIMIT 50
         """.format(date.today().strftime('%Y%m%d'))
-    }, 'ReportAllDaily')
+    )
 
 
 @celery.task()
 def most_starred_week():
-    most_starred_sync({
-        'query': """
+    most_starred_sync(
+        'ReportAllWeekly',
+        """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
@@ -49,13 +50,14 @@ def most_starred_week():
             ORDER BY cnt DESC
             LIMIT 50
         """
-    }, 'ReportAllWeekly')
+    )
 
 
 @celery.task()
 def most_starred_month():
-    most_starred_sync({
-        'query': """
+    most_starred_sync(
+        'ReportAllMonthly',
+        """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
@@ -69,16 +71,16 @@ def most_starred_month():
             ORDER BY cnt DESC
             LIMIT 50
         """
-    }, 'ReportAllMonthly')
+    )
 
 
-def most_starred_sync(body, model_name):
-    response = fetch(body)
+def most_starred_sync(model_name: str, query: str):
+    service = bigquery.instance(app)
     model = getattr(report, model_name)
 
     db.session.query(model).delete()
 
-    for row in response:
+    for row in job_results(Job(service, query)):
         info = repo_info(row[1])
         if not info:
             continue
@@ -105,30 +107,3 @@ def most_starred_sync(body, model_name):
         )
 
     db.session.commit()
-
-
-@celery.task()
-def repos_stars(days_from, days_to):
-    date_from = (datetime.now() + timedelta(days=days_from)).strftime('%Y-%m-%d')
-    date_to = (datetime.now() + timedelta(days=days_to)).strftime('%Y-%m-%d')
-    query = """
-        SELECT
-            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
-        FROM
-            TABLE_DATE_RANGE(
-                githubarchive:day.events_,
-                TIMESTAMP('{date_from}'),
-                TIMESTAMP('{date_to}')
-            )
-        WHERE repo.id = {id} AND type = 'WatchEvent'
-        GROUP BY y, doy
-    """
-
-    repos = Repo.query.with_entities(Repo.id)\
-        .filter(Repo.created_at >= date_from)\
-        .filter(Repo.created_at <= date_to)
-    for repo in repos:
-        response = fetch({'query': query.format(id=repo.id, date_from=date_from, date_to=date_to)})
-        for row in response:
-            db.session.merge(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
-        db.session.commit()

@@ -24,5 +24,6 @@ class ReportAllDaily(ReportBase):
 class ReportAllWeekly(ReportBase):
     __tablename__ = 'report_all_weekly'
 
+
 class ReportAllMonthly(ReportBase):
     __tablename__ = 'report_all_monthly'
