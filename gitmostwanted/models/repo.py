@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.mysql import SMALLINT
+from sqlalchemy.sql import expression
 from gitmostwanted.app import db
 
 
@@ -18,7 +19,7 @@ class Repo(db.Model):
     html_url = db.Column(db.String(150), nullable=False)
     homepage = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, nullable=False)
-    mature = db.Column(db.Boolean, default=False, nullable=False)
+    mature = db.Column(db.Boolean, nullable=False, server_default=expression.false())
 
     """
     @todo! move me
