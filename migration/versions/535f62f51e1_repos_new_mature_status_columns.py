@@ -1,4 +1,4 @@
-"""mature column for the repos table
+"""mature and status columns for the repos table
 
 Revision ID: 535f62f51e1
 Revises: 4e0851c5f08
@@ -20,9 +20,17 @@ import sqlalchemy as sa
 def upgrade():
     op.add_column(
         'repos',
-        sa.Column('mature', sa.Boolean(), nullable=False, server_default=expression.false())
+        sa.Column('mature', sa.Boolean(), nullable=False, server_default=expression.false(),index=True)
+    )
+    op.add_column(
+        'repos',
+        sa.Column(
+            'status', sa.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),
+            server_default='new', nullable=False, index=True
+        )
     )
 
 
 def downgrade():
+    op.drop_column('repos', 'status')
     op.drop_column('repos', 'mature')

@@ -3,15 +3,11 @@ from gitmostwanted.app import db
 
 class User(db.Model):
     __tablename__ = 'users'
-    __table_args__ = (
-        db.UniqueConstraint('email', name='ix_email'),
-        db.UniqueConstraint('github_id', name='ix_github_id')
-    )
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120))
+    email = db.Column(db.String(120), unique=True)
     username = db.Column(db.String(80))
-    github_id = db.Column(db.BigInteger)
+    github_id = db.Column(db.BigInteger, unique=True)
 
 
 class UserAttitude(db.Model):
