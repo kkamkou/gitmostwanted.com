@@ -4,7 +4,7 @@
       <h4>
         <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a>
 
-        {% if not repo.mature %}
+        {% if repo.mature %}
           <sup class="secondary label" title="Mature enough (Older than 6 months)">m</sup>
         {% endif %}
 
