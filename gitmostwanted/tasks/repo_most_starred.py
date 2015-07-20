@@ -1,27 +1,12 @@
 # pylint: disable=E1002
-from gitmostwanted.models.repo import Repo, RepoStars
-from gitmostwanted.models import report
-from gitmostwanted.bigquery.job import Job
-from gitmostwanted.bigquery.service import ServiceGmw
-from gitmostwanted.app import app, db, celery
 from gitmostwanted.github.api import repo_info
-from datetime import date, datetime, timedelta
+from gitmostwanted.app import app, db, celery
+from gitmostwanted.services import bigquery
+from gitmostwanted.bigquery.job import Job
+from gitmostwanted.models.repo import Repo
+from gitmostwanted.models import report
+from datetime import date, datetime
 from time import sleep
-
-
-class ContextTask(celery.Task):
-    abstract = True
-
-    def __call__(self, *args, **kwargs):
-        with app.app_context():
-            return super().__call__(*args, **kwargs)
-
-celery.Task = ContextTask
-
-
-def service_bigquery():
-    cfg = app.config['GOOGLE_BIGQUERY']
-    return ServiceGmw(cfg['account_name'], cfg['private_key_path'], cfg['project_id'])
 
 
 def job_results(j: Job):
@@ -90,12 +75,12 @@ def most_starred_month():
 
 
 def most_starred_sync(model_name: str, query: str):
-    bigquery = service_bigquery()
+    service = bigquery.instance(app)
     model = getattr(report, model_name)
 
     db.session.query(model).delete()
 
-    for row in job_results(Job(bigquery, query)):
+    for row in job_results(Job(service, query)):
         info = repo_info(row[1])
         if not info:
             continue
@@ -122,31 +107,3 @@ def most_starred_sync(model_name: str, query: str):
         )
 
     db.session.commit()
-
-
-@celery.task()
-def repos_stars(days_from, days_to):
-    bigquery = service_bigquery()
-    date_from = (datetime.now() + timedelta(days=days_from)).strftime('%Y-%m-%d')
-    date_to = (datetime.now() + timedelta(days=days_to)).strftime('%Y-%m-%d')
-    query = """
-        SELECT
-            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
-        FROM
-            TABLE_DATE_RANGE(
-                githubarchive:day.events_,
-                TIMESTAMP('{date_from}'),
-                TIMESTAMP('{date_to}')
-            )
-        WHERE repo.id = {id} AND type = 'WatchEvent'
-        GROUP BY y, doy
-    """
-
-    repos = Repo.query.with_entities(Repo.id)\
-        .filter(Repo.created_at >= date_from)\
-        .filter(Repo.created_at <= date_to)
-    for repo in repos:
-        job = Job(bigquery, query.format(id=repo.id, date_from=date_from, date_to=date_to))
-        for row in job_results(job):
-            db.session.merge(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
-        db.session.commit()
