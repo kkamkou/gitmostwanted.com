@@ -19,12 +19,12 @@ import sqlalchemy as sa
 
 def upgrade():
     op.add_column(
-        'repos',
-        sa.Column('mature', sa.Boolean(), nullable=False, server_default=expression.false(),index=True)
+        'repos', sa.Column(
+            'mature', sa.Boolean(), nullable=False, server_default=expression.false(), index=True
+        )
     )
     op.add_column(
-        'repos',
-        sa.Column(
+        'repos', sa.Column(
             'status', sa.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),
             server_default='new', nullable=False, index=True
         )
