@@ -18,7 +18,7 @@ class Repo(db.Model):
     description = db.Column(db.String(250))
     html_url = db.Column(db.String(150), nullable=False)
     homepage = db.Column(db.String(150))
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
     status = db.Column(
         db.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),

@@ -18,6 +18,7 @@ import sqlalchemy as sa
 
 
 def upgrade():
+    op.create_index(op.f('ix_repos_created_at'), 'repos', ['created_at'], unique=False)
     op.add_column(
         'repos', sa.Column(
             'mature', sa.Boolean(), nullable=False, server_default=expression.false(), index=True
@@ -32,5 +33,6 @@ def upgrade():
 
 
 def downgrade():
+    op.drop_index(op.f('ix_repos_created_at'), table_name='repos')
     op.drop_column('repos', 'status')
     op.drop_column('repos', 'mature')
