@@ -22,17 +22,8 @@ class Repo(db.Model):
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
     status = db.Column(
         db.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),
-        nullable=False, default='new', index=True
+        server_default='new', nullable=False, index=True
     )
-
-    """
-    @todo! move me
-    from datetime import datetime, timedelta
-    def is_newbie(self):
-        if not self.created_at:
-            return True  # @todo! #52 remove me
-        return self.created_at > datetime.now() + timedelta(days=-180)  # 6 months
-    """
 
     @staticmethod
     def language_distinct():
