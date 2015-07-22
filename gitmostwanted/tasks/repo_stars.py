@@ -1,4 +1,3 @@
-# pylint: disable=E1002
 from gitmostwanted.models.repo import Repo, RepoStars
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.services import bigquery
@@ -15,29 +14,29 @@ def job_results(j: Job):
 
 
 @celery.task()
-def repos_stars(days_from, days_to):
-    service = bigquery.new_instance(app)
-
-    date_from = (datetime.now() + timedelta(days=days_from)).strftime('%Y-%m-%d')
-    date_to = (datetime.now() + timedelta(days=days_to)).strftime('%Y-%m-%d')
+def repos_stars_mature(num_days):
+    date_from = (datetime.now() + timedelta(days=num_days * -1)).strftime('%Y-%m-%d')
+    service = bigquery.instance(app)
     query = """
         SELECT
             COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
         FROM
             TABLE_DATE_RANGE(
-                githubarchive:day.events_,
-                TIMESTAMP('{date_from}'),
-                TIMESTAMP('{date_to}')
+                githubarchive:day.events_, TIMESTAMP('{date_from}'), CURRENT_TIMESTAMP()
             )
         WHERE repo.id = {id} AND type = 'WatchEvent'
         GROUP BY y, doy
     """
+    jobs = []
 
-    repos = Repo.query.with_entities(Repo.id)\
-        .filter(Repo.created_at >= date_from)\
-        .filter(Repo.created_at <= date_to)
+    repos = Repo.query.filter(Repo.mature.is_(True)).filter(Repo.status == 'new')
     for repo in repos:
-        job = Job(service, query.format(id=repo.id, date_from=date_from, date_to=date_to))
-        for row in job_results(job):
-            db.session.merge(RepoStars(repo_id=repo.id, stars=row[0], year=row[1], day=row[2]))
+        jobs.append((Job(service, query.format(id=repo.id, date_from=date_from), batch=True), repo))
+
+    for job in jobs:
+        for row in job_results(job[0]):
+            db.session.add(RepoStars(repo_id=job[1].id, stars=row[0], year=row[1], day=row[2]))
+
+        job[1].status = 'unknown'
+
         db.session.commit()

@@ -1,13 +1,16 @@
 from flask import g, render_template, redirect, request, session, url_for
 from gitmostwanted.blueprints.user_attitude import user_attitude
-from gitmostwanted.app import app, db, oauth
+from gitmostwanted.services import oauth as service_oauth
 from gitmostwanted.models.user import User, UserAttitude
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.models import report
+from gitmostwanted.app import app, db
 
 
 app.register_blueprint(user_attitude)
 app.jinja_env.add_extension('jinja2.ext.do')
+
+oauth = service_oauth.instance(app)
 
 
 @app.route('/', defaults={'rng': 'day'})
