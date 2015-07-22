@@ -1,4 +1,3 @@
-# pylint: disable=E1002
 from gitmostwanted.github.api import repo_info
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.services import bigquery

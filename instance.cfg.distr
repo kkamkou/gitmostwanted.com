@@ -11,8 +11,16 @@ CELERY_BROKER_URL = 'sqla+mysql+pymysql://celery_broker:celery_broker_pwd@dbCele
 CELERY_RESULT_BACKEND = 'db+mysql+pymysql://celery_result:celery_result_pwd@dbCeleryResult/celery_result'
 
 # celery beat
-CELERY_INCLUDE = ('gitmostwanted.tasks.repo_most_starred', 'gitmostwanted.tasks.repo_stars')
+CELERY_INCLUDE = (
+    'gitmostwanted.tasks.repo_most_starred', 'gitmostwanted.tasks.repo_stars',
+    'gitmostwanted.tasks.repo_metadata'
+)
 CELERYBEAT_SCHEDULE = {
+    'repo-flag-mature': {
+        'task': 'gitmostwanted.tasks.repo_metadata.repo_flag_mature',
+        'schedule': crontab(hour=1),
+        'args': [6]
+    },
     'most-starred-day': {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_day',
         'schedule': crontab(hour=2)
