@@ -6,7 +6,7 @@ from uuid import uuid4
 
 class Job:
     """:type num_retries: int"""
-    num_retries = 3
+    num_retries = 5
 
     def __init__(self, api: ServiceGmw, query_str: str, batch: bool=False):
         self.__complete = False
