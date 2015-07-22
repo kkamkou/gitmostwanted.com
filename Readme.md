@@ -1,9 +1,7 @@
 [![wercker status](https://app.wercker.com/status/7767a5325ebf378ede0ac3016c992ebc/s "wercker status")](https://app.wercker.com/project/bykey/7767a5325ebf378ede0ac3016c992ebc)
-<!--
-  [![Code Health](https://landscape.io/github/kkamkou/gitmostwanted.com/master/landscape.svg)](https://landscape.io/github/kkamkou/gitmostwanted.com/master)
--->
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kkamkou/gitmostwanted.com/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kkamkou/gitmostwanted.com/?branch=master)
 # gitmostwanted
-Advanced explorer of github.com. The main goal is to highlight the most interesting repositories and exclude others.
+Advanced explorer of github.com. The main goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
 
 ## Donation
 If you would like to help the project, please consider these topics:

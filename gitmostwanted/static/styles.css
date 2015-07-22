@@ -1,4 +1,6 @@
-body{ background: #FFF url(/static/images/bg.png); }
+body{ background: #FFF url(/static/images/bg.png); min-width: 320px; }
+
+nav.top-bar h1 a{ white-space: nowrap; }
 
 #gh-entries.row{ min-width: 100% !important; }
     #gh-entries ul > li small{ padding-top: 18px; }
