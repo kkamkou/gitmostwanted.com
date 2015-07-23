@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.mysql import SMALLINT
 from sqlalchemy.sql import expression
 from gitmostwanted.app import db
+from datetime import datetime
 
 
 class Repo(db.Model):
@@ -20,10 +21,18 @@ class Repo(db.Model):
     homepage = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, nullable=False, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
+    status_updated_at = db.Column(db.DateTime)
     status = db.Column(
         db.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),
         server_default='new', nullable=False, index=True
     )
+
+    def __setattr__(self, key, value):
+        if key == 'status' and self.status != value:
+            if value not in ('promising', 'new', 'unknown', 'deleted', 'hopeless'):
+                raise ValueError('Unknown status provided')
+            self.status_updated_at = datetime.now()
+        super().__setattr__(key, value)
 
     @staticmethod
     def language_distinct():
