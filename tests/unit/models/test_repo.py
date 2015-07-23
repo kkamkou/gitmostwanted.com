@@ -25,6 +25,3 @@ class ModelsRepoTestCase(TestCase):
 
     def test_handle_incorrect_status(self):
         self.assertRaises(ValueError, Repo, status='abc')
-
-
-
