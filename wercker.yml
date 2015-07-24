@@ -2,10 +2,10 @@ box: wercker/python
 build:
     steps:
         - virtualenv:
-            name: setup virtual environment
+            name: virtual environment
             python_location: /usr/bin/python3.4
         - script:
-            name: copy artifacts
+            name: artifacts
             code: |-
               rsync -az "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
               rsync -az "$WERCKER_SOURCE_DIR/migration" "$WERCKER_OUTPUT_DIR"
@@ -13,8 +13,8 @@ build:
         - pip-install:
             packages_list: pytest-pep8 pytest-cov scrutinizer-ocular
         - script:
-            name: run py.test
-            code: py.test --pep8 --clearcache --cov --cov-report annotate gitmostwanted tests/unit
+            name: py.test
+            code: py.test --pep8 --clearcache --cov . --cov-report annotate gitmostwanted tests/unit
         - script:
             name: transfer code coverage to scrutinizer
             code: ocular --data-file .coverage
@@ -33,7 +33,7 @@ deploy:
             overwrite: true
             hide-from-log: true
         - script:
-            name: upload source-code
+            name: source-code upload
             code: |-
               rsync -az --delete-after -e "ssh -i $SSH_KEY_PATH" "./gitmostwanted" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               rsync -az --delete-after -e "ssh -i $SSH_KEY_PATH" "./migration" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
