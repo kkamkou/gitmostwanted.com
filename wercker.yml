@@ -11,10 +11,13 @@ build:
               rsync -az "$WERCKER_SOURCE_DIR/migration" "$WERCKER_OUTPUT_DIR"
               rsync -az "$WERCKER_SOURCE_DIR/alembic.ini" "$WERCKER_OUTPUT_DIR"
         - pip-install:
-            packages_list: pytest-pep8 pytest-cov
+            packages_list: pytest-pep8 pytest-cov scrutinizer-ocular
         - script:
             name: run py.test
-            code: "py.test --pep8 --clearcache --cov gitmostwanted tests/unit"
+            code: py.test --pep8 --clearcache --cov --cov-report annotate gitmostwanted tests/unit
+        - script:
+            name: transfer code coverage to scrutinizer
+            code: ocular --data-file .coverage
 deploy:
     steps:
         - add-to-known_hosts:
