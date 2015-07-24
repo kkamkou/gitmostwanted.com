@@ -17,7 +17,7 @@ build:
             code: py.test --pep8 --clearcache --cov . --cov-report annotate gitmostwanted tests/unit
         - script:
             name: transfer code coverage to scrutinizer
-            code: ocular --data-file .coverage
+            code: ocular --data-file .coverage --repository kkamkou/gitmostwanted.com
 deploy:
     steps:
         - add-to-known_hosts:
