@@ -8,6 +8,11 @@
           <sup class="secondary label" title="Mature enough (Older than 6 months)">m</sup>
         {% endif %}
 
+        {% if repo.status in ('promising', 'hopeless') %}
+          <sup class="{{ 'success' if repo.status == 'promising' else 'warning' }} label"
+            title="{{ repo.status|capitalize() }}">{{ repo.status[0] }}</sup>
+        {% endif %}
+
         {% if repo.language %}
           <small class="right">{{ repo.language }}</small>
         {% endif %}
