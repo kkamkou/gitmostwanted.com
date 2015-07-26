@@ -15,17 +15,14 @@ def repos_status_hopeless():
         if not result:
             continue
 
-        chunks = result_split(list(result_normalize(result, 28)), 7)
+        means = []
+        chunks = result_split(list(result_normalize(result, 28)), 4)
         for chunk in chunks:
-            print(variance(chunk))
-            if variance(chunk) >= 1000:
-                continue
+            means.append(1 if variance(chunk) >= 1000 else mean(chunk))
 
-            if mean(chunk) < 1:
-                print("{} is hopeless".format(repo.id))
-                continue
+        repo.status = 'hopeless' if mean(means) < 1 else 'promising'
 
-            print("{} is promising".format(repo.id))
+        db.session.commit()
 
 
 def result_normalize(lst: list, num_days: int):
