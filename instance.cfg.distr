@@ -13,7 +13,7 @@ CELERY_RESULT_BACKEND = 'db+mysql+pymysql://celery_result:celery_result_pwd@dbCe
 # celery beat
 CELERY_INCLUDE = (
     'gitmostwanted.tasks.repo_most_starred', 'gitmostwanted.tasks.repo_stars',
-    'gitmostwanted.tasks.repo_metadata'
+    'gitmostwanted.tasks.repo_metadata', 'gitmostwanted.tasks.repo_status'
 )
 CELERYBEAT_SCHEDULE = {
     'repo-flag-mature': {
@@ -33,7 +33,11 @@ CELERYBEAT_SCHEDULE = {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_month',
         'schedule': crontab(hour=3, day_of_month=1)
     },
-    'repos-stars': {
+    'repos-status-hopeless': {
+        'task': 'gitmostwanted.tasks.repo_status.repos_status_hopeless',
+        'schedule': crontab(hour=12, day_of_week=1)
+    },
+    'repos-stars-mature': {
         'task': 'gitmostwanted.tasks.repo_stars.repos_stars_mature',
         'schedule': crontab(hour=5, day_of_week=1),
         'args': [28]
