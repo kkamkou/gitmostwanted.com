@@ -18,7 +18,6 @@ import sqlalchemy as sa
 
 def upgrade():
     op.add_column('repos', sa.Column('status_updated_at', sa.DateTime(), nullable=True))
-    op.create_index(op.f('ix_repos_created_at'), 'repos', ['created_at'], unique=False)
 
 
 def downgrade():
