@@ -15,3 +15,4 @@ div.user_attitude{ display: block; }
 div.wrapper{ min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -4em; }
 footer, .footer-push{ height: 4em; }
 footer{ background-color: #EEE; border-top: 1px solid #DDD; text-align: center; padding-top: 1em; }
+    footer ul{ padding-top: 0.2em!important; }
