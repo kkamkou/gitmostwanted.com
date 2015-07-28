@@ -62,6 +62,13 @@ def list_by_attitude(attitude, page):
     if lang != 'All' and (lang,) in languages:
         q = q.filter(Repo.language == lang)
 
+    status = request.args.get('status')
+    if status in ('promising', 'hopeless'):
+        q = q.filter(Repo.status == status)
+
+    if bool(request.args.get('mature')):
+        q = q.filter(Repo.mature.is_(True))
+
     entries = q.paginate(page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:
         return list_by_attitude(attitude, entries.pages)

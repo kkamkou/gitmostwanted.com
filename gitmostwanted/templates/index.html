@@ -18,15 +18,8 @@
     {% endif %}
   </dl>
 
-  {% if not g.user %}
-    <div data-alert class="alert-box info">
-      Did you know that it makes no sense to use GMW without authentication? Because it looks identical to
-      <a href="https://github.com/trending" target="_blank">GitHub Trending repositories</a>.
-    </div>
-  {% endif %}
-
   <div class="row" id="gh-entries">
-    {{ repository_filter(languages, request.args.get('lang')) }}
+    {{ repository_filter(languages) }}
 
     <div class="small-12 columns">
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">

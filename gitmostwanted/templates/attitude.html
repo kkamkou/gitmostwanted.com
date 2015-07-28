@@ -18,7 +18,7 @@
   </dl>
 
   <div class="row" id="gh-entries">
-    {{ repository_filter(languages, request.args.get('lang')) }}
+    {{ repository_filter(languages) }}
 
     <div class="small-12 columns">
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
@@ -31,5 +31,10 @@
     </div>
   </div>
 
-  {{ pagination(repos, lang=request.args.get('lang')) }}
+  {{
+    pagination(
+      repos, lang=request.args.get('lang'), status=request.args.get('status'),
+      mature=request.args.get('mature')
+    )
+  }}
 {% endblock %}
