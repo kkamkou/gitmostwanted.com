@@ -1,6 +1,6 @@
 $(function () {
-  $('form.repository_filter')
-    .find('select').on('change', function () {
+  $('form.repository-filter')
+    .find('select, input').on('change', function () {
       $(this).closest('form').submit();
     })
     .end()

@@ -31,18 +31,60 @@
   </li>
 {%- endmacro %}
 
-{% macro repository_filter(languages, language) -%}
-  <form class="repository_filter">
+{% macro repository_filter(languages) -%}
+  <form class="repository-filter clearfix">
     <div class="small-8 medium-10 large-11 columns">
       <select name="lang">
         <option>All</option>
         {% for (lang,) in languages %}
-          <option{{ ' selected="selected"' if language == lang }}>{{ lang }}</option>
+          <option{{ ' selected="selected"' if request.args.get('lang') == lang }}>{{ lang }}</option>
         {% endfor %}
       </select>
     </div>
     <div class="small-4 medium-2 large-1 columns">
       <a href="#" class="button tiny">Reset</a>
     </div>
+
+    <div class="small-12 columns">
+      <div class="row">
+        <div class="small-2 medium-2 text-right columns">
+          <div class="switch small radius">
+            <input id="statusPromising" type="radio" value="promising" name="status"
+              {{ 'checked' if request.args.get('status') == 'promising' }}>
+            <label for="statusPromising"></label>
+          </div>
+        </div>
+        <div class="small-1 columns">
+          <span class="label success has-tip" data-tooltip aria-haspopup="true"
+            title="Show only Promising repositories">P</span>
+        </div>
+
+        <div class="small-2 medium-2 text-right columns">
+          <div class="switch small radius">
+            <input id="statusHopeless" type="radio" value="hopeless" name="status"
+              {{ 'checked' if request.args.get('status') == 'hopeless' }}>
+            <label for="statusHopeless"></label>
+          </div>
+        </div>
+        <div class="small-1 columns">
+          <span class="label warning has-tip" data-tooltip aria-haspopup="true"
+            title="Show only Hopeless repositories">H</span>
+        </div>
+
+        <div class="small-2 medium-2 text-right columns">
+          <div class="switch small radius">
+            <input id="maturityFlag" type="checkbox" name="mature" value="1"
+              {{ 'checked' if request.args.get('mature') }}>
+            <label for="maturityFlag"></label>
+          </div>
+        </div>
+        <div class="small-1 columns">
+          <span class="label secondary has-tip" data-tooltip aria-haspopup="true"
+            title="Show only mature enough (older than 6 months) repositories">M</span>
+        </div>
+        <div class="small-3 columns">&nbsp;</div>
+      </div>
+    </div>
+
   </form>
 {%- endmacro %}

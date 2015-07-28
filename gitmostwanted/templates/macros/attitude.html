@@ -1,5 +1,5 @@
 {% macro user_attitude(repo_id, attitude=None) -%}
-  <div class="user_attitude">
+  <div class="user-attitude">
     <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='like') }}"
       class="button tiny attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
       title="Like it"><i class="fi-like"></i></a>
