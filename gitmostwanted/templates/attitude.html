@@ -31,5 +31,10 @@
     </div>
   </div>
 
-  {{ pagination(repos, lang=request.args.get('lang')) }}
+  {{
+    pagination(
+      repos, lang=request.args.get('lang'), status=request.args.get('status'),
+      mature=request.args.get('mature')
+    )
+  }}
 {% endblock %}

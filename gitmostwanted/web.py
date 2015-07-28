@@ -42,6 +42,13 @@ def index(rng):
     if lang != 'All' and (lang,) in languages:
         q = q.filter(Repo.language == lang)
 
+    status = request.args.get('status')
+    if status in ('promising', 'hopeless'):
+        q = q.filter(Repo.status == status)
+
+    if bool(request.args.get('mature')):
+        q = q.filter(Repo.mature.is_(True))
+
     return render_template(
         'index.html', range=rng, entries=q.order_by(db.desc(model.cnt_watch)), languages=languages
     )
