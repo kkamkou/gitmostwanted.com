@@ -8,12 +8,16 @@
     {% for page in paginator.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) -%}
       {% if page %}
         {% if page != paginator.page %}
-          <li><a href="{{ url_for(request.endpoint, page=page, **view_args) }}" class="button tiny secondary">{{ page }}</a></li>
+          <li>
+            <a href="{{ url_for(request.endpoint, page=page, **view_args) }}"
+              class="button tiny secondary">{{ page }}</a>
+          </li>
         {% else %}
-          <li class="current"><a href="javascript:void(0)" class="button tiny disabled">{{ page }}</a></li>
+          <li class="current"><a href="javascript:void(0)"
+            class="button tiny disabled">{{ page }}</a></li>
         {% endif %}
       {% else %}
-        <li class="unavailable"><a href="javascript:void(0)" class="button tiny secondary">&hellip;</a></li>
+        <li class="unavailable">&nbsp;</li>
       {% endif %}
     {%- endfor %}
   </ul>
