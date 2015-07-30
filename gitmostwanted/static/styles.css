@@ -1,7 +1,7 @@
 body{ background: #FFF url(/static/images/bg.png); min-width: 320px; }
 
 nav.top-bar{ margin-bottom: 0!important; }
-nav.top-bar h1 a{ white-space: nowrap; }
+    nav.top-bar h1 a{ white-space: nowrap; }
 
 #gh-entries.row{ min-width: 100% !important; }
     #gh-entries ul > li small{ padding-top: 18px; }
@@ -9,7 +9,8 @@ nav.top-bar h1 a{ white-space: nowrap; }
     #gh-entries ul > li > div{ overflow: hidden; }
     #gh-entries ul > li:hover{ background-color: #F7F7F7; }
 
-ul.breadcrumbs li:before{ margin: 0 0.7rem; }
+ul.breadcrumbs{ border-radius: 0; }
+    ul.breadcrumbs li:before{ margin: 0 0.7rem; }
 
 div.user-attitude{ display: block; }
 
