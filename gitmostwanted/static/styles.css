@@ -10,7 +10,7 @@ nav.top-bar{ margin-bottom: 0!important; }
     #gh-entries ul > li:hover{ background-color: #F7F7F7; }
 
 ul.breadcrumbs{ border-radius: 0; }
-    ul.breadcrumbs li:before{ margin: 0 0.7rem; }
+    ul.breadcrumbs li:before{ margin: 0 0.65rem; }
 
 div.user-attitude{ display: block; }
 
