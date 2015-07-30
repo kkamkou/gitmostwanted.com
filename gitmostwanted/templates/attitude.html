@@ -7,15 +7,15 @@
 {% from "macros/repository.html" import repository, repository_filter %}
 
 {% block body %}
-  <dl class="sub-nav">
-    <dd {{ 'class=active' if not attitude }}><a href="{{ url_for('user_attitude.list_unchecked') }}">Unchecked</a></dd>
+  <ul class="breadcrumbs">
+    <li><a href="/">Trending</a></li>
+    <li {{ 'class=unavailable' if not attitude }}><a href="{{ url_for('user_attitude.list_unchecked') }}">All</a></li>
     {% for r in ['like', 'dislike', 'neutral'] %}
-      <dd {{ 'class=active' if attitude == r }}>
+      <li {{ 'class=unavailable' if attitude == r }}>
         <a href="{{ url_for('user_attitude.list_attitude', attitude=r) }}">{{ r|capitalize() }}</a>
-      </dd>
+      </li>
     {% endfor %}
-    <dd><a href="/">Trending</a></dd>
-  </dl>
+  </ul>
 
   <div class="row" id="gh-entries">
     {{ repository_filter(languages) }}
