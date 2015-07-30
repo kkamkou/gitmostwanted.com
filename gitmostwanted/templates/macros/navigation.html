@@ -4,6 +4,8 @@
   {% do view_args.pop('page') %}
   {% do view_args.update(kwargs) %}
 
+  <hr>
+
   <ul class="button-group text-center">
     {% for page in paginator.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) -%}
       {% if page %}
