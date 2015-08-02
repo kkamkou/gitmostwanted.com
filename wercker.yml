@@ -33,5 +33,9 @@ deploy:
               rsync -az --delete-after ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               rsync -az --delete-after ./migration gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               rsync -az ./alembic.ini gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-              ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; alembic upgrade head"
-              ssh gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
+        - script:
+            name: migrations
+            code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; alembic upgrade head"
+        - script:
+            name: wsgi reload
+            code: ssh gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
