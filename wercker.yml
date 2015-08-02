@@ -39,5 +39,4 @@ deploy:
               rsync -az --delete-after -e "ssh -i $SSH_KEY_PATH" "./migration" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               rsync -az -e "ssh -i $SSH_KEY_PATH" "./alembic.ini" gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
               ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; alembic upgrade head"
-              ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com "[ -f $PROJECT_SOURCE_DIR/celeryd.pid ] && kill -s SIGTERM \`cat $PROJECT_SOURCE_DIR/celeryd.pid\`"
               ssh -i "$SSH_KEY_PATH" gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
