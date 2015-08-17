@@ -2,10 +2,11 @@ from gitmostwanted.models.repo import Repo, RepoStars
 from gitmostwanted.app import db, celery
 from sqlalchemy.sql import expression
 from statistics import variance, mean
+from datetime import datetime, timedelta
 
 
 @celery.task()
-def repos_status_hopeless():
+def repos_status():
     repos = Repo.query.filter().filter(Repo.status == 'unknown')
     for repo in repos:
         result = db.session.query(RepoStars.day, RepoStars.stars)\
@@ -23,6 +24,17 @@ def repos_status_hopeless():
         repo.status = 'hopeless' if mean(means) < 1 else 'promising'
 
         db.session.commit()
+
+
+@celery.task()
+def repos_status_cleanup(num_months):
+    db.session.query(Repo)\
+        .filter(Repo.status.in_(('promising', 'hopeless'))) \
+        .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_months * 30 * -1)) \
+        .update(
+            {Repo.status: 'new', Repo.status_updated_at: datetime.now()},
+            synchronize_session=False
+        )
 
 
 def result_normalize(lst: list, num_days: int):
