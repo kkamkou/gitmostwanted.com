@@ -18,7 +18,7 @@ CELERY_INCLUDE = (
 CELERYBEAT_SCHEDULE = {
     'repo-flag-mature': {
         'task': 'gitmostwanted.tasks.repo_metadata.repo_flag_mature',
-        'schedule': crontab(hour=4),
+        'schedule': crontab(minute=30, hour=1),
         'args': [6]
     },
     'most-starred-day': {
@@ -33,13 +33,18 @@ CELERYBEAT_SCHEDULE = {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_month',
         'schedule': crontab(hour=3, day_of_month=1)
     },
-    'repos-status-hopeless': {
-        'task': 'gitmostwanted.tasks.repo_status.repos_status_hopeless',
-        'schedule': crontab(hour=12, day_of_week=1)
+    'repos-status-cleanup': {
+        'task': 'gitmostwanted.tasks.repo_status.repos_status_cleanup',
+        'schedule': crontab(hour=3, day_of_month=1, month_of_year='*/2'),
+        'args': [2]
+    },
+    'repos-status': {
+        'task': 'gitmostwanted.tasks.repo_status.repos_status',
+        'schedule': crontab(minute=30, hour=3, day_of_week=1)
     },
     'repos-stars-mature': {
         'task': 'gitmostwanted.tasks.repo_stars.repos_stars_mature',
-        'schedule': crontab(hour=5, day_of_week='*/2'),
+        'schedule': crontab(hour=4, day_of_week='*/2'),
         'args': [28]
     }
 }
