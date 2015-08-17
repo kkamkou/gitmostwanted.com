@@ -19,7 +19,7 @@ CELERYBEAT_SCHEDULE = {
     'repo-flag-mature': {
         'task': 'gitmostwanted.tasks.repo_metadata.repo_flag_mature',
         'schedule': crontab(minute=30, hour=1),
-        'args': [6]
+        'args': [3]
     },
     'most-starred-day': {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_day',
