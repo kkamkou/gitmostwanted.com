@@ -5,7 +5,7 @@
         <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a>
 
         {% if repo.mature %}
-          <sup class="secondary label" title="Mature enough (Older than 6 months)">m</sup>
+          <sup class="secondary label" title="Mature enough (Older than 3 months)">m</sup>
         {% endif %}
 
         {% if repo.status in ('promising', 'hopeless') %}
@@ -81,7 +81,7 @@
         </div>
         <div class="small-1 columns">
           <span class="label secondary has-tip" data-tooltip aria-haspopup="true"
-            title="Show only mature enough (older than 6 months) repositories">M</span>
+            title="Show only mature enough (older than 3 months) repositories">M</span>
         </div>
         <div class="small-3 columns">&nbsp;</div>
       </div>
