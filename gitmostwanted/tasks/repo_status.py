@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 
 @celery.task()
-def repos_status():
+def repos_status(num_days, num_segments):
     repos = Repo.query.filter().filter(Repo.status == 'unknown')
     for repo in repos:
         result = db.session.query(RepoStars.day, RepoStars.stars)\
@@ -17,7 +17,7 @@ def repos_status():
             continue
 
         means = []
-        chunks = result_split(list(result_normalize(result, 28)), 4)
+        chunks = result_split(list(result_normalize(result, num_days)), num_segments)
         for chunk in chunks:
             means.append(1 if variance(chunk) >= 1000 else mean(chunk))
 
