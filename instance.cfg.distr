@@ -40,11 +40,11 @@ CELERYBEAT_SCHEDULE = {
     },
     'repos-status': {
         'task': 'gitmostwanted.tasks.repo_status.repos_status',
-        'schedule': crontab(minute=30, hour=3, day_of_week=1)
+        'schedule': crontab(minute=30, hour=4)
     },
     'repos-stars-mature': {
         'task': 'gitmostwanted.tasks.repo_stars.repos_stars_mature',
-        'schedule': crontab(hour=4, day_of_week='*/2'),
+        'schedule': crontab(minute=30, hour=3, day_of_week='*/2'),
         'args': [28]
     }
 }
