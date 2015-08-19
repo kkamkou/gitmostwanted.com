@@ -28,13 +28,18 @@ def repos_status():
 
 @celery.task()
 def repos_status_cleanup(num_months):
-    db.session.query(Repo)\
-        .filter(Repo.status.in_(('promising', 'hopeless'))) \
-        .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_months * 30 * -1)) \
-        .update(
-            {Repo.status: 'new', Repo.status_updated_at: datetime.now()},
-            synchronize_session=False
-        )
+    repos = db.session.query(Repo.id)\
+        .filter(Repo.status.in_(('promising', 'hopeless')))\
+        .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_months * 30 * -1))
+
+    RepoStars.query\
+        .filter(RepoStars.repo_id.in_(repos.subquery()))\
+        .delete(synchronize_session=False)
+
+    repos.update(
+        {Repo.status: 'new', Repo.status_updated_at: datetime.now()},
+        synchronize_session=False
+    )
 
 
 def result_normalize(lst: list, num_days: int):
