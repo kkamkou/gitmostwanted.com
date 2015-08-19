@@ -11,6 +11,7 @@ def repos_status():
     for repo in repos:
         result = db.session.query(RepoStars.day, RepoStars.stars)\
             .filter(RepoStars.repo_id == repo.id)\
+            .filter(RepoStars.year == datetime.today().year)\
             .order_by(expression.asc(RepoStars.day))\
             .all()
         if not result:
