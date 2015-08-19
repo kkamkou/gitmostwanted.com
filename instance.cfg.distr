@@ -36,7 +36,7 @@ CELERYBEAT_SCHEDULE = {
     'repos-status-cleanup': {
         'task': 'gitmostwanted.tasks.repo_status.repos_status_cleanup',
         'schedule': crontab(hour=3),
-        'args': [2]
+        'args': [28]
     },
     'repos-status': {
         'task': 'gitmostwanted.tasks.repo_status.repos_status',

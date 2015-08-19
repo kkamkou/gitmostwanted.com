@@ -11,7 +11,6 @@ def repos_status():
     for repo in repos:
         result = db.session.query(RepoStars.day, RepoStars.stars)\
             .filter(RepoStars.repo_id == repo.id)\
-            .filter(RepoStars.year == datetime.today().year)\
             .order_by(expression.asc(RepoStars.day))\
             .all()
         if not result:
@@ -28,10 +27,10 @@ def repos_status():
 
 
 @celery.task()
-def repos_status_cleanup(num_months):
+def repos_status_cleanup(num_days):
     repos = db.session.query(Repo.id)\
         .filter(Repo.status.in_(('promising', 'hopeless')))\
-        .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_months * 30 * -1))
+        .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_days * -1))
 
     RepoStars.query\
         .filter(RepoStars.repo_id.in_(repos.subquery()))\
