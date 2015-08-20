@@ -34,11 +34,7 @@ def repos_status_cleanup(num_days):
     for repo in repos:
         RepoStars.query.filter(RepoStars.repo_id == repo.id).delete()
 
-        if repo.status == 'promising':
-            repo.worth += 1
-        else:
-            repo.worth -= 1
-
+        repo.worth += 1 if repo.status == 'promising' else -1
         repo.status = 'new'
 
         db.session.commit()
