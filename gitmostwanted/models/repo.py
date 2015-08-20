@@ -21,6 +21,7 @@ class Repo(db.Model):
     homepage = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, nullable=False, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
+    worth = db.Column(SMALLINT(display_width=1), nullable=False, server_default='3', index=True)
     status_updated_at = db.Column(db.DateTime)
     status = db.Column(
         db.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),

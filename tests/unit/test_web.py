@@ -1,5 +1,5 @@
-from unittest import TestCase, skipIf
 from gitmostwanted.web import app, url_next, oauth_login, db
+from unittest import TestCase, skipIf
 import flask
 
 
