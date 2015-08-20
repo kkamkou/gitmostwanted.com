@@ -28,18 +28,20 @@ def repos_status(num_days, num_segments):
 
 @celery.task()
 def repos_status_cleanup(num_days):
-    repos = db.session.query(Repo.id)\
+    repos = Repo.query\
         .filter(Repo.status.in_(('promising', 'hopeless')))\
         .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_days * -1))
+    for repo in repos:
+        RepoStars.query.filter(RepoStars.repo_id == repo.id).delete()
 
-    RepoStars.query\
-        .filter(RepoStars.repo_id.in_(repos.subquery()))\
-        .delete(synchronize_session=False)
+        if repo.status == 'promising':
+            repo.worth += 1
+        else:
+            repo.worth -= 1
 
-    repos.update(
-        {Repo.status: 'new', Repo.status_updated_at: datetime.now()},
-        synchronize_session=False
-    )
+        repo.status = 'new'
+
+        db.session.commit()
 
 
 def result_normalize(lst: list, num_days: int):
