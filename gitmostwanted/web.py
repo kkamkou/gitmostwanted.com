@@ -30,10 +30,7 @@ def index(rng):
             .add_columns(UserAttitude.attitude)\
             .outerjoin(
                 UserAttitude,
-                db.and_(
-                    UserAttitude.user_id == g.user.id,
-                    UserAttitude.repo_id == Repo.id
-                )
+                (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
             )
 
     languages = Repo.language_distinct()
