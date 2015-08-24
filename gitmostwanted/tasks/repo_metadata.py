@@ -2,7 +2,6 @@ from gitmostwanted.app import db, celery
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.github import api
 from datetime import datetime, timedelta
-from time import sleep
 
 
 @celery.task()
