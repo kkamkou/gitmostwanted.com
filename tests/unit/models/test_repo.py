@@ -23,5 +23,17 @@ class ModelsRepoTestCase(TestCase):
         entry.status = 'unknown'
         self.assertEquals(entry.status_updated_at, status_updated_at)
 
+    def test_update_fields(self):
+        entry = Repo()
+
+        entry.homepage = ' example.com '
+        self.assertEquals(entry.homepage, 'http://example.com')
+
+        entry.description = ''
+        self.assertEquals(entry.description, None)
+
+        entry.description = 'atext' * 60
+        self.assertEquals(len(entry.description), 250)
+
     def test_handle_incorrect_status(self):
         self.assertRaises(ValueError, Repo, status='abc')
