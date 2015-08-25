@@ -19,7 +19,7 @@ CELERYBEAT_SCHEDULE = {
     'repo-details-update': {
         'task': 'gitmostwanted.tasks.repo_metadata.repo_details_update',
         'schedule': crontab(minute=30, hour=0),
-        'args': [1]
+        'args': [14]
     },
     'repo-flag-mature': {
         'task': 'gitmostwanted.tasks.repo_metadata.repo_flag_mature',
