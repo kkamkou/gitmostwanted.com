@@ -80,13 +80,9 @@ def most_starred_sync(model_name: str, query: str):
     db.session.query(model).delete()
 
     for row in job_results(Job(service, query)):
-        info = repo_info(row[1])
+        info, code = repo_info(row[1])
         if not info:
             continue
-
-        homepage = info['homepage'].strip() if info['homepage'] else None
-        if homepage and homepage.find('http') != 0:
-            homepage = 'http://' + homepage
 
         db.session.merge(
             model(
@@ -97,9 +93,9 @@ def most_starred_sync(model_name: str, query: str):
                     name=info['name'],
                     language=info['language'],
                     full_name=info['full_name'],
-                    description=info['description'][:250] if info['description'] else None,
+                    description=info['description'],
                     html_url=info['html_url'],
-                    homepage=homepage,
+                    homepage=info['homepage'],
                     created_at=datetime.strptime(info['created_at'], '%Y-%m-%dT%H:%M:%SZ')
                 )
             )

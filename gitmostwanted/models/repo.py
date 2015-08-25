@@ -20,6 +20,7 @@ class Repo(db.Model):
     html_url = db.Column(db.String(150), nullable=False)
     homepage = db.Column(db.String(150))
     created_at = db.Column(db.DateTime, nullable=False, index=True)
+    checked_at = db.Column(db.DateTime, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
     worth = db.Column(SMALLINT(display_width=1), nullable=False, server_default='3', index=True)
     status_updated_at = db.Column(db.DateTime)
@@ -33,6 +34,15 @@ class Repo(db.Model):
             if value not in ('promising', 'new', 'unknown', 'deleted', 'hopeless'):
                 raise ValueError('Unknown status provided')
             self.status_updated_at = datetime.now()
+
+        if key == 'homepage':
+            value = value.strip() if value else None
+            if value and value.find('http') != 0:
+                value = 'http://' + value
+
+        if key == 'description':
+            value = value[:250] if value else None
+
         super().__setattr__(key, value)
 
     @staticmethod

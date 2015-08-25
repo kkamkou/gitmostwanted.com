@@ -49,10 +49,7 @@ def list_by_attitude(attitude, page):
     q = Repo.query.filter(UserAttitude.attitude == attitude)\
         .outerjoin(
             UserAttitude,
-            db.and_(
-                UserAttitude.user_id == g.user.id,
-                UserAttitude.repo_id == Repo.id
-            )
+            (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
         )\
         .add_columns(UserAttitude.attitude if attitude else db.null())
 
