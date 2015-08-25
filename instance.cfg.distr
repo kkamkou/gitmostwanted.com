@@ -16,6 +16,11 @@ CELERY_INCLUDE = (
     'gitmostwanted.tasks.repo_metadata', 'gitmostwanted.tasks.repo_status'
 )
 CELERYBEAT_SCHEDULE = {
+    'repo-details-update': {
+        'task': 'gitmostwanted.tasks.repo_metadata.repo_details_update',
+        'schedule': crontab(minute=30, hour=0),
+        'args': [1]
+    },
     'repo-flag-mature': {
         'task': 'gitmostwanted.tasks.repo_metadata.repo_flag_mature',
         'schedule': crontab(minute=30, hour=1),

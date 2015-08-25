@@ -1,4 +1,4 @@
-from gitmostwanted.app import db, celery
+from gitmostwanted.app import app, db, celery
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.github import api
 from datetime import datetime, timedelta
@@ -27,8 +27,13 @@ def repo_details_update(num_days):
     for repo in repos:
         repo.checked_at = datetime.now()
 
-        details = api.repo_info(repo.full_name)
+        details, code = api.repo_info(repo.full_name)
         if not details:
+            if code == 404:
+                repo.worth -= 1
+                app.logger.info(
+                    '{0} is not found, the "worth" has been decreased by 1'.format(repo.full_name)
+                )
             continue
 
         for key in ['description', 'language', 'homepage']:

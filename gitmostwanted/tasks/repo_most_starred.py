@@ -80,7 +80,7 @@ def most_starred_sync(model_name: str, query: str):
     db.session.query(model).delete()
 
     for row in job_results(Job(service, query)):
-        info = repo_info(row[1])
+        info, code = repo_info(row[1])
         if not info:
             continue
 

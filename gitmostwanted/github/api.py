@@ -3,16 +3,20 @@ from requests import get, exceptions
 
 
 def fetch(uri):
+    """:rtype: (str|None, int)"""
+    json = None
     try:
         result = get('https://api.github.com/{0}'.format(uri), auth=app.config['GITHUB_AUTH'])
         result.raise_for_status()
-        return result.json()
+        json = result.json()
     except exceptions.HTTPError as e:
-        app.logger.warning('Request exception {0}: {1}'.format(e.errno, e.strerror))
-        return None
+        app.logger.info(
+            'Request exception {0}: {1}, code: {2}'.format(e.errno, e.strerror, result.status_code)
+        )
+    return json, result.status_code
 
 
-def repo_info(full_name):
+def repo_info(full_name: str):
     return fetch('repos/{0}'.format(full_name))
 
 
