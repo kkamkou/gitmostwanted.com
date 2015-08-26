@@ -14,7 +14,7 @@ def job_results(j: Job):
 
 
 @celery.task()
-def repos_stars_mature(num_days):
+def stars_mature(num_days):
     date_from = (datetime.now() + timedelta(days=num_days * -1)).strftime('%Y-%m-%d')
     service = bigquery.instance(app)
     query = """
