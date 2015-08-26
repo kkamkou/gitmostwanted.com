@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 
 @celery.task()
-def repo_flag_mature(num_months):
+def metadata_maturity(num_months):
     repos = Repo.query\
         .filter(Repo.created_at <= datetime.now() + timedelta(days=num_months * 30 * -1))\
         .filter(Repo.mature.is_(False))
@@ -16,14 +16,14 @@ def repo_flag_mature(num_months):
 
 
 @celery.task()
-def repo_details_update(num_days):
+def metadata_refresh(num_days):
     repos = Repo.query\
         .filter(
             Repo.checked_at.is_(None) |
             (Repo.checked_at <= datetime.now() + timedelta(days=num_days * -1))
         )\
         .yield_per(10)\
-        .limit(200)  # GitHup allows only 3000 calls per day within a token
+        .limit(200)  # GitHub allows only 3000 calls per day within a token
     for repo in repos:
         repo.checked_at = datetime.now()
 
@@ -42,3 +42,11 @@ def repo_details_update(num_days):
 
         db.session.commit()
     return repos.count()
+
+
+@celery.task()
+def metadata_erase():
+    query = Repo.query.filter((Repo.status == 'deleted') & (Repo.worth < 0))
+    cnt = query.count()
+    query.delete()
+    return cnt

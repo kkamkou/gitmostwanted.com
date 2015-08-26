@@ -16,13 +16,17 @@ CELERY_INCLUDE = (
     'gitmostwanted.tasks.repo_metadata', 'gitmostwanted.tasks.repo_status'
 )
 CELERYBEAT_SCHEDULE = {
-    'repo-details-update': {
-        'task': 'gitmostwanted.tasks.repo_metadata.repo_details_update',
+    'metadata-refresh': {
+        'task': 'gitmostwanted.tasks.repo_metadata.metadata_refresh',
         'schedule': crontab(minute=30, hour=0),
         'args': [14]
     },
-    'repo-flag-mature': {
-        'task': 'gitmostwanted.tasks.repo_metadata.repo_flag_mature',
+    'metadata-erase': {
+        'task': 'gitmostwanted.tasks.repo_metadata.metadata_erase',
+        'schedule': crontab(minute=50, hour=0)
+    },
+    'metadata-maturity': {
+        'task': 'gitmostwanted.tasks.repo_metadata.metadata_maturity',
         'schedule': crontab(minute=30, hour=1),
         'args': [3]
     },
@@ -38,18 +42,18 @@ CELERYBEAT_SCHEDULE = {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_month',
         'schedule': crontab(hour=3, day_of_month=1)
     },
-    'repos-status-cleanup': {
-        'task': 'gitmostwanted.tasks.repo_status.repos_status_cleanup',
+    'status-refresh': {
+        'task': 'gitmostwanted.tasks.repo_status.status_refresh',
         'schedule': crontab(hour=3),
         'args': [28]
     },
-    'repos-status': {
-        'task': 'gitmostwanted.tasks.repo_status.repos_status',
+    'status-detect': {
+        'task': 'gitmostwanted.tasks.repo_status.status_detect',
         'schedule': crontab(minute=30, hour=4),
         'args': [28, 4]
     },
-    'repos-stars-mature': {
-        'task': 'gitmostwanted.tasks.repo_stars.repos_stars_mature',
+    'stars-mature': {
+        'task': 'gitmostwanted.tasks.repo_stars.stars_mature',
         'schedule': crontab(minute=30, hour=3, day_of_week='*/2'),
         'args': [28]
     }

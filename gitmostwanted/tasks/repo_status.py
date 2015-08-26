@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 
 @celery.task()
-def repos_status(num_days, num_segments):
+def status_detect(num_days, num_segments):
     repos = Repo.query.filter().filter(Repo.status == 'unknown')
     for repo in repos:
         result = db.session.query(RepoStars.day, RepoStars.stars)\
@@ -27,7 +27,7 @@ def repos_status(num_days, num_segments):
 
 
 @celery.task()
-def repos_status_cleanup(num_days):
+def status_refresh(num_days):
     repos = Repo.query\
         .filter(Repo.status.in_(('promising', 'hopeless')))\
         .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_days * -1))
@@ -35,7 +35,7 @@ def repos_status_cleanup(num_days):
         RepoStars.query.filter(RepoStars.repo_id == repo.id).delete()
 
         repo.worth += 1 if repo.status == 'promising' else -1
-        repo.status = 'new'
+        repo.status = 'new' if repo.worth > 0 else 'deleted'
 
         db.session.commit()
 
