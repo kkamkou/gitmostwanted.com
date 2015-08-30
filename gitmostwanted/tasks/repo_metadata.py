@@ -29,7 +29,7 @@ def metadata_refresh(num_days):
 
         details, code = api.repo_info(repo.full_name)
         if not details:
-            if code == 404:
+            if 400 <= code < 500:
                 repo.worth -= 1
                 app.logger.info(
                     '{0} is not found, the "worth" has been decreased by 1'.format(repo.full_name)
