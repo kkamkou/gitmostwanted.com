@@ -60,7 +60,6 @@ CELERYBEAT_SCHEDULE = {
 }
 
 # oauth
-GITHUB_AUTH = (None, None)
 GITHUB_OAUTH = {
     'consumer_key': None,
     'consumer_secret': None,

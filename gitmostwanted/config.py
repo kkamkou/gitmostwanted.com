@@ -18,6 +18,9 @@ class Config:
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_ACCEPT_CONTENT = ['json']
 
+    # Oauth
+    GITHUB_AUTH = (None, None)
+
 
 class ConfigDevelopment(Config):
     SQLALCHEMY_ECHO = True
