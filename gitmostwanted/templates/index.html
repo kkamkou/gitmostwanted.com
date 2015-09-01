@@ -39,6 +39,8 @@
                 {{ user_attitude(repo.id, attitude) }}
             {% endif %}
           {% endcall %}
+        {% else %}
+          <p class="alert-box secondary">No entries found</p>
         {% endfor %}
       </ul>
     </div>
