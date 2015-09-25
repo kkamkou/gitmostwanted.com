@@ -14,7 +14,7 @@ build:
             packages_list: pytest-pep8 pytest-cov==1.8.1 responses scrutinizer-ocular
         - script:
             name: py.test
-            code: py.test --pep8 --clearcache --cov . --cov-report annotate gitmostwanted tests/unit
+            code: py.test --pep8 --cov . --cov-report annotate gitmostwanted tests/unit
         - script:
             name: transfer code coverage to scrutinizer
             code: ocular --data-file .coverage --repository "g/kkamkou/gitmostwanted.com"

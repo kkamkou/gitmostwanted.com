@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% set page_title = account.username %}
+
+{% block body %}
+  <br>
+  <div class="row">
+    <h2>{{ account.username }}
+  </div>
+
+  <br>
+  <div class="row">
+    <h3 class="subheader">Liked Repositories</h3>
+    {% if repos.count() %}
+      <table>
+        {% for repo in repos %}
+          <tr>
+            <td><a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a></td>
+            <td>{{ repo.language or 'N/A' }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p class="alert-box secondary">No entries found</p>
+    {% endif %}
+  </div>
+{% endblock %}
