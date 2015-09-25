@@ -6,7 +6,7 @@ user_profile = Blueprint('user_profile', __name__)
 
 
 @user_profile.route('/<name>')
-def profile_view(name):
+def overview(name):
     entity = User.query.filter_by(username=name).first_or_404()
     repos = Repo.query.join(UserAttitude)\
         .filter(UserAttitude.user_id == entity.id)\
