@@ -46,7 +46,6 @@ def metadata_refresh(num_days):
 
 @celery.task()
 def metadata_erase():
-    query = Repo.query.filter((Repo.status == 'deleted') & (Repo.worth < 0))
-    cnt = query.count()
-    query.delete()
+    cnt = Repo.query.filter((Repo.status == 'deleted') & (Repo.worth < 0)).delete()
+    db.session.commit()
     return cnt
