@@ -37,7 +37,7 @@ class Repo(db.Model):
 
         if key == 'homepage':
             value = value.strip() if value else None
-            if value and value.find('http') != 0:
+            if value and value.find('http:') != 0 and value.find('https:') != 0:
                 value = 'http://' + value
 
         if key == 'description':

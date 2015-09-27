@@ -26,8 +26,11 @@ class ModelsRepoTestCase(TestCase):
     def test_update_fields(self):
         entry = Repo()
 
-        entry.homepage = ' example.com '
-        self.assertEquals(entry.homepage, 'http://example.com')
+        entry.homepage = ' httpexample.com '
+        self.assertEquals(entry.homepage, 'http://httpexample.com')
+
+        entry.homepage = ' https://example.com '
+        self.assertEquals(entry.homepage, 'https://example.com')
 
         entry.description = ''
         self.assertEquals(entry.description, None)
