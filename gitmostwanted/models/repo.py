@@ -1,5 +1,7 @@
 from sqlalchemy.dialects.mysql import SMALLINT
 from sqlalchemy.sql import expression
+from gitmostwanted.lib.status import Status
+from gitmostwanted.lib.url import Url
 from gitmostwanted.app import db
 from datetime import datetime
 
@@ -31,14 +33,11 @@ class Repo(db.Model):
 
     def __setattr__(self, key, value):
         if key == 'status' and self.status != value:
-            if value not in ('promising', 'new', 'unknown', 'deleted', 'hopeless'):
-                raise ValueError('Unknown status provided')
+            value = str(Status(value))
             self.status_updated_at = datetime.now()
 
         if key == 'homepage':
-            value = value.strip() if value else None
-            if value and value.find('http:') != 0 and value.find('https:') != 0:
-                value = 'http://' + value
+            value = str(Url(value)) if value else None
 
         if key == 'description':
             value = value[:250] if value else None
