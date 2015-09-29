@@ -1,4 +1,4 @@
-from gitmostwanted.services import celery as service_celery, db as service_db
+from gitmostwanted.services import celery as service_celery, db as service_db, log as service_log
 from flask import Flask
 from os import environ
 
@@ -9,10 +9,7 @@ app.config.from_object('gitmostwanted.config.Config' + env)
 app.config.from_envvar('GMW_APP_SETTINGS', silent=True)
 
 celery = service_celery.instance(app)
+log = service_log.instance(app)
 db = service_db.instance(app)
 
-if not app.debug:
-    from logging import handlers, INFO
-    handler = handlers.TimedRotatingFileHandler(app.config['DEBUG_FILE'], when='d', backupCount=1)
-    handler.setLevel(INFO)
-    app.logger.addHandler(handler)
+del Flask, service_celery, service_db, service_log, environ
