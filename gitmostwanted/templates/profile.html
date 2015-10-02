@@ -3,12 +3,15 @@
 {% set page_title = account.username %}
 
 {% block body %}
-  <br>
+  <ul class="breadcrumbs">
+    <li><a href="/">Trending</a></li>
+    <li class=unavailable><a href="#">Profile</a></li>
+  </ul>
+
   <div class="row">
-    <h2>{{ account.username }}
+    <h2>{{ account.username }}</h2>
   </div>
 
-  <br>
   <div class="row">
     <h3 class="subheader">Liked Repositories</h3>
     {% if repos.count() %}
