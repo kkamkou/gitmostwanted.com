@@ -74,6 +74,8 @@ def most_starred_month():
 
 
 def most_starred_sync(model_name: str, query: str):
+    app.logger.info('Importing repos of {}'.format(model_name))
+
     service = bigquery.instance(app)
     model = getattr(report, model_name)
 
