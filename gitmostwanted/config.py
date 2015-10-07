@@ -13,6 +13,7 @@ class Config:
     SQLALCHEMY_ECHO = False
 
     # Celery
+    CELERY_TIMEZONE = 'Europe/Berlin'
     CELERY_BROKER_URL = ''
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_TASK_SERIALIZER = 'json'
