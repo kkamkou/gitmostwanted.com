@@ -6,6 +6,9 @@ def instance(app):
     """:rtype: SQLAlchemy"""
     db = SQLAlchemy(app)
 
+    if app.testing:
+        return db
+
     @event.listens_for(db.engine, 'checkout')
     def checkout(dbapi_con, con_record, con_proxy):
         try:
