@@ -12,7 +12,7 @@ class Config:
     # SQLAlchemy
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_POOL_SIZE = 15
-    SQLALCHEMY_POOL_RECYCLE = 3600
+    SQLALCHEMY_POOL_RECYCLE = 1800
 
     # Celery
     CELERY_TIMEZONE = 'Europe/Berlin'
@@ -20,6 +20,7 @@ class Config:
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_RESULT_DB_SHORT_LIVED_SESSIONS = True
 
     # Oauth
     GITHUB_AUTH = (None, None)
