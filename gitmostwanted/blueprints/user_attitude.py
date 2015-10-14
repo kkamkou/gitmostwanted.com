@@ -62,4 +62,4 @@ def list_by_attitude(attitude, page):
     if entries.pages and entries.pages < entries.page:
         return list_by_attitude(attitude, entries.pages)
 
-    return render_template('attitude.html', repos=entries, attitude=attitude, languages=languages)
+    return render_template('repository/attitude.html', repos=entries, attitude=attitude, languages=languages)

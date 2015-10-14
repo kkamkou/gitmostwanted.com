@@ -19,7 +19,9 @@
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         {% for (repo, attitude) in repos.items %}
           {% call(repo) repository(repo) %}
-            {{ user_attitude(repo.id, attitude) }}
+            {% if g.user %}
+              {{ user_attitude(repo.id, attitude) }}
+            {% endif %}
           {% endcall %}
         {% else %}
           <p class="alert-box secondary">No entries found</p>
