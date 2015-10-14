@@ -1,6 +1,8 @@
 from flask import g, render_template, redirect, request, session, url_for
 from gitmostwanted.blueprints.user_attitude import user_attitude
 from gitmostwanted.blueprints.user_profile import user_profile
+from gitmostwanted.blueprints.repo_rating import repo_rating
+from gitmostwanted.blueprints.mixin import repository_filtered
 from gitmostwanted.services import oauth as service_oauth
 from gitmostwanted.models.user import User, UserAttitude
 from gitmostwanted.models.repo import Repo
@@ -10,6 +12,7 @@ from gitmostwanted.app import app, db
 
 app.register_blueprint(user_attitude)
 app.register_blueprint(user_profile)
+app.register_blueprint(repo_rating)
 app.jinja_env.add_extension('jinja2.ext.do')
 
 oauth = service_oauth.instance(app)
@@ -35,21 +38,10 @@ def index(rng):
                 (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
             )
 
-    languages = Repo.language_distinct()
-
-    lang = request.args.get('lang')
-    if lang != 'All' and (lang,) in languages:
-        q = q.filter(Repo.language == lang)
-
-    status = request.args.get('status')
-    if status in ('promising', 'hopeless'):
-        q = q.filter(Repo.status == status)
-
-    if bool(request.args.get('mature')):
-        q = q.filter(Repo.mature.is_(True))
-
+    l = Repo.language_distinct()
+    q = repository_filtered(request, l, Repo, q)
     return render_template(
-        'index.html', range=rng, entries=q.order_by(db.desc(model.cnt_watch)), languages=languages
+        'index.html', range=rng, entries=q.order_by(model.cnt_watch.desc()), languages=l
     )
 
 
