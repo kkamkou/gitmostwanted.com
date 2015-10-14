@@ -20,7 +20,6 @@ class Config:
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_ACCEPT_CONTENT = ['json']
-    CELERY_RESULT_DB_SHORT_LIVED_SESSIONS = True
 
     # Oauth
     GITHUB_AUTH = (None, None)
@@ -36,4 +35,5 @@ class ConfigTesting(Config):
 
 
 class ConfigProduction(Config):
+    SQLALCHEMY_POOL_TIMEOUT = 5
     DEBUG = False
