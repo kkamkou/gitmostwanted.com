@@ -11,8 +11,6 @@ class Config:
 
     # SQLAlchemy
     SQLALCHEMY_ECHO = False
-    SQLALCHEMY_POOL_SIZE = 15
-    SQLALCHEMY_POOL_RECYCLE = 1800
 
     # Celery
     CELERY_TIMEZONE = 'Europe/Berlin'
@@ -35,5 +33,5 @@ class ConfigTesting(Config):
 
 
 class ConfigProduction(Config):
-    SQLALCHEMY_POOL_TIMEOUT = 5
+    SQLALCHEMY_POOL_SIZE = 0  # disable pooling
     DEBUG = False
