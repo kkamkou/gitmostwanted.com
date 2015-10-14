@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% set page_title = 'Top' %}
+
+{% from "macros/attitude.html" import user_attitude %}
+{% from "macros/navigation.html" import pagination %}
+{% from "macros/repository.html" import repository, repository_filter %}
+
+{% block body %}
+  <ul class="breadcrumbs">
+    <li><a href="/">Trending</a></li>
+    <li class="unavailable"><a href="#">Top</a></li>
+  </ul>
+
+  <div class="row" id="gh-entries">
+    {{ repository_filter(languages) }}
+
+    <div class="small-12 columns">
+      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+        {% for (repo, attitude) in repos.items %}
+          {% call(repo) repository(repo) %}
+            {{ user_attitude(repo.id, attitude) }}
+          {% endcall %}
+        {% else %}
+          <p class="alert-box secondary">No entries found</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  {{
+    pagination(
+      repos, lang=request.args.get('lang'), status=request.args.get('status'),
+      mature=request.args.get('mature')
+    )
+  }}
+{% endblock %}
