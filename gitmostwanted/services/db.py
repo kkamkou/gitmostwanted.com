@@ -15,7 +15,7 @@ def instance(app):
             try:
                 dbapi_con.ping(False)
             except TypeError:
-                app.logger.debug('MySQL connection died. Restoring...')
+                app.logger.info('MySQL connection died. Restoring...')
                 dbapi_con.ping()
         except dbapi_con.OperationalError as e:
             app.logger.warning(e)
