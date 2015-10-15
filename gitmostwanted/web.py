@@ -26,11 +26,12 @@ def index(rng):
         rng = 'day'
 
     model = getattr(report, map_list[rng])
+    lngs = Repo.language_distinct()
 
     if not g.user:
-        q = model.query.join(Repo).add_columns(db.null())
+        query = model.query.join(Repo).add_columns(db.null())
     else:
-        q = model.query\
+        query = model.query\
             .join(Repo)\
             .add_columns(UserAttitude.attitude)\
             .outerjoin(
@@ -38,11 +39,10 @@ def index(rng):
                 (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
             )
 
-    l = Repo.language_distinct()
-    q = repository_filtered(request, l, Repo, q)
-    return render_template(
-        'index.html', range=rng, entries=q.order_by(model.cnt_watch.desc()), languages=l
-    )
+    query = repository_filtered(request, lngs, Repo, query)\
+        .order_by(model.cnt_watch.desc())
+
+    return render_template('index.html', entries=query, languages=lngs)
 
 
 @app.route('/logout')

@@ -16,7 +16,3 @@ case "$1" in
         echo $"Usage: $0 {web|celery}"
         exit 1
 esac
-
-
-
-

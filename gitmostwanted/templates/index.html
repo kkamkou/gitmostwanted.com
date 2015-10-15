@@ -8,7 +8,7 @@
 {% block body %}
   <ul class="breadcrumbs">
     {% for r in ['day', 'week', 'month'] %}
-      <li {{ 'class=unavailable' if range == r }}>
+      <li {{ 'class=unavailable' if request.view_args.get('rng') == r }}>
         <a href="{{ url_for('index', rng=r) }}">{{ r|capitalize() }}</a>
       </li>
     {% endfor %}
