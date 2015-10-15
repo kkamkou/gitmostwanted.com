@@ -25,7 +25,8 @@ py.test --pep8 --clearcache --cov gitmostwanted tests/unit
 ```
 
 ## Docker
+The first time [it'll fail](https://github.com/docker/compose/issues/374)
 
 ```bash
-[sudo] docker-compose up -d  # The first time it'll fail
+[sudo] docker-compose up -d
 ```
