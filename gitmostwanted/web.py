@@ -1,55 +1,26 @@
-from flask import g, render_template, redirect, request, session, url_for
+from flask import g, redirect, request, session, url_for
 from gitmostwanted.blueprints.user_attitude import user_attitude
 from gitmostwanted.blueprints.user_profile import user_profile
+from gitmostwanted.blueprints.repo_trending import repo_trending
 from gitmostwanted.blueprints.repo_rating import repo_rating
-from gitmostwanted.blueprints.mixin import repository_filtered
 from gitmostwanted.services import oauth as service_oauth
-from gitmostwanted.models.user import User, UserAttitude
-from gitmostwanted.models.repo import Repo
-from gitmostwanted.models import report
+from gitmostwanted.models.user import User
 from gitmostwanted.app import app, db
 
-
+app.register_blueprint(repo_trending)
+app.register_blueprint(repo_rating)
 app.register_blueprint(user_attitude)
 app.register_blueprint(user_profile)
-app.register_blueprint(repo_rating)
 app.jinja_env.add_extension('jinja2.ext.do')
 
 oauth = service_oauth.instance(app)
-
-
-@app.route('/', defaults={'rng': 'day'})
-@app.route('/trending/<rng>/')
-def index(rng):
-    map_list = {'day': 'ReportAllDaily', 'week': 'ReportAllWeekly', 'month': 'ReportAllMonthly'}
-    if rng not in map_list:
-        rng = 'day'
-
-    model = getattr(report, map_list[rng])
-    lngs = Repo.language_distinct()
-
-    if not g.user:
-        query = model.query.join(Repo).add_columns(db.null())
-    else:
-        query = model.query\
-            .join(Repo)\
-            .add_columns(UserAttitude.attitude)\
-            .outerjoin(
-                UserAttitude,
-                (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
-            )
-
-    query = repository_filtered(request, lngs, Repo, query)\
-        .order_by(model.cnt_watch.desc())
-
-    return render_template('index.html', entries=query, languages=lngs)
 
 
 @app.route('/logout')
 def logout():
     session.pop('github_token', None)
     session.pop('user_id', None)
-    return redirect(url_for('index'))
+    return redirect('/')
 
 
 @app.route('/oauth/login')
@@ -61,7 +32,7 @@ def oauth_login():
 
 @app.route('/oauth/authorized')
 def oauth_authorized():
-    next_url = url_next() or url_for('index')
+    next_url = url_next() or url_for('/')
 
     resp = oauth.github.authorized_response()
     if resp is None:
