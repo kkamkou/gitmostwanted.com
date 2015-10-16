@@ -1,7 +1,7 @@
-from gitmostwanted.github.api import repo_info
+from gitmostwanted.lib.github.api import repo_info
+from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.services import bigquery
-from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.models import report
 from datetime import date, datetime
