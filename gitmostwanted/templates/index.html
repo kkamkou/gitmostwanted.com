@@ -17,7 +17,7 @@
       <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude</a></li>
     {% else %}
       <li class="unavailable">
-        <a href="{{ url_for('oauth_login', next=url_for('user_attitude.list_unchecked')) }}">Attitude</a>
+        <a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude</a>
       </li>
     {% endif %}
   </ul>

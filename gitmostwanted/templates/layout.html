@@ -38,14 +38,14 @@
           <li><a href="https://github.com/Letscodeit/gitmostwanted.com"
             target="_blank">Fork it!</a></li>
           {% if not g.user %}
-            <li><a href="{{ url_for('oauth_login') }}">Login via GitHub</a></li>
+            <li><a href="{{ url_for('user_oauth.login') }}">Login via GitHub</a></li>
           {% else %}
             <li class="has-dropdown">
               <a href="#">{{ g.user.username }}</a>
               <ul class="dropdown">
                   <li><a href="{{ url_for('user_profile.overview', name=g.user.username) }}">Profile</a></li>
                   <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Unchecked</a></li>
-                  <li><a href="{{ url_for('logout') }}">Log-out</a></li>
+                  <li><a href="{{ url_for('user_oauth.logout') }}">Log-out</a></li>
               </ul>
             </li>
           {% endif %}
