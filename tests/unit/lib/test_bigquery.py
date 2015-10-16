@@ -1,8 +1,8 @@
 from unittest import TestCase
-from gitmostwanted.bigquery.result import ResultJob
+from gitmostwanted.lib.bigquery.result import ResultJob
 
 
-class ServicesBigQueryResultTestCase(TestCase):
+class LibBigQueryResultTestCase(TestCase):
     def setUp(self):
         pass
 
