@@ -11,6 +11,7 @@ class Config:
 
     # SQLAlchemy
     SQLALCHEMY_ECHO = False
+    SQLALCHEMY_POOL_RECYCLE = 299  # 5 min
 
     # Celery
     CELERY_TIMEZONE = 'Europe/Berlin'
@@ -18,8 +19,6 @@ class Config:
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_ACCEPT_CONTENT = ['json']
-    CELERY_RESULT_ENGINE_OPTIONS = {'echo': True}
-    CELERY_RESULT_DB_SHORT_LIVED_SESSIONS = True
 
     # Oauth
     GITHUB_AUTH = (None, None)
@@ -35,5 +34,4 @@ class ConfigTesting(Config):
 
 
 class ConfigProduction(Config):
-    SQLALCHEMY_POOL_SIZE = 0  # disable pooling
     DEBUG = False
