@@ -22,9 +22,10 @@ def metadata_refresh(num_days):
             Repo.checked_at.is_(None) |
             (Repo.checked_at <= datetime.now() + timedelta(days=num_days * -1))
         )\
-        .yield_per(10)\
-        .limit(200)  # GitHub allows only 3000 calls per day within a token
+        .limit(200)  # .yield_per(10)\ GitHub allows only 3000 calls per day within a token
     for repo in repos:
+        app.logger.debug("Checking the {0} repository".format(repo.full_name))
+
         repo.checked_at = datetime.now()
 
         details, code = api.repo_info(repo.full_name)
