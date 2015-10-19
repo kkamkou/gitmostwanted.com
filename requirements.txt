@@ -1,5 +1,5 @@
 alembic
-celery[sqlalchemy]
+celery[redis]
 flask
 flask-wtf
 flask-sqlalchemy
