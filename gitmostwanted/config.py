@@ -11,8 +11,7 @@ class Config:
 
     # SQLAlchemy
     SQLALCHEMY_ECHO = False
-    SQLALCHEMY_POOL_SIZE = 15
-    SQLALCHEMY_POOL_RECYCLE = 1800
+    SQLALCHEMY_POOL_RECYCLE = 3600
 
     # Celery
     CELERY_TIMEZONE = 'Europe/Berlin'
