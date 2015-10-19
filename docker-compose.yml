@@ -22,8 +22,7 @@ celery:
     - web
   links:
     - dbGmw
-    - dbCeleryResult
-    - dbCeleryBroker
+    - redis
 
 dbGmw:
   image: mysql:latest
@@ -33,18 +32,5 @@ dbGmw:
     - MYSQL_USER=gitmostwanted
     - MYSQL_PASSWORD=gitmostwanted_pwd
 
-dbCeleryBroker:
-  image: mysql:latest
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=celery_broker
-    - MYSQL_USER=celery_broker
-    - MYSQL_PASSWORD=celery_broker_pwd
-
-dbCeleryResult:
-  image: mysql:latest
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=celery_result
-    - MYSQL_USER=celery_result
-    - MYSQL_PASSWORD=celery_result_pwd
+redis:
+  image: redis:latest
