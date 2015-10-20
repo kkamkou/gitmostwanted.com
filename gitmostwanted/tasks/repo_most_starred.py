@@ -1,14 +1,14 @@
-from gitmostwanted.github.api import repo_info
+from gitmostwanted.lib.github.api import repo_info
+from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.services import bigquery
-from gitmostwanted.bigquery.job import Job
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.models import report
 from datetime import date, datetime
 from time import sleep
 
 
-def job_results(j: Job):
+def results_of(j: Job):
     while not j.complete:
         app.logger.debug('The job is not complete, waiting...')
         sleep(10)
@@ -76,12 +76,15 @@ def most_starred_month():
 def most_starred_sync(model_name: str, query: str):
     app.logger.info('Importing repos of %s', model_name)
 
-    service = bigquery.instance(app)
     model = getattr(report, model_name)
+    service = bigquery.instance(app)
 
     db.session.query(model).delete()
 
-    for row in job_results(Job(service, query)):
+    job = Job(service, query)
+    job.execute()
+
+    for row in results_of(job):
         info, code = repo_info(row[1])
         if not info:
             continue

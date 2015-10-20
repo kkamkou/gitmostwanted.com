@@ -1,6 +1,6 @@
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.models.repo import Repo
-from gitmostwanted.github import api
+from gitmostwanted.lib.github import api
 from datetime import datetime, timedelta
 
 

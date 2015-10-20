@@ -1,4 +1,4 @@
-from gitmostwanted.bigquery.service import ServiceGmw
+from gitmostwanted.lib.bigquery.service import ServiceGmw
 
 
 def instance(app):

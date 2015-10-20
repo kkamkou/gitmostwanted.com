@@ -1,5 +1,5 @@
 from unittest import TestCase
-from gitmostwanted.github import api
+from gitmostwanted.lib.github import api
 import responses
 import json
 

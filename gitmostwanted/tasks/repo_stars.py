@@ -1,12 +1,12 @@
 from gitmostwanted.models.repo import Repo, RepoStars
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.services import bigquery
-from gitmostwanted.bigquery.job import Job
+from gitmostwanted.lib.bigquery.job import Job
 from datetime import datetime, timedelta
 from time import sleep
 
 
-def job_results(j: Job):
+def results_of(j: Job):
     while not j.complete:
         app.logger.debug('The job is not complete, waiting...')
         sleep(10)
@@ -31,10 +31,12 @@ def stars_mature(num_days):
 
     repos = Repo.query.filter(Repo.mature.is_(True)).filter(Repo.status == 'new')
     for repo in repos:
-        jobs.append((Job(service, query.format(id=repo.id, date_from=date_from), batch=True), repo))
+        job = Job(service, query.format(id=repo.id, date_from=date_from), batch=True)
+        job.execute()
+        jobs.append((job, repo))
 
     for job in jobs:
-        for row in job_results(job[0]):
+        for row in results_of(job[0]):
             db.session.add(RepoStars(repo_id=job[1].id, stars=row[0], year=row[1], day=row[2]))
 
         job[1].status = 'unknown'
