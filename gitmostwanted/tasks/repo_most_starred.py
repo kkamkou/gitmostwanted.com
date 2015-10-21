@@ -4,7 +4,7 @@ from gitmostwanted.app import app, db, celery
 from gitmostwanted.services import bigquery
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.models import report
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from time import sleep
 
 
@@ -27,7 +27,7 @@ def most_starred_day():
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
             LIMIT 50
-        """.format(date.today().strftime('%Y%m%d'))
+        """.format((date.today() - timedelta(1)).strftime('%Y%m%d'))
     )
 
 
@@ -39,10 +39,10 @@ def most_starred_week():
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
-                TABLE_DATE_RANGE(
+                TABLE_DATE_RANGE_STRICT(
                     githubarchive:day.events_,
-                    DATE_ADD(CURRENT_TIMESTAMP(), -7, 'DAY'),
-                    CURRENT_TIMESTAMP()
+                    DATE_ADD(CURRENT_TIMESTAMP(), -8, 'DAY'),
+                    DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
                 )
             WHERE type = 'WatchEvent'
             GROUP BY repo.id, repo.name
@@ -60,10 +60,10 @@ def most_starred_month():
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
-                TABLE_DATE_RANGE(
+                TABLE_DATE_RANGE_STRICT(
                     githubarchive:day.events_,
-                    DATE_ADD(CURRENT_TIMESTAMP(), -30, 'DAY'),
-                    CURRENT_TIMESTAMP()
+                    DATE_ADD(CURRENT_TIMESTAMP(), -31, 'DAY'),
+                    DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
                 )
             WHERE type = 'WatchEvent'
             GROUP BY repo.id, repo.name
