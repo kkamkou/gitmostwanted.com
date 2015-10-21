@@ -8,6 +8,7 @@ nav.top-bar{ margin-bottom: 0!important; }
     #gh-entries ul > li:hover{  }
     #gh-entries ul > li > div{ overflow: hidden; }
     #gh-entries ul > li:hover{ background-color: #F7F7F7; }
+    #gh-entries ul > li.deleted{ opacity: 0.5; }
 
 ul.breadcrumbs{ border-radius: 0; }
     ul.breadcrumbs li:before{ margin: 0 0.6rem; }
