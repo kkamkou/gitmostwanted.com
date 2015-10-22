@@ -40,5 +40,5 @@ deploy:
             name: reload services
             code: |
                 ssh gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
-                ssh gitmostwanted@gitmostwanted.com (kill -15 `cat "$PROJECT_SOURCE_DIR/celery.pid"`) &>/dev/null || true
+                ssh gitmostwanted@gitmostwanted.com '(kill -15 `cat "$PROJECT_SOURCE_DIR/celery.pid"`) &>/dev/null || true'
 
