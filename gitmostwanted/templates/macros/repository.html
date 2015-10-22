@@ -1,5 +1,5 @@
 {% macro repository(repo) -%}
-  <li data-url="{{ repo.html_url }}">
+  <li data-url="{{ repo.html_url }}" class="{{ repo.status }}">
     <div>
       <h4>
         <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a>

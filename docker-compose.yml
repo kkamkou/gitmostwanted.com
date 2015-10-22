@@ -1,7 +1,7 @@
 web:
   build: .
   user: gitmostwanted
-  entrypoint: ["/opt/entrypoint.sh"]
+  entrypoint: ["/opt/entrypoint.sh", "web"]
   ports:
     - "5000:5000"
   volumes:
@@ -15,7 +15,7 @@ web:
 celery:
   build: .
   user: gitmostwanted
-  command: celery -A gitmostwanted.app.celery worker -B -s /tmp/celerybeat-schedule.dat --autoreload --loglevel=DEBUG
+  entrypoint: ["/opt/entrypoint.sh", "celery"]
   environment:
       - GMW_APP_SETTINGS=/opt/instance.cfg
   volumes_from:

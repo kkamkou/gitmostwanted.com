@@ -1,6 +1,5 @@
-from flask import\
-    abort, Blueprint, g, make_response, request, render_template_string, render_template
-from gitmostwanted.blueprints.mixin import repository_filtered
+from flask import abort, Blueprint, g, make_response, request, render_template_string,\
+    render_template
 from gitmostwanted.models.user import UserAttitude
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.app import db
@@ -56,7 +55,16 @@ def list_by_attitude(attitude, page):
 
     languages = Repo.language_distinct()
 
-    q = repository_filtered(request, languages, Repo, q)
+    lang = request.args.get('lang')
+    if lang != 'All' and (lang,) in languages:
+        q = q.filter(Repo.language == lang)
+
+    status = request.args.get('status')
+    if status in ('promising', 'hopeless'):
+        q = q.filter(Repo.status == status)
+
+    if bool(request.args.get('mature')):
+        q = q.filter(Repo.mature.is_(True))
 
     entries = q.paginate(page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:

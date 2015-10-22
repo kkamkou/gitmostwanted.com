@@ -1,4 +1,6 @@
-from gitmostwanted.web import app, url_next, oauth_login, db
+from gitmostwanted.blueprints.user_oauth import login, url_next
+from gitmostwanted.web import app
+from gitmostwanted.app import db
 from unittest import TestCase, skipIf
 import flask
 
@@ -27,7 +29,7 @@ class WebTestCase(TestCase):
     @skipIf('OAUTH_GITHUB' not in app.config, "Requires GitHub auth")
     def test_login_via_github(self):
         with app.test_request_context():
-            resp = oauth_login()
+            resp = login()
             self.assertTrue(resp.headers['Location'].endswith('authorized'))
             self.assertEquals(resp.status_code, 302)
 
