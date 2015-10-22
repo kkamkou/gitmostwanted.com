@@ -37,5 +37,8 @@ deploy:
             name: migrations
             code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; alembic upgrade head"
         - script:
-            name: wsgi reload
-            code: ssh gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
+            name: reload services
+            code: |
+                ssh gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
+                ssh gitmostwanted@gitmostwanted.com kill -15 `cat $PROJECT_SOURCE_DIR/celery.pid` &>/dev/null
+

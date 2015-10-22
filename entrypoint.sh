@@ -9,7 +9,9 @@ case "$1" in
 
     celery)
         rm -f /tmp/celerybeat-schedule.dat
-        celery -A gitmostwanted.app.celery worker -B -s /tmp/celerybeat-schedule.dat --autoreload --loglevel=DEBUG
+        celery --app=gitmostwanted.app.celery worker --beat --detach \
+            --events --logfile=celery.log --loglevel=DEBUG \
+            --pidfile=celery.pid --schedule=/tmp/celerybeat-schedule.dat
         ;;
 
     *)
