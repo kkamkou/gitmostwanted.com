@@ -39,6 +39,6 @@ deploy:
         - script:
             name: reload services
             code: |
-                ssh gitmostwanted@gitmostwanted.com touch "$PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
-                ssh gitmostwanted@gitmostwanted.com "cd $PROJECT_SOURCE_DIR; (cat celery.pid | xargs kill -15) &>/dev/null || true"
+                ssh gitmostwanted@gitmostwanted.com "touch $PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
+                ssh gitmostwanted@gitmostwanted.com "(cat $PROJECT_SOURCE_DIR/celery.pid | xargs kill -15) &>/dev/null || true"
 

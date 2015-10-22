@@ -1,3 +1,14 @@
+db:
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=gitmostwanted
+    - MYSQL_USER=gitmostwanted
+    - MYSQL_PASSWORD=gitmostwanted_pwd
+
+redis:
+  image: redis:latest
+
 web:
   build: .
   user: gitmostwanted
@@ -10,27 +21,15 @@ web:
   environment:
     - GMW_APP_SETTINGS=/opt/instance.cfg
   links:
-    - dbGmw
+    - db
 
 celery:
   build: .
   user: gitmostwanted
   entrypoint: ["/opt/entrypoint.sh", "celery"]
   environment:
-      - GMW_APP_SETTINGS=/opt/instance.cfg
+    - GMW_APP_SETTINGS=/opt/instance.cfg
   volumes_from:
     - web
   links:
-    - dbGmw
     - redis
-
-dbGmw:
-  image: mysql:latest
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=gitmostwanted
-    - MYSQL_USER=gitmostwanted
-    - MYSQL_PASSWORD=gitmostwanted_pwd
-
-redis:
-  image: redis:latest

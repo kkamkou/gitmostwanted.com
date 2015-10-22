@@ -8,10 +8,9 @@ case "$1" in
         ;;
 
     celery)
-        rm -f /tmp/celerybeat-schedule.dat
-        celery --app=gitmostwanted.app.celery worker --beat --detach \
-            --events --logfile=celery.log --loglevel=DEBUG \
-            --pidfile=celery.pid --schedule=/tmp/celerybeat-schedule.dat
+        celery worker --app=gitmostwanted.app.celery --beat --purge \
+            --events --logfile=/tmp/celery.log --loglevel=DEBUG \
+            --pidfile=/tmp/celery.pid --schedule=/tmp/celerybeat-schedule.dat
         ;;
 
     *)
