@@ -3,10 +3,14 @@ def instance(app):
     if app.debug:
         return app.logger
 
-    from logging import handlers, DEBUG, Formatter
-    handler = handlers.TimedRotatingFileHandler(app.config['DEBUG_FILE'], when='d', backupCount=1)
-    handler.setLevel(DEBUG)
-    handler.setFormatter(Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-    app.logger.setLevel(DEBUG)
+    import logging
+
+    handler = logging.handlers\
+        .TimedRotatingFileHandler(app.config['DEBUG_FILE'], when='d', backupCount=7)
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+    app.logger.setLevel(logging.INFO)
     app.logger.addHandler(handler)
+
     return app.logger
