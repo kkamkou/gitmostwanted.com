@@ -13,11 +13,13 @@ class User(db.Model):
 class UserAttitude(db.Model):
     __tablename__ = 'users_attitude'
 
+    user = db.relationship('User')
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id', name='fk_users_id', ondelete='CASCADE'),
         primary_key=True
     )
+    repo = db.relationship('Repo', lazy=False)
     repo_id = db.Column(
         db.BigInteger,
         db.ForeignKey('repos.id', name='fk_repos_id', ondelete='CASCADE'),
