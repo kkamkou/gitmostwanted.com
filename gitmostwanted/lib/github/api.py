@@ -4,24 +4,23 @@ import requests
 
 def fetch(uri: str, method: str = 'get', token: str = None):
     """:rtype: (str|None, int)"""
-    json = None
-    headers = {}
+    uri = 'https://api.github.com/{0}'.format(uri)
     auth = app.config['GITHUB_AUTH']
+    headers = {}
+    json = None
 
     if token:
         headers['Authorization'] = 'token {}'.format(token)
         auth = None
 
     try:
-        result = getattr(requests, method.lower())(
-            'https://api.github.com/{0}'.format(uri), auth=auth, headers=headers
-        )
+        result = getattr(requests, method.lower())(uri, auth=auth, headers=headers)
         result.raise_for_status()
-        json = result.json() if result.status_code != 204 else {}
+        json = result.json() if result.status_code != 204 else None
     except requests.HTTPError as e:
         app.logger.info(
-            "Request to {} is failed ({}, {}): {}\n{}\n{}"
-            .format(result.url, method, e.strerror, result.status_code, result.text, result.request)
+            "Request to {} is failed ({}, {}): {}\n{}\n"
+            .format(result.url, method, e.strerror, result.status_code, result.text)
         )
 
     return json, result.status_code

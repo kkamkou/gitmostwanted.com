@@ -2,11 +2,15 @@
 
 {% set page_title = account.username %}
 
+{% from "macros/messages.html" import flashed_messages %}
+
 {% block body %}
   <ul class="breadcrumbs">
     <li><a href="/">Trending</a></li>
     <li class="unavailable"><a href="#">Profile</a></li>
   </ul>
+
+  {{  flashed_messages() }}
 
   <div class="row">
     <h2>{{ account.username }}</h2>

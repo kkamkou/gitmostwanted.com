@@ -1,0 +1,8 @@
+{% macro flashed_messages(filter=None) -%}
+  {% for type, msg in get_flashed_messages(with_categories=True, category_filter=filter) %}
+    <div data-alert class="alert-box {{ type }}">
+      {{ msg }}
+      <a href="#" class="close">&times;</a>
+    </div>
+  {% endfor %}
+{%- endmacro %}

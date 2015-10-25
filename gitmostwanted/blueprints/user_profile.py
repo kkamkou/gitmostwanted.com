@@ -1,8 +1,9 @@
-from flask import Blueprint, g, render_template, make_response, render_template_string, session
+import flask
+from gitmostwanted.lib.github.api import user_starred, user_starred_star
 from gitmostwanted.models.user import User, UserAttitude
 from gitmostwanted.models.repo import Repo
-from gitmostwanted.lib.github.api import user_starred, user_starred_star
-user_profile = Blueprint('user_profile', __name__)
+
+user_profile = flask.Blueprint('user_profile', __name__)
 
 
 @user_profile.route('/<name>')
@@ -12,21 +13,27 @@ def overview(name):
         .filter(UserAttitude.user_id == entity.id)\
         .filter(UserAttitude.attitude == 'like')\
         .order_by(Repo.language.desc())
-    return render_template('profile.html', account=entity, repos=repos)
+    return flask.render_template('profile.html', account=entity, repos=repos)
 
 
 @user_profile.route('/profile/github/sync')
 def github_sync():
+    token, secret = flask.session.get('github_token', (None, None))
+    if not token:
+        return flask.abort(403)
+
     starred, code = user_starred()
     if starred:
         attitudes = UserAttitude.query\
-            .filter(UserAttitude.user == g.user)\
+            .filter(UserAttitude.user == flask.g.user)\
             .filter(UserAttitude.attitude == 'like')
 
-        token, secret = session.get('github_token')
+        lst = [user_starred_star(r.repo.full_name, token) for r in attitudes
+               if filter(lambda x: x['full_name'] == r.repo.full_name, starred)]
 
-        [
-            user_starred_star(r.repo.full_name, token) for r in attitudes
-            if filter(lambda x: x['full_name'] == r.repo.full_name, starred)
-        ]
-    return make_response(render_template_string('Ok'), 204)
+        flask.flash(
+            '{} repositories were successfully starred'.format(
+                len([c for r, c in lst if c == 204])
+            ), 'success'
+        )
+    return flask.redirect(flask.url_for('user_profile.overview', name=flask.g.user.username))
