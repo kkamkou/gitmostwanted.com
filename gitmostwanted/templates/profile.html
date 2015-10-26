@@ -25,7 +25,9 @@
       <table>
         {% for repo in repos %}
           <tr>
-            <td><a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a></td>
+            <td>
+              <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name | truncate(28, True) }}</a>
+            </td>
             <td>{{ repo.language or 'N/A' }}</td>
           </tr>
         {% endfor %}
