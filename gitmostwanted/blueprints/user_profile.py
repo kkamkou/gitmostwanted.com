@@ -39,7 +39,7 @@ def github_sync():
         .filter(UserAttitude.attitude == 'like')
 
     lst = [user_starred_star(r.repo.full_name, token) for r in attitudes
-           if filter(lambda x: x['full_name'] == r.repo.full_name, starred)]
+           if not [x for x in starred if x['full_name'] == r.repo.full_name]]
 
     flask.flash(
         '{} repositories were successfully starred'.format(
