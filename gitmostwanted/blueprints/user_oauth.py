@@ -16,15 +16,17 @@ def load_user_from_session():
 
 @user_oauth.route('/logout')
 def logout():
-    session.pop('github_token', None)
+    session.pop('oauth_access_token', None)
     session.pop('user_id', None)
     return redirect('/')
 
 
 @user_oauth.route('/oauth/login')
 def login():
-    return oauth.github\
-        .authorize(callback=url_for('user_oauth.authorized', next=url_next(), _external=True))
+    return oauth.github.authorize(
+        callback=url_for('user_oauth.authorized', next=url_next(), _external=True),
+        scope=request.args.get('scope')
+    )
 
 
 @user_oauth.route('/oauth/authorized')
@@ -36,7 +38,8 @@ def authorized():
         return redirect(next_url)
 
     session.permanent = True
-    session['github_token'] = (resp['access_token'], '')
+    session['oauth_access_token'] = (resp['access_token'], resp['scope'].split(','))
+
     me = oauth.github.get('user')
     session['user_id'] = user_get_or_create(me.data['id'], me.data['email'], me.data['login']).id
 
@@ -44,8 +47,8 @@ def authorized():
 
 
 @oauth.github.tokengetter
-def github_tokengetter():
-    return session.get('github_token')
+def tokengetter():
+    return session.get('oauth_access_token')
 
 
 def user_get_or_create(uid, uemail, uname):

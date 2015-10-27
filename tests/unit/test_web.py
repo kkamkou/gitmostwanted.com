@@ -45,8 +45,8 @@ class WebTestCase(TestCase):
     def test_logout(self):
         with self.app as a:
             with self.app.session_transaction() as session:
-                session['github_token'] = 'github_token'
+                session['oauth_access_token'] = 'oauth_access_token'
                 session['user_id'] = 'user_id'
             self.assertIsInstance(a.get('/logout'), flask.Response)
-            self.assertNotIn('github_token', flask.session)
+            self.assertNotIn('oauth_access_token', flask.session)
             self.assertNotIn('user_id', flask.session)
