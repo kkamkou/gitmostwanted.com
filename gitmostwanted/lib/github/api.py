@@ -30,8 +30,8 @@ def repo_info(full_name: str):
     return fetch('repos/{}'.format(full_name))
 
 
-def user_starred():
-    return fetch('user/starred')
+def user_starred(token: str = None):
+    return fetch('user/starred?per_page=9999', token=token)
 
 
 def user_starred_star(full_name: str, token: str):

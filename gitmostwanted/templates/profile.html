@@ -14,9 +14,10 @@
 
   <div class="row">
     <h2>{{ account.username }}</h2>
-    {#<a href="{{ url_for('user_profile.github_sync') }}" class="button small success">
+    <a class="button small success"
+      href="{{ url_for('user_oauth.login', next=url_for('user_profile.github_sync'), scope='public_repo') }}">
       <i class="fi-loop"></i> Synchronise with GitHub
-    </a>#}
+    </a>
   </div>
 
   <div class="row">
