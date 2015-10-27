@@ -33,6 +33,7 @@ def github_sync():
         flask.flash('Unable to read from your profile', 'alert')
         return redirect
 
+    # @todo! move this functionality to celery
     attitudes = UserAttitude.query\
         .filter(UserAttitude.user == flask.g.user)\
         .filter(UserAttitude.attitude == 'like')
