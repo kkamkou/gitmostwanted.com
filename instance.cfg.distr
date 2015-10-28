@@ -13,7 +13,8 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 # celery beat
 CELERY_INCLUDE = (
     'gitmostwanted.tasks.repo_most_starred', 'gitmostwanted.tasks.repo_stars',
-    'gitmostwanted.tasks.repo_metadata', 'gitmostwanted.tasks.repo_status'
+    'gitmostwanted.tasks.repo_metadata', 'gitmostwanted.tasks.repo_status',
+    'gitmostwanted.tasks.github'
 )
 CELERYBEAT_SCHEDULE = {
     'metadata-refresh': {
