@@ -22,6 +22,7 @@ web:
     - GMW_APP_SETTINGS=/opt/instance.cfg
   links:
     - db
+    - redis
 
 celery:
   build: .
