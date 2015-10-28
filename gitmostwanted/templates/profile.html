@@ -14,10 +14,12 @@
 
   <div class="row">
     <h2>{{ account.username }}</h2>
-    <a class="button small success"
-      href="{{ url_for('user_oauth.login', next=url_for('user_profile.github_sync'), scope='public_repo') }}">
-      <i class="fi-loop"></i> Synchronise with GitHub
-    </a>
+    {% if account.id == g.user.id %}
+      <a class="button small success"
+        href="{{ url_for('user_oauth.login', next=url_for('user_profile.github_sync'), scope='public_repo') }}">
+        <i class="fi-loop"></i> Synchronise with GitHub
+      </a>
+    {% endif %}
   </div>
 
   <div class="row">
