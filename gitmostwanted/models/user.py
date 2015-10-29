@@ -26,3 +26,7 @@ class UserAttitude(db.Model):
         primary_key=True, index=True
     )
     attitude = db.Column(db.Enum('like', 'dislike', 'neutral'), nullable=False)
+
+    @classmethod
+    def liked_by_user(cls, user_id: int):
+        return cls.query.filter(cls.user_id == user_id).filter(cls.attitude == 'like')
