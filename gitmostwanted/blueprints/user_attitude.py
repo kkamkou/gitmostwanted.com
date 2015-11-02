@@ -46,30 +46,17 @@ def list_attitude(attitude, page):
 
 
 def list_by_attitude(attitude, page):
-    q = Repo.query.filter(UserAttitude.attitude == attitude)\
-        .outerjoin(
-            UserAttitude,
-            (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
-        )\
-        .add_columns(UserAttitude.attitude if attitude else db.null())
+    q = UserAttitude.join_by_user_and_repo(Repo.query, g.user.id, Repo.id)\
+        .add_columns(UserAttitude.attitude if attitude else db.null())\
+        .filter(UserAttitude.attitude == attitude)
 
-    languages = Repo.language_distinct()
-
-    lang = request.args.get('lang')
-    if lang != 'All' and (lang,) in languages:
-        q = q.filter(Repo.language == lang)
-
-    status = request.args.get('status')
-    if status in ('promising', 'hopeless'):
-        q = q.filter(Repo.status == status)
-
-    if bool(request.args.get('mature')):
-        q = q.filter(Repo.mature.is_(True))
+    q = Repo.filter_by_args(q, request.args)
 
     entries = q.paginate(page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:
         return list_by_attitude(attitude, entries.pages)
 
     return render_template(
-        'repository/attitude.html', repos=entries, attitude=attitude, languages=languages
+        'repository/attitude.html', repos=entries, attitude=attitude,
+        languages=Repo.language_distinct()
     )

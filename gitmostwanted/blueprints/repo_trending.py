@@ -13,30 +13,14 @@ def list_by_range(rng):
     map_list = {'day': 'ReportAllDaily', 'week': 'ReportAllWeekly', 'month': 'ReportAllMonthly'}
     model = getattr(report, map_list.get(rng, map_list.get('day')))
 
-    query = model.query.join(Repo).order_by(model.cnt_watch.desc())
+    query = Repo.filter_by_args(model.query, request.args)\
+        .join(Repo)\
+        .order_by(model.cnt_watch.desc())
+
     if not g.user:
-        return list_by_range_filtered(query.add_columns(db.null()))
+        query = query.add_columns(db.null())
+    else:
+        query = UserAttitude.join_by_user_and_repo(query, g.user.id, Repo.id)\
+            .add_columns(UserAttitude.attitude)
 
-    return list_by_range_filtered(
-        query.add_columns(UserAttitude.attitude).outerjoin(
-            UserAttitude,
-            (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
-        )
-    )
-
-
-def list_by_range_filtered(query):
-    langs = Repo.language_distinct()
-
-    lang = request.args.get('lang')
-    if lang != 'All' and (lang,) in langs:
-        query = query.filter(Repo.language == lang)
-
-    status = request.args.get('status')
-    if status in ('promising', 'hopeless'):
-        query = query.filter(Repo.status == status)
-
-    if bool(request.args.get('mature')):
-        query = query.filter(Repo.mature.is_(True))
-
-    return render_template('index.html', entries=query, languages=langs)
+    return render_template('index.html', entries=query, languages=Repo.language_distinct())

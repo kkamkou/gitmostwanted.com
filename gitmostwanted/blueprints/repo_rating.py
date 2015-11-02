@@ -9,35 +9,21 @@ repo_rating = Blueprint('repo_rating', __name__)
 @repo_rating.route('/top/', defaults={'page': 1})
 @repo_rating.route('/top/<int:page>')
 def top(page):
-    if not g.user:
-        q = Repo.query.add_columns(db.null())
-    else:
-        q = Repo.query \
-            .add_columns(UserAttitude.attitude) \
-            .outerjoin(
-                UserAttitude,
-                (UserAttitude.user_id == g.user.id) & (UserAttitude.repo_id == Repo.id)
-            )
-
-    q = q.filter(Repo.worth > 4) \
-        .order_by(Repo.worth.desc()) \
+    q = Repo.filter_by_args(Repo.query, request.args)\
+        .filter(Repo.worth > 4)\
+        .order_by(Repo.worth.desc())\
         .order_by(Repo.created_at.asc())
 
-    lngs = Repo.language_distinct()
-
-    lang = request.args.get('lang')
-    if lang != 'All' and (lang,) in lngs:
-        q = q.filter(Repo.language == lang)
-
-    status = request.args.get('status')
-    if status in ('promising', 'hopeless'):
-        q = q.filter(Repo.status == status)
-
-    if bool(request.args.get('mature')):
-        q = q.filter(Repo.mature.is_(True))
+    if not g.user:
+        q = q.add_columns(db.null())
+    else:
+        q = UserAttitude.join_by_user_and_repo(q, g.user.id, Repo.id)\
+            .add_columns(UserAttitude.attitude)
 
     entries = q.paginate(page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:
         return top(entries.pages)
 
-    return render_template('repository/top.html', repos=entries, page=page, languages=lngs)
+    return render_template(
+        'repository/top.html', repos=entries, page=page, languages=Repo.language_distinct()
+    )

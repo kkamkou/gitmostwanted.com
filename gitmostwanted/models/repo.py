@@ -1,3 +1,4 @@
+from werkzeug.datastructures import ImmutableMultiDict
 from sqlalchemy.dialects.mysql import SMALLINT
 from sqlalchemy.sql import expression
 from gitmostwanted.lib.status import Status
@@ -43,6 +44,21 @@ class Repo(db.Model):
             value = value[:250] if value else None
 
         super().__setattr__(key, value)
+
+    @classmethod
+    def filter_by_args(cls, q, args: ImmutableMultiDict):
+        lang = args.get('lang')
+        if lang != 'All' and (lang,) in cls.language_distinct():
+            q = q.filter(cls.language == lang)
+
+        status = args.get('status')
+        if status in ('promising', 'hopeless'):
+            q = q.filter(cls.status == status)
+
+        if bool(args.get('mature')):
+            q = q.filter(cls.mature.is_(True))
+
+        return q
 
     @staticmethod
     def language_distinct():

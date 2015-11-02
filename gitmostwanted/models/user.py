@@ -28,5 +28,9 @@ class UserAttitude(db.Model):
     attitude = db.Column(db.Enum('like', 'dislike', 'neutral'), nullable=False)
 
     @classmethod
+    def join_by_user_and_repo(cls, query, user_id: int, repo_id: int):
+        return query.outerjoin(cls, (cls.user_id == user_id) & (cls.repo_id == repo_id))
+
+    @classmethod
     def liked_by_user(cls, user_id: int):
         return cls.query.filter(cls.user_id == user_id).filter(cls.attitude == 'like')
