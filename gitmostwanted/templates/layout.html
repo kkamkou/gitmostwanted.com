@@ -23,11 +23,34 @@
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
       </ul>
 
+      <!-- what is GMW modal -->
+      <div id="whatIsGmwModal" class="reveal-modal" data-reveal aria-labelledby="firstModalTitle" aria-hidden="true" role="dialog">
+        <h3>What's It All About?</h3>
+        <p>
+          Each promoted or created by a famous company repository is popular at the beginning. Also it is possible to have a
+          number of them which are in trend right now (publications, marketing, events).
+          It doesn't mean that those repositories are useful.
+        </p>
+        <p>
+          The gitmostwanted.com project analyses <a href="https://www.githubarchive.org/" target="_blank">githubarchive</a>
+          data in order to highlight the most interesting repositories and exclude others. You can find some concepts in the
+          <a href="https://github.com/kkamkou/gitmostwanted.com/wiki" target="_blank">Wiki</a>.
+        </p>
+        <h3>Why should I login?</h3>
+        <p>
+          GMW is like a personal database, where you store <code>liked</code> repositories. As soon as GWM
+          gets 200 registered users, it'll be possible to find people closer/similar to you by preference.
+          Right now you can synchronise your stars with GitHub. See the <a href="/kkamkou" target="_blank">example account</a>.
+        </p>
+        <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+      </div>
+
       <section class="top-bar-section">
         <ul class="right">
           <li><a href="https://github.com/Letscodeit/gitmostwanted.com"
             target="_blank">Fork it!</a></li>
           {% if not g.user %}
+            <li><a href="#" data-reveal-id="whatIsGmwModal">What is it?</a></li>
             <li><a href="{{ url_for('user_oauth.login') }}">Login via GitHub</a></li>
           {% else %}
             <li class="has-dropdown">
