@@ -8,6 +8,7 @@ case "$1" in
         ;;
 
     celery)
+        unlink /tmp/celery.pid &> /dev/null
         celery worker --app=gitmostwanted.app.celery --beat --purge \
             --events --logfile=/tmp/celery.log --loglevel=DEBUG \
             --pidfile=/tmp/celery.pid --schedule=/tmp/celerybeat-schedule.dat

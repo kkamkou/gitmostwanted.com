@@ -1,4 +1,4 @@
-from gitmostwanted.models.repo import Repo, RepoStars
+from gitmostwanted.models.repo import Repo, RepoStars, RepoMean
 from gitmostwanted.app import db, celery
 from sqlalchemy.sql import expression
 from statistics import variance, mean
@@ -21,8 +21,11 @@ def status_detect(num_days, num_segments):
         for chunk in chunks:
             means.append(1 if variance(chunk) >= 1000 else mean(chunk))
 
-        repo.status = 'hopeless' if mean(means) < 1 else 'promising'
+        mean_val = mean(means)
 
+        repo.status = 'hopeless' if mean_val < 1 else 'promising'
+
+        db.session.add(RepoMean(repo=repo, value=mean_val))
         db.session.commit()
 
 

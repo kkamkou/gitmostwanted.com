@@ -72,11 +72,13 @@ class RepoStars(db.Model):
     __tablename__ = 'repos_stars'
 
     repo_id = db.Column(
-        db.BigInteger,
-        db.ForeignKey('repos.id', name='fk_repos_stars_repo_id', ondelete='CASCADE'),
+        db.BigInteger, db.ForeignKey('repos.id', name='fk_repos_stars_repo_id', ondelete='CASCADE'),
         primary_key=True
     )
-    stars = db.Column(SMALLINT(display_width=4, unsigned=True), nullable=False)
+    stars = db.Column(
+        SMALLINT(display_width=4, unsigned=True),
+        nullable=False
+    )
     year = db.Column(
         SMALLINT(display_width=4, unsigned=True),
         autoincrement=False, nullable=False, primary_key=True
@@ -85,3 +87,18 @@ class RepoStars(db.Model):
         SMALLINT(display_width=3, unsigned=True),
         autoincrement=False, nullable=False, primary_key=True
     )
+
+
+class RepoMean(db.Model):
+    __tablename__ = 'repos_mean'
+
+    repo = db.relationship('Repo')
+    repo_id = db.Column(
+        db.BigInteger, db.ForeignKey('repos.id', name='fk_repos_mean_repo_id', ondelete='CASCADE'),
+        primary_key=True
+    )
+    created_at = db.Column(
+        db.Date,
+        default=datetime.today().strftime('%Y-%m-%d'), nullable=False, primary_key=True
+    )
+    value = db.Column(db.Float(), nullable=False)
