@@ -10,6 +10,11 @@
   <ul class="breadcrumbs">
     <li><a href="/">Trending</a></li>
     <li class="unavailable"><a href="#">Top</a></li>
+    {% if g.user %}
+      <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude</a></li>
+    {% else %}
+      <li><a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude</a></li>
+    {% endif %}
   </ul>
 
   <div class="row" id="gh-entries">
