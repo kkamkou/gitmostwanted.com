@@ -38,7 +38,7 @@ def status_refresh(num_days):
         RepoStars.query.filter(RepoStars.repo_id == repo.id).delete()
 
         repo.worth += 1 if repo.status == 'promising' else -1
-        repo.status = 'new' if repo.worth > 0 else 'deleted'
+        repo.status = 'new' if repo.worth > -1 else 'deleted'
 
         db.session.commit()
 
