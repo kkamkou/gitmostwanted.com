@@ -1,14 +1,27 @@
 $(function () {
-  $('form.repository-filter')
+  'use strict';
+
+  var $form = $('form.repository-filter');
+
+  $form
     .find('select, input').on('change', function () {
-      $(this).closest('form').submit();
+      $form.slideUp('fast', function () {
+        $form.submit();
+      })
+    })
+    .end()
+    .find('label').on('click', function () {
+      var $prev = $(this).prev();
+      if ($prev.prop('checked')) {
+        $prev.prop('checked', false).trigger('change');
+        return false;
+      }
     })
     .end()
     .find('a.button').on('click', function () {
-      $(this).closest('form')
+      $form
         .find('select').val('All').end()
-        .find('input:checkbox, input:radio').prop('checked', false).end()
-        .submit();
+        .find('input:checkbox, input:radio').prop('checked', false).trigger('change');
       return false;
     })
     .end()
