@@ -54,4 +54,4 @@ def result_normalize(lst: list, num_days: int):
 def result_split(lst: list, num_rows: int):
     num_segments = len(lst) // num_rows
     for i in range(num_segments):
-        yield lst[(i*num_rows):((i+1)*num_rows)]
+        yield lst[(i * num_rows):((i + 1) * num_rows)]
