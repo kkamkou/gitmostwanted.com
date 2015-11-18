@@ -3,6 +3,7 @@ from gitmostwanted.app import db, celery
 from sqlalchemy.sql import expression
 from statistics import variance, mean
 from datetime import datetime, timedelta
+from types import GeneratorType
 
 
 @celery.task()
@@ -13,19 +14,14 @@ def status_detect(num_days, num_segments):
             .filter(RepoStars.repo_id == repo.id)\
             .order_by(expression.asc(RepoStars.day))\
             .all()
-        if not result:
-            continue
 
-        means = []
-        chunks = result_split(list(result_normalize(result, num_days)), num_segments)
-        for chunk in chunks:
-            means.append(1 if variance(chunk) >= 1000 else mean(chunk))
+        val = 0 if not result else result_mean(
+            result_split(list(result_normalize(result, num_days)), num_segments)
+        )
 
-        mean_val = mean(means)
+        repo.status = 'hopeless' if val < 1 else 'promising'
 
-        repo.status = 'hopeless' if mean_val < 1 else 'promising'
-
-        db.session.add(RepoMean(repo=repo, value=mean_val))
+        db.session.add(RepoMean(repo=repo, value=val))
         db.session.commit()
 
 
@@ -41,6 +37,10 @@ def status_refresh(num_days):
         repo.status = 'new' if repo.worth > -1 else 'deleted'
 
         db.session.commit()
+
+
+def result_mean(chunks: GeneratorType):
+    return mean([1 if variance(chunk) >= 1000 else mean(chunk) for chunk in chunks])
 
 
 def result_normalize(lst: list, num_days: int):
