@@ -1,6 +1,7 @@
-from gitmostwanted.tasks.repo_status import result_normalize, result_split
+from gitmostwanted.tasks.repo_status import result_normalize, result_split, result_mean
 from types import GeneratorType
 from unittest import TestCase
+from itertools import chain
 
 
 class TasksRepoStatusTestCase(TestCase):
@@ -20,3 +21,14 @@ class TasksRepoStatusTestCase(TestCase):
         lst = list(result)
         self.assertEquals(len(lst), 4)
         self.assertEquals(len(lst[0]), 7)
+
+    def test_calculate_mean(self):
+        def gn_normal():
+            yield [10, 20]
+
+        def gn_mixed():
+            yield [10, 99999, 10]
+
+        self.assertEquals(result_mean(gn_normal()), 15)
+        self.assertEquals(result_mean(gn_mixed()), 1)
+        self.assertEquals(result_mean(chain(gn_mixed(), gn_normal())), 8)
