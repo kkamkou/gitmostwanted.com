@@ -42,4 +42,4 @@ class UserAttitude(db.Model):
 
     @staticmethod
     def like(user_id: int, repo_id: int):
-        return Repo(user_id=user_id, repo_id=repo_id, attitude='like')
+        return UserAttitude(user_id=user_id, repo_id=repo_id, attitude='like')
