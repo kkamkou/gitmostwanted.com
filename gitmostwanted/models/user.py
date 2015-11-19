@@ -34,7 +34,11 @@ class UserAttitude(db.Model):
 
     @classmethod
     def list_liked_by_user(cls, user_id: int):
-        return cls.query.filter(cls.user_id == user_id).filter(cls.attitude == 'like')
+        """
+        @type user_id: int
+        @rtype: list
+        """
+        return cls.query.filter(cls.user_id == user_id).filter(cls.attitude == 'like').all()
 
     @staticmethod
     def like(user_id: int, repo_id: int):

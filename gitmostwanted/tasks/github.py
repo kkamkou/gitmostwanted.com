@@ -10,7 +10,7 @@ def repo_starred_star(user_id: int, access_token: str):
     if not starred:
         return False
 
-    attitudes = UserAttitude.list_liked_by_user(user_id).all()
+    attitudes = UserAttitude.list_liked_by_user(user_id)
 
     lst_in = [repo_like(s['full_name'], user_id) for s in starred
               if not [a for a in attitudes if s['full_name'] == a.repo.full_name]]
