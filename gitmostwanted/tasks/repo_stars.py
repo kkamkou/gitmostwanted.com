@@ -24,7 +24,7 @@ def stars_mature(num_days):
             TABLE_DATE_RANGE(
                 githubarchive:day.events_, TIMESTAMP('{date_from}'), CURRENT_TIMESTAMP()
             )
-        WHERE repo.id = {id} AND type = 'WatchEvent'
+        WHERE repo.id = {id} AND type IN ('WatchEvent', 'ForkEvent')
         GROUP BY y, doy
     """
     jobs = []
