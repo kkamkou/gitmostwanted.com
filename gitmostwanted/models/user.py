@@ -1,3 +1,4 @@
+from gitmostwanted.models.repo import Repo
 from gitmostwanted.app import db
 
 
@@ -13,13 +14,13 @@ class User(db.Model):
 class UserAttitude(db.Model):
     __tablename__ = 'users_attitude'
 
-    user = db.relationship('User')
+    user = db.relationship(User)
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id', name='fk_users_id', ondelete='CASCADE'),
         primary_key=True
     )
-    repo = db.relationship('Repo', lazy=False)
+    repo = db.relationship(Repo, lazy=False)
     repo_id = db.Column(
         db.BigInteger,
         db.ForeignKey('repos.id', name='fk_repos_id', ondelete='CASCADE'),
@@ -32,5 +33,13 @@ class UserAttitude(db.Model):
         return query.outerjoin(cls, (cls.user_id == user_id) & (cls.repo_id == repo_id))
 
     @classmethod
-    def liked_by_user(cls, user_id: int):
-        return cls.query.filter(cls.user_id == user_id).filter(cls.attitude == 'like')
+    def list_liked_by_user(cls, user_id: int):
+        """
+        @type user_id: int
+        @rtype: list
+        """
+        return cls.query.filter(cls.user_id == user_id).filter(cls.attitude == 'like').all()
+
+    @staticmethod
+    def like(user_id: int, repo_id: int):
+        return Repo(user_id=user_id, repo_id=repo_id, attitude='like')

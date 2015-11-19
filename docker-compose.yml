@@ -33,4 +33,5 @@ celery:
   volumes_from:
     - web
   links:
+    - db
     - redis

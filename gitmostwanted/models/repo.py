@@ -67,6 +67,10 @@ class Repo(db.Model):
             setattr(Repo.language_distinct, 'memoize', q.all())
         return getattr(Repo.language_distinct, 'memoize')
 
+    @classmethod
+    def get_one_by_full_name(cls, name):
+        return cls.query.filter(cls.full_name == name).first()
+
 
 class RepoStars(db.Model):
     __tablename__ = 'repos_stars'
@@ -92,7 +96,7 @@ class RepoStars(db.Model):
 class RepoMean(db.Model):
     __tablename__ = 'repos_mean'
 
-    repo = db.relationship('Repo')
+    repo = db.relationship(Repo)
     repo_id = db.Column(
         db.BigInteger, db.ForeignKey('repos.id', name='fk_repos_mean_repo_id', ondelete='CASCADE'),
         primary_key=True
