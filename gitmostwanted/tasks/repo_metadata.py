@@ -22,8 +22,8 @@ def metadata_refresh(num_days):
             Repo.checked_at.is_(None) |
             (Repo.checked_at <= datetime.now() + timedelta(days=num_days * -1))
         )\
-        .yield_per(10)\
-        .limit(200)  # GitHub allows only 3000 calls per day within a token
+        .yield_per(25)\
+        .limit(300)  # GitHub allows only 3000 calls per day within a token
     for repo in repos:
         repo.checked_at = datetime.now()
 
@@ -36,7 +36,7 @@ def metadata_refresh(num_days):
                 )
             continue
 
-        for key in ['description', 'language', 'homepage']:
+        for key in ['description', 'language', 'homepage', 'stargazers_count']:
             if getattr(repo, key) != details[key]:
                 setattr(repo, key, details[key])
 

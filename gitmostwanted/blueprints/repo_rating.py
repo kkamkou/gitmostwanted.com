@@ -12,7 +12,7 @@ def top(page):
     q = Repo.filter_by_args(Repo.query, request.args)\
         .filter(Repo.worth > 4)\
         .order_by(Repo.worth.desc())\
-        .order_by(Repo.created_at.asc())
+        .order_by(Repo.stargazers_count.desc())
 
     if not g.user:
         q = q.add_columns(db.null())
