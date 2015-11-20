@@ -26,6 +26,7 @@ class Repo(db.Model):
     checked_at = db.Column(db.DateTime, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
     worth = db.Column(SMALLINT(display_width=1), nullable=False, server_default='3', index=True)
+    stargazers_count = db.Column(db.Integer, nullable=False, server_default='0')
     status_updated_at = db.Column(db.DateTime)
     status = db.Column(
         db.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),
