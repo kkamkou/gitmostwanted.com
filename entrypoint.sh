@@ -11,7 +11,7 @@ case "$1" in
         unlink /tmp/celery.pid &> /dev/null || true
         celery worker --app=gitmostwanted.app.celery --beat --purge \
             --events --loglevel=DEBUG --pidfile=/tmp/celery.pid \
-            --schedule=/tmp/celerybeat-schedule.dat
+            --schedule=/tmp/celerybeat-schedule
         ;;
 
     *)
