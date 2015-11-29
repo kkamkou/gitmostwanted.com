@@ -65,7 +65,7 @@ class Repo(db.Model):
     def language_distinct():
         if not hasattr(Repo.language_distinct, 'memoize'):
             q = db.session.query(Repo.language).distinct().filter(Repo.language.isnot(None))
-            setattr(Repo.language_distinct, 'memoize', q.all())
+            setattr(Repo.language_distinct, 'memoize', sorted(q.all()))
         return getattr(Repo.language_distinct, 'memoize')
 
     @classmethod
