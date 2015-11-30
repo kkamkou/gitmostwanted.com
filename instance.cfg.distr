@@ -33,19 +33,19 @@ CELERYBEAT_SCHEDULE = {
     },
     'most-starred-day': {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_day',
-        'schedule': crontab(hour=1)
+        'schedule': crontab(minute=0, hour=1)
     },
     'most-starred-week': {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_week',
-        'schedule': crontab(hour=2, day_of_week=0)
+        'schedule': crontab(minute=0, hour=2, day_of_week=0)
     },
     'most-starred-month': {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_month',
-        'schedule': crontab(hour=3, day_of_month=1)
+        'schedule': crontab(minute=0, hour=3, day_of_month=1)
     },
     'status-refresh': {
         'task': 'gitmostwanted.tasks.repo_status.status_refresh',
-        'schedule': crontab(hour=3),
+        'schedule': crontab(minute=0, hour=3),
         'args': [28]
     },
     'status-detect': {
