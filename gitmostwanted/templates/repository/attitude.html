@@ -36,7 +36,7 @@
   {{
     pagination(
       repos, lang=request.args.get('lang'), status=request.args.get('status'),
-      mature=request.args.get('mature')
+      mature=request.args.get('mature'), term=request.args.get('term')
     )
   }}
 {% endblock %}
