@@ -38,10 +38,12 @@
 {%- endmacro %}
 
 {% macro repository_filter(languages) -%}
-  <a href="#" data-section="search" class="repository-filter button tiny secondary">
+  <a href="#" data-section="search"
+    class="repository-filter button tiny {{ 'success' if request.args.get('term') else 'secondary' }}">
     <i class="fi-magnifying-glass"></i> Search by name
   </a>
-  <a href="#" data-section="preset" class="repository-filter button tiny secondary">
+  <a href="#" data-section="preset"
+    class="repository-filter button tiny {{'success' if (request.args.get('lang', 'All') != 'All' or 'status' in request.args or 'mature' in request.args) else 'secondary' }}">
     <i class="fi-filter"></i> Filter options
   </a>
 
@@ -49,8 +51,12 @@
 
     <div class="search hide large-12 columns">
       <div class="row collapse">
-        <div class="small-10 medium-11 columns">
-          <input type="text" name="term" maxlength="120" placeholder="Search by name">
+        <div class="small-8 medium-10 columns">
+          <input type="text" name="term" value="{{ request.args.get('term', '') }}" maxlength="120"
+            placeholder="Search by name">
+        </div>
+        <div class="small-2 medium-1 columns">
+          <a href="#" class="button postfix secondary" onclick="$('input[name=term]').val('').trigger('change');return false;"><i class="fi-x"></i></a>
         </div>
         <div class="small-2 medium-1 columns">
           <a href="#" class="button postfix success"><i class="fi-magnifying-glass"></i></a>
