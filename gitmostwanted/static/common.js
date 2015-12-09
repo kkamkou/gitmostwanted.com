@@ -1,16 +1,17 @@
 $(function () {
   'use strict';
 
-  var $form = $('form.repository-filter');
+  var $formFilter = $('form.repository-filter'),
+    $formFilterBtn = $('a.repository-filter');
 
-  $form
-    .find('select, input').on('change', function () {
-      $form.slideUp('fast', function () {
-        $form.submit();
+  $formFilter
+    .find('select, input').change(function () {
+      $formFilter.hide(0, function () {
+        $formFilter.submit();
       })
     })
     .end()
-    .find('label').on('click', function () {
+    .find('label').click(function () {
       var $prev = $(this).prev();
       if ($prev.prop('checked')) {
         $prev.prop('checked', false).trigger('change');
@@ -18,26 +19,26 @@ $(function () {
       }
     })
     .end()
-    .find('a.button').on('click', function () {
-      $form
+    .find('a.button').click(function () {
+      $formFilter
         .find('select').val('All').end()
         .find('input:checkbox, input:radio').prop('checked', false).trigger('change');
       return false;
-    })
-    .end()
-    .prev().on('click', function () {
-      var $elem = $(this);
-      $(this).next().slideToggle('fast', function () {
-        if ($(this).is(':visible')) {
-          $elem.removeClass('secondary').addClass('info');
-          return;
-        }
-        $elem.removeClass('info').addClass('secondary');
-      });
-      return false;
     });
 
-  $('a.attitude').on('click', function () {
+  $formFilterBtn.click(function () {
+    var $elem = $(this);
+    $formFilter.find('div.' + $elem.data('section')).toggle(0, function () {
+      if ($(this).is(':visible')) {
+        $elem.removeClass('secondary').addClass('info');
+        return;
+      }
+      $elem.removeClass('info').addClass('secondary');
+    });
+    return false;
+  });
+
+  $('a.attitude').click(function () {
     $.get($(this).attr('href'), function () {
       window.location.reload();
     });
