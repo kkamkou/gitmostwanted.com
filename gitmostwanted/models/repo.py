@@ -3,6 +3,7 @@ from sqlalchemy.dialects.mysql import SMALLINT
 from sqlalchemy.sql import expression
 from gitmostwanted.lib.status import Status
 from gitmostwanted.lib.url import Url
+from gitmostwanted.lib.regex import SearchTerm
 from gitmostwanted.app import db
 from datetime import datetime
 
@@ -58,6 +59,11 @@ class Repo(db.Model):
 
         if bool(args.get('mature')):
             q = q.filter(cls.mature.is_(True))
+
+        try:
+            q = q.filter(cls.full_name.like(str(SearchTerm(args.get('term', '')))))
+        except ValueError:
+            pass
 
         return q
 
