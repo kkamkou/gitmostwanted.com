@@ -10,7 +10,7 @@ repo_rating = Blueprint('repo_rating', __name__)
 @repo_rating.route('/top/<int:page>')
 def top(page):
     q = Repo.filter_by_args(Repo.query, request.args)\
-        .filter(Repo.worth > 4)\
+        .filter(Repo.worth > 6)\
         .order_by(Repo.worth.desc())\
         .order_by(Repo.stargazers_count.desc())
 
