@@ -30,3 +30,8 @@ The first time [it'll fail](https://github.com/docker/compose/issues/374)
 ```bash
 [sudo] docker-compose up -d
 ```
+
+## Contribution
+- Fork this repo
+- Modify the source code and create a Pull Request
+- Please, follow [these code standards](https://github.com/amontalenti/elements-of-python-style)
