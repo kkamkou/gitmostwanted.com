@@ -7,3 +7,4 @@ class LibRegexSearchTermTestCase(TestCase):
         self.assertRaises(ValueError, SearchTerm, '#')
         self.assertRaises(ValueError, SearchTerm, 'te')
         self.assertEquals('%test%', str(SearchTerm('test')))
+        self.assertEquals('%free-programming-books%', str(SearchTerm('free-programming-books')))
