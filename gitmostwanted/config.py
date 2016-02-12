@@ -12,6 +12,7 @@ class Config:
     # SQLAlchemy
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_POOL_RECYCLE = 3600
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Celery
     CELERY_TIMEZONE = 'Europe/Berlin'
@@ -25,6 +26,7 @@ class Config:
 
 
 class ConfigDevelopment(Config):
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = True
 
 

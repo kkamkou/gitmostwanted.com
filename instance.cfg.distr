@@ -7,8 +7,8 @@ SECRET_KEY = 'secret_key'
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@db/gitmostwanted?charset=utf8'
 
 # celery
-CELERY_BROKER_URL = 'redis://localhost:6379/0',
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0',
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 # celery beat
 CELERY_INCLUDE = (
