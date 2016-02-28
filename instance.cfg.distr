@@ -71,7 +71,6 @@ GITHUB_OAUTH = {
 
 # google
 GOOGLE_BIGQUERY = {
-    'private_key_path': None,
-    'account_name': None,
+    'json_key_path': None,
     'project_id': None
 }
