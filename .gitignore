@@ -35,3 +35,4 @@ target/
 /.idea/
 *.cfg
 *.p12
+*.json

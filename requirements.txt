@@ -7,3 +7,4 @@ flask-oauthlib
 google-api-python-client
 pymysql
 pyopenssl
+httplib2
