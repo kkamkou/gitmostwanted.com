@@ -1,5 +1,5 @@
-from flask import Blueprint, g, request, render_template
-from gitmostwanted.models.repo import Repo
+from flask import abort, Blueprint, g, request, render_template
+from gitmostwanted.models.repo import Repo, RepoMean
 from gitmostwanted.models.user import UserAttitude
 from gitmostwanted.models import report
 from gitmostwanted.app import db
@@ -24,3 +24,14 @@ def list_by_range(rng):
             .add_columns(UserAttitude.attitude)
 
     return render_template('index.html', entries=query, languages=Repo.language_distinct())
+
+
+@repo_trending.route('/trending/details/<int:repo_id>')
+def details(repo_id):
+    repo = Repo.query.get(repo_id)
+    if not repo:
+        return abort(404)
+
+    means = RepoMean.query.filter(RepoMean.repo_id == repo_id)
+
+    return render_template('repository/details.html', entry=repo, means=means)

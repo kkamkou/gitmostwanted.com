@@ -25,6 +25,11 @@
         {% for (repo, attitude) in repos.items %}
           {% call(repo) repository(repo) %}
             {% if g.user %}
+              <a href="{{ url_for('repo_trending.details', repo_id=repo.id) }}"
+                class="button tiny secondary right" title="Details"
+                data-reveal-id="repoDetailsModal"
+                data-reveal-ajax="true"><i class="fi-graph-bar"></i></a>
+
               {{ user_attitude(repo.id, attitude) }}
             {% endif %}
           {% endcall %}
@@ -34,6 +39,9 @@
       </ul>
     </div>
   </div>
+
+  <div id="repoDetailsModal" class="reveal-modal" data-reveal
+    aria-labelledby="repoDetailsModal" aria-hidden="true" role="dialog"></div>
 
   {{
     pagination(

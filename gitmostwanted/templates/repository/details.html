@@ -1,0 +1,51 @@
+<h3 id="repoDetailsModalTitle">{{ entry.full_name }}</h3>
+
+<p>
+  <b>Stars:</b> {{ entry.stargazers_count }}<br />
+
+  {% if entry.language %}
+    <b>Language:</b> {{ entry.language }}<br />
+  {% endif %}
+
+  {% if entry.description %}
+    <b>Description:</b><br /> {{ entry.description }}
+  {% endif %}
+</p>
+
+{% if means %}
+  <script type="text/javascript">
+      if (!google.charts.Line) {
+        google.charts.load('current', {'packages': ['line']});
+      }
+
+      google.charts.setOnLoadCallback(function () {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Popularity']
+          {% for mean in means %}
+            , ["{{ mean.created_at }}",  {{ mean.value }}]
+          {% endfor %}
+        ]);
+
+        var options = {
+          chart: {
+            title: 'Popularity of the repository',
+            subtitle: 'shows the mean value'
+          },
+          legend: {position: 'none'},
+          animation: {
+            duration: 300,
+            startup: true
+          },
+          width: '100%',
+          height: 300
+        };
+
+        setTimeout(function () {
+          var chart = new google.charts.Line($('<div/>').insertAfter('#repoDetailsModalTitle').get(0));
+          chart.draw(data, google.charts.Line.convertOptions(options));
+        }, 200);
+      });
+  </script>
+{% endif %}
+
+<a class="close-reveal-modal" aria-label="Close">&#215;</a>
