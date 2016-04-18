@@ -1,7 +1,7 @@
 <h3 id="repoDetailsModalTitle">{{ entry.full_name }}</h3>
 
 <p>
-  <b>Stars:</b> {{ entry.stargazers_count }}<br />
+  <b>Stars:</b> {{ entry.stargazers_count|number_humanize }}<br />
 
   {% if entry.language %}
     <b>Language:</b> {{ entry.language }}<br />

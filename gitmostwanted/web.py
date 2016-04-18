@@ -1,4 +1,5 @@
 from gitmostwanted.app import app
+from gitmostwanted.lib.filter import number_humanize
 from gitmostwanted.blueprints import\
     user_oauth, user_profile, user_attitude, repo_rating, repo_trending
 
@@ -8,6 +9,7 @@ app.register_blueprint(repo_rating.repo_rating)
 app.register_blueprint(user_attitude.user_attitude)
 app.register_blueprint(user_profile.user_profile)
 
+app.jinja_env.filters['number_humanize'] = number_humanize
 app.jinja_env.add_extension('jinja2.ext.do')
 
 if __name__ == '__main__':

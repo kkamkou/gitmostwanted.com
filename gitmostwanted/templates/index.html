@@ -29,7 +29,7 @@
           {% call(repo) repository(entry.repo) %}
             <div class="right">
               <span class="label secondary">
-                +{{ entry.cnt_watch }} <i class="fi-star"></i>
+                +{{ entry.cnt_watch|number_humanize }} <i class="fi-star"></i>
               </span>
             </div>
 
