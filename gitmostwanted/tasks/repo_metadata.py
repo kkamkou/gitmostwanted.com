@@ -1,6 +1,7 @@
 from gitmostwanted.app import app, db, celery
-from gitmostwanted.models.repo import Repo
+from gitmostwanted.models.repo import Repo, RepoMean
 from gitmostwanted.lib.github import api
+from sqlalchemy.sql import func, expression
 from datetime import datetime, timedelta
 
 
@@ -42,6 +43,30 @@ def metadata_refresh(num_days):
 
         db.session.commit()
     return repos.count()
+
+
+@celery.task()
+def metadata_trend(num_days):
+    results = db.session.query(
+        RepoMean.repo_id, func.substring_index(
+            func.group_concat(
+                RepoMean.value.op('ORDER BY')(expression.desc(RepoMean.created_at))
+            ), ',', 2)
+        )\
+        .filter(RepoMean.created_at >= datetime.now() + timedelta(days=num_days * -1))\
+        .group_by(RepoMean.repo_id)\
+        .all()
+    for result in filter(lambda x: ',' in x[1], results):
+        curr, prev = result[1].split(',')
+        if curr < prev:
+            app.logger.info(
+                'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
+                .format(result[0], curr, prev)
+            )
+            db.session.query(Repo)\
+                .filter(Repo.id == result[0])\
+                .update({Repo.worth: Repo.worth - 1})
+            db.session.commit()
 
 
 @celery.task()
