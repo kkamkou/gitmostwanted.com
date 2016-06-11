@@ -21,7 +21,8 @@
   </ul>
 
   <div class="row" id="gh-entries">
-    {{ repository_filter(languages) }}
+    {% call repository_filter(languages) %}
+    {% endcall %}
 
     <div class="small-12 columns">
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">

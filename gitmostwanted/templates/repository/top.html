@@ -18,7 +18,14 @@
   </ul>
 
   <div class="row" id="gh-entries">
-    {{ repository_filter(languages) }}
+    {% call repository_filter(languages) %}
+      <dl class="sub-nav">
+        <dd {{ 'class=active' if sort_by == 'wanted' }}><a
+          href="{{ url_for('repo_rating.top', sort_by='wanted') }}">Most wanted</a></dd>
+        <dd {{ 'class=active' if sort_by == 'stars' }}><a
+          href="{{ url_for('repo_rating.top', sort_by='stars') }}">Stars</a></dd>
+      </dl>
+    {% endcall %}
 
     <div class="small-12 columns">
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
