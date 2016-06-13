@@ -35,7 +35,8 @@
               <a href="{{ url_for('repo_trending.details', repo_id=repo.id) }}"
                 class="button tiny secondary right" title="Details"
                 data-reveal-id="repoDetailsModal"
-                data-reveal-ajax="true"><i class="fi-graph-bar"></i></a>
+                data-reveal-ajax="true">{{ repo.stargazers_count|number_humanize }}
+                <i class="fi-graph-bar"></i></a>
 
               {{ user_attitude(repo.id, attitude) }}
             {% endif %}
