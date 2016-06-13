@@ -1,7 +1,11 @@
 <h3 id="repoDetailsModalTitle">{{ entry.full_name }}</h3>
 
+<div id="repoDetailsChart" style="height: 300px;width: 100%">Generating the popularity chart&hellip;</div>
+
 <p>
   <b>Stars:</b> {{ entry.stargazers_count|number_humanize }}<br />
+
+  <b>GitHub:</b> <a href="{{ entry.html_url }}" target="_blank">{{ entry.html_url }}</a><br />
 
   {% if entry.language %}
     <b>Language:</b> {{ entry.language }}<br />
@@ -26,23 +30,24 @@
           {% endfor %}
         ]);
 
-        var options = {
-          chart: {
-            title: 'Popularity of the repository',
-            subtitle: 'shows the mean value'
-          },
-          legend: {position: 'none'},
-          animation: {
-            duration: 300,
-            startup: true
-          },
-          width: '100%',
-          height: 300
-        };
+        var holder = $('#repoDetailsChart'),
+          options = {
+            chart: {
+              title: 'Popularity of the repository',
+              subtitle: 'shows the mean value'
+            },
+            legend: {position: 'none'},
+            animation: {
+              duration: 300,
+              startup: true
+            },
+            width: holder.css('width'),
+            height: holder.css('height')
+          };
 
         setTimeout(function () {
-          var chart = new google.charts.Line($('<div/>').insertAfter('#repoDetailsModalTitle').get(0));
-          chart.draw(data, google.charts.Line.convertOptions(options));
+          (new google.charts.Line(holder.get(0)))
+            .draw(data, google.charts.Line.convertOptions(options));
         }, 200);
       });
   </script>
