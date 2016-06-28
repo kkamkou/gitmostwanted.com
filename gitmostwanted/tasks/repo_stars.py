@@ -22,7 +22,7 @@ def stars_mature(num_days):
             COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
         FROM
             TABLE_DATE_RANGE(
-                githubarchive:day.events_, TIMESTAMP('{date_from}'), CURRENT_TIMESTAMP()
+                githubarchive:day., TIMESTAMP('{date_from}'), CURRENT_TIMESTAMP()
             )
         WHERE repo.id = {id} AND type IN ('WatchEvent', 'ForkEvent')
         GROUP BY y, doy

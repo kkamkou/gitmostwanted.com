@@ -22,7 +22,7 @@ def most_starred_day():
         """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
-            FROM [githubarchive:day.events_{0}]
+            FROM [githubarchive:day.{0}]
             WHERE type = 'WatchEvent'
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
@@ -40,7 +40,7 @@ def most_starred_week():
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
                 TABLE_DATE_RANGE_STRICT(
-                    githubarchive:day.events_,
+                    githubarchive:day.,
                     DATE_ADD(CURRENT_TIMESTAMP(), -8, 'DAY'),
                     DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
                 )
@@ -61,7 +61,7 @@ def most_starred_month():
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
                 TABLE_DATE_RANGE_STRICT(
-                    githubarchive:day.events_,
+                    githubarchive:day.,
                     DATE_ADD(CURRENT_TIMESTAMP(), -31, 'DAY'),
                     DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
                 )
