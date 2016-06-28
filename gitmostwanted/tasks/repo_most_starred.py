@@ -40,7 +40,7 @@ def most_starred_week():
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
                 TABLE_DATE_RANGE_STRICT(
-                    githubarchive:day.,
+                    [githubarchive:day.],
                     DATE_ADD(CURRENT_TIMESTAMP(), -8, 'DAY'),
                     DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
                 )
@@ -61,7 +61,7 @@ def most_starred_month():
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
                 TABLE_DATE_RANGE_STRICT(
-                    githubarchive:day.,
+                    [githubarchive:day.],
                     DATE_ADD(CURRENT_TIMESTAMP(), -31, 'DAY'),
                     DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
                 )
