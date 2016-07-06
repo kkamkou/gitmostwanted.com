@@ -54,11 +54,12 @@
     <div class="search hide large-12 columns">
       <div class="row collapse">
         <div class="small-8 medium-10 columns">
-          <input type="text" name="term" value="{{ request.args.get('term', '') }}" maxlength="120"
-            placeholder="Search by name">
+          <input type="text" name="term" autofocus="autofocus" maxlength="120"
+            value="{{ request.args.get('term', '') }}" placeholder="Search by name">
         </div>
         <div class="small-2 medium-1 columns">
-          <a href="#" class="button postfix secondary" onclick="$('input[name=term]').val('').trigger('change');return false;"><i class="fi-x"></i></a>
+          <a href="#" class="button postfix secondary"
+            onclick="$('input[name=term]').val('').trigger('change');return false;"><i class="fi-x"></i></a>
         </div>
         <div class="small-2 medium-1 columns">
           <a href="#" class="button postfix success"><i class="fi-magnifying-glass"></i></a>

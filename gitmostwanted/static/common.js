@@ -35,6 +35,7 @@ $(function () {
       }
       $elem.removeClass('info').addClass('secondary');
     });
+    $formFilter.find('input[autofocus]:visible').focus();
     return false;
   });
 
