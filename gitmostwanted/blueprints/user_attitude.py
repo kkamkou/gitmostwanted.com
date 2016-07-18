@@ -48,7 +48,9 @@ def list_attitude(attitude, page):
 def list_by_attitude(attitude, page):
     q = UserAttitude.join_by_user_and_repo(Repo.query, g.user.id, Repo.id)\
         .add_columns(UserAttitude.attitude if attitude else db.null())\
-        .filter(UserAttitude.attitude == attitude)
+        .filter(UserAttitude.attitude == attitude) \
+        .order_by(Repo.worth.desc())\
+        .order_by(Repo.stargazers_count.desc())
 
     q = Repo.filter_by_args(q, request.args)
 
