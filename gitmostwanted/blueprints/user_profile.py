@@ -1,4 +1,5 @@
 import flask
+from gitmostwanted.app import db
 from gitmostwanted.tasks.github import repo_starred_star
 from gitmostwanted.models.user import User, UserAttitude
 from gitmostwanted.models.repo import Repo
@@ -32,3 +33,16 @@ def github_sync():
         flask.flash('Synchronisation is successfully queued', 'success')
 
     return flask.redirect(flask.url_for('user_profile.overview', name=flask.g.user.username))
+
+
+@user_profile.route('/profile/remove')
+def remove():
+    if not flask.g.user:
+        return flask.abort(403)
+
+    im_sure = flask.request.args.get('im_sure', False)
+    if im_sure == 'True':
+        db.session.delete(flask.g.user)
+        db.session.commit()
+
+    return flask.redirect(flask.url_for('user_oauth.logout'))

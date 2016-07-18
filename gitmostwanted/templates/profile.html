@@ -13,17 +13,27 @@
   {{  flashed_messages() }}
 
   <div class="row">
-    <h2>{{ account.username }}</h2>
+    <h2><i class="fi-torso"></i> {{ account.username }}</h2>
     {% if account.id == g.user.id %}
-      <a class="button small success"
-        href="{{ url_for('user_oauth.login', next=url_for('user_profile.github_sync'), scope='public_repo') }}">
-        <i class="fi-loop"></i> Synchronise with GitHub
-      </a>
+      <ul class="button-group">
+        <li>
+          <a class="tiny button success"
+            href="{{ url_for('user_oauth.login', next=url_for('user_profile.github_sync'), scope='public_repo') }}">
+            <i class="fi-loop"></i> Synchronise with GitHub
+          </a>
+        </li>
+        <li>
+          <a class="tiny button alert" id="profile-remove"
+            href="{{ url_for('user_profile.remove', im_sure=False) }}">
+            <i class="fi-trash"></i> Delete account
+          </a>
+        </li>
+      </ul>
     {% endif %}
   </div>
 
   <div class="row">
-    <h3 class="subheader">Liked Repositories</h3>
+    <h3 class="subheader"><i class="fi-star"></i> Liked Repositories</h3>
     {% if repos.count() %}
       <table>
         {% for repo in repos %}
@@ -39,4 +49,16 @@
       <p class="alert-box secondary">No entries found</p>
     {% endif %}
   </div>
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript">
+    $('#profile-remove').click(function () {
+      if (!confirm('Are you sure you want to delete your profile? (no way to restore it later)')) {
+        return false;
+      }
+      $(this).attr('href', $(this).attr('href').replace('im_sure=False', 'im_sure=True'));
+      return true;
+    });
+  </script>
 {% endblock %}
