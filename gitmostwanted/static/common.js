@@ -40,6 +40,9 @@ $(function () {
   });
 
   $('a.attitude').click(function () {
+    if (!$(this).hasClass('secondary')) {
+      return false;
+    }
     $.get($(this).attr('href'), function () {
       window.location.reload();
     });
