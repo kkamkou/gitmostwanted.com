@@ -1,5 +1,8 @@
 #!/bin/bash
+
 set -e
+
+sleep 5
 
 case "$1" in
     web)
