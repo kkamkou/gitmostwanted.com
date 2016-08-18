@@ -2,7 +2,7 @@ import re
 
 
 class SearchTerm:
-    pattern = '^[\w-.]{3,}$'
+    pattern = '^[\w.-]{3,}$'
 
     def __init__(self, term: str):
         if re.match(self.pattern, term) is None:
