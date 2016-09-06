@@ -28,7 +28,9 @@ py.test --pep8 --clearcache --cov gitmostwanted tests/unit
 The first time [it'll fail](https://github.com/docker/compose/issues/374)
 
 ```bash
+cp instance.cfg.distr instance.cfg
 [sudo] docker-compose up -d
+# open http://127.0.0.1:5000/ in your browser
 ```
 
 ## Contribution
@@ -37,5 +39,6 @@ The first time [it'll fail](https://github.com/docker/compose/issues/374)
 - Please, follow [these code standards](https://github.com/amontalenti/elements-of-python-style)
 
 ## License
-The MIT License (MIT)  
+The MIT License (MIT)
+
 Copyright (c) 2015-2016 Kanstantsin Kamkou <2ka.by>
