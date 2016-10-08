@@ -9,3 +9,9 @@ class LibTextWithoutSmiliesTestCase(TestCase):
             for tpl in tpls:
                 self.assertEquals('a b', str(TextWithoutSmilies(tpl.format(smile))))
         self.assertEquals(':hallo world:', str(TextWithoutSmilies(':hallo world:')))
+
+    def test_filter_invalid_chars(self):
+        text = 'hello {} world'.format(u'\u0061\u0301')
+        self.assertEquals('hello á world', str(TextWithoutSmilies(text)))
+        text = '\xF0\x9F\x8E\xB7\xF0\x9F...'
+        self.assertEquals('ð\x9f\x8e·ð\x9f...', str(TextWithoutSmilies(text)))
