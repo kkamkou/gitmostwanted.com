@@ -16,26 +16,19 @@ from alembic import op
 
 def upgrade():
     op.drop_constraint('report_all_daily_ibfk_1', 'report_all_daily', type_='foreignkey')
-    op.create_foreign_key(None, 'report_all_daily', 'repos', ['id'], ['id'])
     op.drop_constraint('report_all_monthly_ibfk_1', 'report_all_monthly', type_='foreignkey')
-    op.create_foreign_key(None, 'report_all_monthly', 'repos', ['id'], ['id'])
     op.drop_constraint('report_all_weekly_ibfk_1', 'report_all_weekly', type_='foreignkey')
-    op.create_foreign_key(None, 'report_all_weekly', 'repos', ['id'], ['id'])
+    op.create_foreign_key(None, 'report_all_daily', 'repos', ['id'], ['id'], ondelete='CASCADE')
+    op.create_foreign_key(None, 'report_all_monthly', 'repos', ['id'], ['id'], ondelete='CASCADE')
+    op.create_foreign_key(None, 'report_all_weekly', 'repos', ['id'], ['id'], ondelete='CASCADE')
 
 
 def downgrade():
     op.drop_constraint(None, 'report_all_weekly', type_='foreignkey')
-    op.create_foreign_key(
-        'report_all_weekly_ibfk_1', 'report_all_weekly', 'repos', ['id'], ['id'],
-        ondelete='CASCADE'
-    )
+    op.create_foreign_key('report_all_weekly_ibfk_1', 'report_all_weekly', 'repos', ['id'], ['id'])
     op.drop_constraint(None, 'report_all_monthly', type_='foreignkey')
     op.create_foreign_key(
-        'report_all_monthly_ibfk_1', 'report_all_monthly', 'repos', ['id'], ['id'],
-        ondelete='CASCADE'
+        'report_all_monthly_ibfk_1', 'report_all_monthly', 'repos', ['id'], ['id']
     )
     op.drop_constraint(None, 'report_all_daily', type_='foreignkey')
-    op.create_foreign_key(
-        'report_all_daily_ibfk_1', 'report_all_daily', 'repos', ['id'], ['id'],
-        ondelete='CASCADE'
-    )
+    op.create_foreign_key('report_all_daily_ibfk_1', 'report_all_daily', 'repos', ['id'], ['id'])
