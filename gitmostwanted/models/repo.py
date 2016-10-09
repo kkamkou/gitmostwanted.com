@@ -2,7 +2,7 @@ from sqlalchemy.dialects.mysql import SMALLINT
 from sqlalchemy.sql import expression
 from gitmostwanted.lib.status import Status
 from gitmostwanted.lib.regex import SearchTerm
-from gitmostwanted.lib.text import TextWithoutSmilies
+from gitmostwanted.lib.text import TextWithoutSmilies, TextNormalized
 from gitmostwanted.lib.url import Url
 from gitmostwanted.app import db
 from werkzeug.datastructures import ImmutableMultiDict
@@ -44,7 +44,7 @@ class Repo(db.Model):
             value = str(Url(value)) if value else None
 
         if key == 'description':
-            value = str(TextWithoutSmilies(value[:250])) if value else None
+            value = str(TextWithoutSmilies(str(TextNormalized(value[:250])))) if value else None
 
         super().__setattr__(key, value)
 
