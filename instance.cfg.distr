@@ -4,7 +4,7 @@ from celery.schedules import crontab
 SECRET_KEY = 'secret_key'
 
 # SQLAlchemy
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@db/gitmostwanted?charset=utf8'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://gitmostwanted:gitmostwanted_pwd@db/gitmostwanted?charset=utf8mb4'
 
 # celery
 CELERY_BROKER_URL = 'redis://redis:6379/0',
