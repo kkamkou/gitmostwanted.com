@@ -1,5 +1,5 @@
 alembic
-celery[redis]==3.1.*
+celery[redis]>=3.1.25, <4
 flask
 flask-wtf
 flask-sqlalchemy

@@ -11,7 +11,7 @@ build:
               rsync -az "$WERCKER_SOURCE_DIR/migration" "$WERCKER_OUTPUT_DIR"
               rsync -az "$WERCKER_SOURCE_DIR/alembic.ini" "$WERCKER_OUTPUT_DIR"
         - pip-install:
-            packages_list: pytest-pep8 pytest-cov==1.8.1 responses coveralls
+            packages_list: pip pytest-pep8 pytest-cov==1.8.1 responses coveralls
         - script:
             name: py.test
             code: py.test --pep8 --cov . --cov-report annotate gitmostwanted tests/unit
