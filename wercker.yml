@@ -37,7 +37,7 @@ deploy:
               rsync -az ./requirements.txt gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
         - script:
             name: requirements
-            code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; pip install -r requirements.txt"
+            code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; pip install -r requirements.txt"
         - script:
             name: migrations
             code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; alembic upgrade head"
