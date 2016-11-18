@@ -11,9 +11,14 @@ class ServicesCeleryTestCase(TestCase):
         app.config['CELERY_ALWAYS_EAGER'] = True
         app.config['CELERY_IGNORE_RESULT'] = True
 
-        class FakeTask(instance(app).Task):
+        cell = instance(app)
+
+        class FakeTask(cell.Task):
             def run(self): pass
 
-        FakeTask().delay()
+        task = FakeTask()
+        cell.tasks.register(task)
+
+        task.delay()
 
         context.__enter__.assert_called_once_with()

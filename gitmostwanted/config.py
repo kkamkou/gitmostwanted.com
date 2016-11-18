@@ -17,9 +17,6 @@ class Config:
     # Celery
     CELERY_TIMEZONE = 'Europe/Berlin'
     CELERY_BROKER_URL = ''
-    CELERY_RESULT_SERIALIZER = 'json'
-    CELERY_TASK_SERIALIZER = 'json'
-    CELERY_ACCEPT_CONTENT = ['json']
 
     # Oauth
     GITHUB_AUTH = (None, None)
