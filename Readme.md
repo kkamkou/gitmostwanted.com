@@ -14,6 +14,7 @@ If you would like to help the project, please consider these topics:
 
 ```bash
 # export PYTHONPATH="`pwd`:${PYTHONPATH}"
+cp instance.cfg.distr instance.cfg
 export GMW_APP_SETTINGS=/path/to/instance.cfg
 python gitmostwanted/web.py
 ```
