@@ -1,48 +1,64 @@
-box: python:3.4
 build:
-    steps:
-        - virtualenv:
-            name: virtual environment
-            python_location: /usr/bin/python3.4
-        - script:
-            name: artifacts
-            code: |-
-              rsync -az "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
-              rsync -az "$WERCKER_SOURCE_DIR/migration" "$WERCKER_OUTPUT_DIR"
-              rsync -az "$WERCKER_SOURCE_DIR/alembic.ini" "$WERCKER_OUTPUT_DIR"
-              rsync -az "$WERCKER_SOURCE_DIR/requirements.txt" "$WERCKER_OUTPUT_DIR"
-        - pip-install:
-            packages_list: pip pytest-pep8 pytest-cov==1.8.1 responses coveralls
-        - script:
-            name: py.test
-            code: py.test --pep8 --cov . --cov-report annotate gitmostwanted tests/unit
-        - script:
-            name: transfer code coverage
-            code: coveralls
+  box: python:3.4
+
+  steps:
+    - virtualenv:
+      name: virtual environment
+      python_location: /usr/bin/python3.4
+
+    - script:
+      name: artifacts
+      code: |-
+        rsync -az "$WERCKER_SOURCE_DIR/gitmostwanted" "$WERCKER_OUTPUT_DIR"
+        rsync -az "$WERCKER_SOURCE_DIR/migration" "$WERCKER_OUTPUT_DIR"
+        rsync -az "$WERCKER_SOURCE_DIR/alembic.ini" "$WERCKER_OUTPUT_DIR"
+        rsync -az "$WERCKER_SOURCE_DIR/requirements.txt" "$WERCKER_OUTPUT_DIR"
+
+    - pip-install:
+      packages_list: pip pytest-pep8 pytest-cov==1.8.1 responses coveralls
+
+    - script:
+      name: py.test
+      code: py.test --pep8 --cov . --cov-report annotate gitmostwanted tests/unit
+
+    - script:
+      name: transfer code coverage
+      code: coveralls
+
 deploy:
-    steps:
-        - add-to-known_hosts:
-            local: true
-            hostname: gitmostwanted.com
-            fingerprint: 97:f6:e7:04:ad:fd:23:b9:70:af:cd:7e:c4:47:6a:8c
-        - add-ssh-key:
-            keyname: SSH_KEY
-            host: gitmostwanted.com
-        - script:
-            name: source-code upload
-            code: |-
-              rsync -az --delete-after ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-              rsync -az --delete-after ./migration gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-              rsync -az ./alembic.ini gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-              rsync -az ./requirements.txt gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-        - script:
-            name: requirements
-            code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; pip install -r requirements.txt"
-        - script:
-            name: migrations
-            code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; alembic upgrade head"
-        - script:
-            name: reload services
-            code: |
-                ssh gitmostwanted@gitmostwanted.com "touch $PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
-                ssh gitmostwanted@gitmostwanted.com "(cat $PROJECT_SOURCE_DIR/celery.pid | xargs kill -15) &>/dev/null || true"
+  box: alpine:latest
+
+  steps:
+    - install-packages:
+      packages: rsync
+
+    - add-to-known_hosts:
+      local: true
+      hostname: gitmostwanted.com
+      fingerprint: 97:f6:e7:04:ad:fd:23:b9:70:af:cd:7e:c4:47:6a:8c
+
+    - add-ssh-key:
+      keyname: SSH_KEY
+      host: gitmostwanted.com
+
+    - script:
+      name: source-code upload
+      code: |-
+        rsync -az --delete-after ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+        rsync -az --delete-after ./migration gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+        rsync -az ./alembic.ini gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+        rsync -az ./requirements.txt gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+
+    - script:
+      name: requirements
+      code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; pip install -r requirements.txt"
+
+    - script:
+      name: migrations
+      code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; alembic upgrade head"
+
+    - script:
+      name: reload services
+      code: |
+        ssh gitmostwanted@gitmostwanted.com "touch $PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
+        ssh gitmostwanted@gitmostwanted.com "(cat $PROJECT_SOURCE_DIR/celery.pid | xargs kill -15) &>/dev/null || true"
