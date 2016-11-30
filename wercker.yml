@@ -2,10 +2,6 @@ build:
   box: python:3.4
 
   steps:
-    - virtualenv:
-      name: virtual environment
-      python_location: /usr/bin/python3.4
-
     - script:
       name: artifacts
       code: |-
