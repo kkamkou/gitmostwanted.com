@@ -1,4 +1,4 @@
-box: wercker/python
+box: python:3.4
 build:
     steps:
         - virtualenv:
@@ -46,4 +46,3 @@ deploy:
             code: |
                 ssh gitmostwanted@gitmostwanted.com "touch $PROJECT_SOURCE_DIR/gitmostwanted.com.wsgi"
                 ssh gitmostwanted@gitmostwanted.com "(cat $PROJECT_SOURCE_DIR/celery.pid | xargs kill -15) &>/dev/null || true"
-
