@@ -29,7 +29,9 @@ deploy:
   steps:
     - script:
       name: os dependencies
-      code: apk add openssh rsync
+      code: |-
+        apk update
+        apk add openssh rsync
 
     - add-to-known_hosts:
       local: true
