@@ -28,6 +28,7 @@ class ConfigDevelopment(Config):
 
 
 class ConfigTesting(Config):
+    GITHUB_AUTH = ('Test', '')
     SECRET_KEY = 'testing'  # noqa
     TESTING = True
 
