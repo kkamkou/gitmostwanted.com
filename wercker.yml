@@ -36,9 +36,9 @@ deploy:
     - add-to-known_hosts:
       local: true
       hostname: gitmostwanted.com
-      fingerprint: 97:f6:e7:04:ad:fd:23:b9:70:af:cd:7e:c4:47:6a:8c
+      fingerprint: db:fb:9d:0c:f2:fd:bf:04:9f:da:f9:ad:70:b3:a0:6e
 
-    - wercker/add-ssh-key@1.0.3:
+    - add-ssh-key:
       keyname: SSH_KEY
       host: gitmostwanted.com
 
