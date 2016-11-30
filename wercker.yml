@@ -38,7 +38,7 @@ deploy:
       hostname: gitmostwanted.com
       fingerprint: 97:f6:e7:04:ad:fd:23:b9:70:af:cd:7e:c4:47:6a:8c
 
-    - add-ssh-key:
+    - wercker/add-ssh-key@1.0.3:
       keyname: SSH_KEY
       host: gitmostwanted.com
 
