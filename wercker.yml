@@ -31,7 +31,7 @@ deploy:
       name: os dependencies
       code: |-
         apk update
-        apk add openssh rsync
+        apk add bash openssh rsync
 
     - add-to-known_hosts:
       local: true
