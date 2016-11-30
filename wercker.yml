@@ -22,7 +22,9 @@ build:
       code: coveralls
 
 deploy:
-  box: alpine:latest
+  box:
+    id: alpine:latest
+    cmd: /bin/sh
 
   steps:
     - script:
