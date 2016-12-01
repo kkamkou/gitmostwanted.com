@@ -32,12 +32,11 @@ deploy:
       code: |-
         apk update
         apk add bash openssh rsync
-        eval $(ssh-agent -s)
 
-    - add-to-known_hosts:
-      local: true
-      hostname: gitmostwanted.com
-      fingerprint: db:fb:9d:0c:f2:fd:bf:04:9f:da:f9:ad:70:b3:a0:6e
+#    - add-to-known_hosts:
+#      local: true
+#      hostname: gitmostwanted.com
+#      fingerprint: db:fb:9d:0c:f2:fd:bf:04:9f:da:f9:ad:70:b3:a0:6e
 
     - add-ssh-key:
       keyname: SSH_KEY
