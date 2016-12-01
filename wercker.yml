@@ -45,7 +45,6 @@ deploy:
     - script:
       name: source-code upload
       code: |-
-        ssh gitmostwanted@gitmostwanted.com whoami
         rsync -az --delete-after ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
         rsync -az --delete-after ./migration gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
         rsync -az ./alembic.ini gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
