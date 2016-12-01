@@ -33,10 +33,10 @@ deploy:
         apk update
         apk add bash openssh rsync
 
-#    - add-to-known_hosts:
-#      local: true
-#      hostname: gitmostwanted.com
-#      fingerprint: db:fb:9d:0c:f2:fd:bf:04:9f:da:f9:ad:70:b3:a0:6e
+    - add-to-known_hosts:
+      local: true
+      hostname: gitmostwanted.com
+      fingerprint: db:fb:9d:0c:f2:fd:bf:04:9f:da:f9:ad:70:b3:a0:6e
 
     - add-ssh-key:
       keyname: SSH_KEY
@@ -45,10 +45,10 @@ deploy:
     - script:
       name: source-code upload
       code: |-
-        rsync -az --delete-after ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-        rsync -az --delete-after ./migration gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-        rsync -az ./alembic.ini gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
-        rsync -az ./requirements.txt gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+        rsync -e ssh -az --delete-after ./gitmostwanted gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+        rsync -e ssh -az --delete-after ./migration gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+        rsync -e ssh -az ./alembic.ini gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
+        rsync -e ssh -az ./requirements.txt gitmostwanted@gitmostwanted.com:"$PROJECT_SOURCE_DIR"
 
     - script:
       name: requirements
