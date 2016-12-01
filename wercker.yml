@@ -32,6 +32,7 @@ deploy:
       code: |-
         apk update
         apk add bash openssh rsync
+        eval $(ssh-agent -s)
 
     - add-to-known_hosts:
       local: true
