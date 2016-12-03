@@ -1,6 +1,6 @@
 [![wercker status](https://app.wercker.com/status/399c14de0d935628b87623cc0d46ad34/s/master "wercker status")](https://app.wercker.com/project/byKey/399c14de0d935628b87623cc0d46ad34)
 [![Code Climate](https://codeclimate.com/github/kkamkou/gitmostwanted.com/badges/gpa.svg)](https://codeclimate.com/github/kkamkou/gitmostwanted.com)
-[![Coverage Status](https://coveralls.io/repos/github/kkamkou/gitmostwanted.com/badge.svg)](https://coveralls.io/github/kkamkou/gitmostwanted.com)
+[![Coverage Status](https://coveralls.io/repos/github/kkamkou/gitmostwanted.com/badge.svg?branch=HEAD)](https://coveralls.io/github/kkamkou/gitmostwanted.com?branch=HEAD)
 
 # gitmostwanted
 Advanced explorer of github.com. The main goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
