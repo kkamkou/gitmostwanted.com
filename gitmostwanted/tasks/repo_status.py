@@ -8,7 +8,7 @@ from types import GeneratorType
 
 @celery.task()
 def status_detect(num_days, num_segments):
-    repos = Repo.query.filter().filter(Repo.status == 'unknown')
+    repos = Repo.query.filter(Repo.status == 'unknown')
     for repo in repos:
         result = db.session.query(RepoStars.day, RepoStars.stars)\
             .filter(RepoStars.repo_id == repo.id)\
