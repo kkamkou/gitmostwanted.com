@@ -1,4 +1,4 @@
-from flask.ext.oauthlib.client import OAuth
+from flask_oauthlib.client import OAuth
 
 
 def instance(app):

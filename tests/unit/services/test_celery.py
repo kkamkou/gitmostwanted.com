@@ -14,11 +14,12 @@ class ServicesCeleryTestCase(TestCase):
         cell = instance(app)
 
         class FakeTask(cell.Task):
+            name = 'test'
+
             def run(self): pass
 
         task = FakeTask()
         cell.tasks.register(task)
-
         task.delay()
 
         context.__enter__.assert_called_once_with()
