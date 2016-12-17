@@ -24,7 +24,8 @@ python gitmostwanted/web.py
 
 ```bash
 export GMW_APP_ENV=testing
-py.test --pep8 --clearcache --cov gitmostwanted tests/unit
+py.test --pep8 gitmostwanted tests/unit
+# py.test --pep8 --cov . --cov-report annotate gitmostwanted tests/unit
 ```
 
 ## Docker
