@@ -34,7 +34,7 @@ def authorized():
     next_url = url_next() or url_for('/')
 
     resp = oauth.github.authorized_response()
-    if resp is None:
+    if resp is None or 'access_token' not in resp:
         return redirect(next_url)
 
     session.permanent = True
