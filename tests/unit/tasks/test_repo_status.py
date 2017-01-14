@@ -29,6 +29,7 @@ class TasksRepoStatusTestCase(TestCase):
         def gn_mixed():
             yield [10, 99999, 10]
 
-        self.assertEquals(result_mean(gn_normal()), 15)
-        self.assertEquals(result_mean(gn_mixed()), 1)
-        self.assertEquals(result_mean(chain(gn_mixed(), gn_normal())), 8)
+        self.assertEquals(result_mean(gn_normal(), 1), 15)
+        self.assertEquals(result_mean(gn_mixed(), 1), 1)
+        self.assertEquals(result_mean(gn_mixed(), 10), 10)
+        self.assertEquals(result_mean(chain(gn_mixed(), gn_normal()), 1), 8)

@@ -16,7 +16,8 @@ def status_detect(num_days, num_segments):
             .all()
 
         val = 0 if not result else result_mean(
-            result_split(list(result_normalize(result, num_days)), num_segments)
+            result_split(list(result_normalize(result, num_days)), num_segments),
+            last_known_mean(repo.id)
         )
 
         repo.status = 'hopeless' if val < 1 else 'promising'
@@ -39,8 +40,16 @@ def status_refresh(num_days):
         db.session.commit()
 
 
-def result_mean(chunks: GeneratorType):
-    return mean([1 if variance(chunk) >= 1000 else mean(chunk) for chunk in chunks])
+def last_known_mean(repo_id: int, default: float = 1.0):
+    last_mean = db.session.query(RepoMean.value) \
+        .filter(RepoMean.repo_id == repo_id) \
+        .order_by(expression.desc(RepoMean.created_at)) \
+        .first()
+    return default if not last_mean else last_mean
+
+
+def result_mean(chunks: GeneratorType, normalized_val: float):
+    return mean([normalized_val if variance(chunk) >= 1000 else mean(chunk) for chunk in chunks])
 
 
 def result_normalize(lst: list, num_days: int):
