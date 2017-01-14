@@ -45,7 +45,7 @@ def last_known_mean(repo_id: int, default: float = 1.0):
         .filter(RepoMean.repo_id == repo_id) \
         .order_by(expression.desc(RepoMean.created_at)) \
         .first()
-    return default if not last_mean else last_mean
+    return default if not last_mean else last_mean.value
 
 
 def result_mean(chunks: GeneratorType, normalized_val: float):

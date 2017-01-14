@@ -1,10 +1,22 @@
-from gitmostwanted.tasks.repo_status import result_normalize, result_split, result_mean
+from datetime import datetime
+from gitmostwanted.app import db
+from gitmostwanted.models.repo import RepoMean
+from gitmostwanted.tasks.repo_status import\
+    result_normalize, result_split, result_mean, last_known_mean
+from itertools import chain
 from types import GeneratorType
 from unittest import TestCase
-from itertools import chain
 
 
 class TasksRepoStatusTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        db.create_all()
+
+    @classmethod
+    def tearDownClass(cls):
+        db.drop_all()
+
     def test_normalize_result(self):
         result = result_normalize([[8, 8], [28, 28]], 28)
         self.assertIsInstance(result, GeneratorType)
@@ -21,6 +33,12 @@ class TasksRepoStatusTestCase(TestCase):
         lst = list(result)
         self.assertEquals(len(lst), 4)
         self.assertEquals(len(lst[0]), 7)
+
+    def test_last_known_mean(self):
+        self.assertEqual(last_known_mean(1, 7), 7.0)
+        db.session.add(RepoMean(repo_id=1, created_at=datetime.now(), value=77.0))
+        db.session.commit()
+        self.assertEqual(last_known_mean(1, 999), 77.0)
 
     def test_calculate_mean(self):
         def gn_normal():
