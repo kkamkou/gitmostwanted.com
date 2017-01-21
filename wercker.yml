@@ -11,6 +11,7 @@ build:
         cp "$WERCKER_SOURCE_DIR/requirements.txt" "$WERCKER_OUTPUT_DIR"
 
     - pip-install:
+      cleanup_wheel_dir: true
       packages_list: pip pytest-pep8 pytest-cov==1.8.1 responses coveralls
 
     - script:
