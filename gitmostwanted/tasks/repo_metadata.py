@@ -1,8 +1,9 @@
-from gitmostwanted.app import app, db, celery
-from gitmostwanted.models.repo import Repo, RepoMean
-from gitmostwanted.lib.github import api
-from sqlalchemy.sql import func, expression
 from datetime import datetime, timedelta
+from gitmostwanted.app import app, db, celery
+from gitmostwanted.lib.github import api
+from gitmostwanted.models.repo import Repo, RepoMean
+from sqlalchemy.sql import func, expression
+from statistics import stdev
 
 
 @celery.task()
@@ -58,7 +59,7 @@ def metadata_trend(num_days):
         .all()
     for result in filter(lambda x: ',' in x[1], results):
         curr, prev = result[1].split(',')
-        if curr < prev:
+        if curr < prev and stdev([curr, prev]) > 1:
             app.logger.info(
                 'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
                 .format(result[0], curr, prev)
