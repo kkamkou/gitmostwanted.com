@@ -33,7 +33,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'metadata-trend': {
         'task': 'gitmostwanted.tasks.repo_metadata.metadata_trend',
-        'schedule': crontab(minute=0, hour=5, day_of_month='*/2'),
+        'schedule': crontab(minute=0, hour=5, month_of_year='*/2'),
         'args': [56]
     },
     'most-starred-day': {
