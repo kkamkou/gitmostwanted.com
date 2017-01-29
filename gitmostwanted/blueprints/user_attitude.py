@@ -1,5 +1,4 @@
-from flask import abort, Blueprint, g, make_response, request, render_template_string,\
-    render_template
+from flask import abort, Blueprint, g, jsonify, render_template, request
 from gitmostwanted.models.user import UserAttitude
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.app import db
@@ -28,7 +27,7 @@ def change(repo_id, attitude):
     db.session.merge(UserAttitude(user_id=g.user.id, repo_id=repo_id, attitude=attitude))
     db.session.commit()
 
-    return make_response(render_template_string('Ok'), 204)
+    return jsonify(attitude=attitude)
 
 
 @user_attitude.route('/unchecked/', defaults={'page': 1})
