@@ -58,7 +58,7 @@ def metadata_trend(num_days):
         .group_by(RepoMean.repo_id)\
         .all()
     for result in filter(lambda x: ',' in x[1], results):
-        curr, prev = result[1].split(',')
+        curr, prev = map(lambda v: float(v), result[1].split(','))
         if curr < prev and stdev([curr, prev]) > 1:
             app.logger.info(
                 'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
