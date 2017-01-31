@@ -1,5 +1,5 @@
 from gitmostwanted.models.repo import Repo, RepoStars, RepoMean
-from gitmostwanted.app import db, celery
+from gitmostwanted.app import db, celery, log
 from sqlalchemy.sql import expression
 from statistics import variance, mean
 from datetime import datetime, timedelta
@@ -34,7 +34,12 @@ def status_refresh(num_days):
     for repo in repos:
         RepoStars.query.filter(RepoStars.repo_id == repo.id).delete()
 
-        repo.worth += 1 if repo.status == 'promising' else -1
+        if repo.status != 'promising':
+            repo.worth += -1
+        else:
+            repo.worth += 1
+            log.info('The "worth" value for {0} has been increased by 1'.format(repo.full_name))
+
         repo.status = 'new' if repo.worth > -1 else 'deleted'
 
         db.session.commit()

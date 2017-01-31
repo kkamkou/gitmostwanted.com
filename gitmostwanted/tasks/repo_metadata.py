@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from gitmostwanted.app import app, db, celery
+from gitmostwanted.app import log, db, celery
 from gitmostwanted.lib.github import api
 from gitmostwanted.models.repo import Repo, RepoMean
 from sqlalchemy.sql import func, expression
@@ -33,7 +33,7 @@ def metadata_refresh(num_days):
         if not details:
             if 400 <= code < 500:
                 repo.worth -= 1
-                app.logger.info(
+                log.info(
                     '{0} is not found, the "worth" has been decreased by 1'.format(repo.full_name)
                 )
             continue
@@ -60,7 +60,7 @@ def metadata_trend(num_days):
     for result in filter(lambda x: ',' in x[1], results):
         curr, prev = map(lambda v: float(v), result[1].split(','))
         if curr < prev and stdev([curr, prev]) > 1:
-            app.logger.info(
+            log.info(
                 'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
                 .format(result[0], curr, prev)
             )
