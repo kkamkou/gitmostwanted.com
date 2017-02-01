@@ -59,7 +59,7 @@ def metadata_trend(num_days):
         .all()
     for result in filter(lambda x: ',' in x[1], results):
         curr, prev = map(lambda v: float(v), result[1].split(','))
-        if curr < prev and stdev([curr, prev]) > 1:
+        if curr < prev and (((prev - curr) / prev) * 100) > 10:
             log.info(
                 'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
                 .format(result[0], curr, prev)
@@ -75,31 +75,3 @@ def metadata_erase():
     cnt = Repo.query.filter(Repo.worth < -5).delete()
     db.session.commit()
     return cnt
-
-
-# temporary fix for #179
-def metadata_worth_reset():
-    cache = {}
-    results = db.session.query(Repo, RepoMean)\
-        .filter(Repo.id == RepoMean.repo_id)\
-        .order_by(RepoMean.created_at.asc())\
-        .yield_per(100)\
-        .all()
-    for result in results:
-        repo, mean = result
-
-        if repo.id not in cache:
-            cache[repo.id] = {'prev': mean.value, 'worth': 3}
-            continue
-
-        prev, curr = cache[repo.id]['prev'], mean.value
-        cache[repo.id]['prev'] = curr
-        cache[repo.id]['worth'] += -1 if curr < prev and stdev([curr, prev]) > 1 else 1
-
-        log.info(
-            '#{0}: prev value is {1}, next value is {2} > worth is: {3} (now {4})'
-            .format(repo.id, prev, curr, cache[repo.id]['worth'], repo.worth)
-        )
-
-        repo.worth = cache[repo.id]['worth']
-        db.session.commit()
