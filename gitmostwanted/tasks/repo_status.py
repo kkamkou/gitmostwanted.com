@@ -22,7 +22,7 @@ def status_detect(num_days, num_segments):
 
         repo.status = 'hopeless' if val < 1 else 'promising'
 
-        db.session.add(RepoMean(repo=repo, value=val))
+        db.session.merge(RepoMean(repo=repo, value=val))
         db.session.commit()
 
 
