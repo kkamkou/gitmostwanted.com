@@ -3,7 +3,6 @@ from gitmostwanted.app import log, db, celery
 from gitmostwanted.lib.github import api
 from gitmostwanted.models.repo import Repo, RepoMean
 from sqlalchemy.sql import func, expression
-from statistics import stdev
 
 
 @celery.task()

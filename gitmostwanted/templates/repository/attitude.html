@@ -8,8 +8,9 @@
 
 {% block body %}
   <ul class="breadcrumbs">
-    <li><a href="/">Trending</a></li>
-    <li {{ 'class=unavailable' if not attitude }}><a href="{{ url_for('user_attitude.list_unchecked') }}">All</a></li>
+    <li><a href="/">&larr;Trending</a></li>
+    <li {{ 'class=unavailable' if not attitude }}><a
+      href="{{ url_for('user_attitude.list_unchecked') }}">New</a></li>
     {% for r in ['like', 'dislike', 'neutral'] %}
       <li {{ 'class=unavailable' if attitude == r }}>
         <a href="{{ url_for('user_attitude.list_attitude', attitude=r) }}">{{ r|capitalize() }}</a>

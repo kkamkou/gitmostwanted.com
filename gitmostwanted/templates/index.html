@@ -12,11 +12,11 @@
         <a href="{{ url_for('repo_trending.list_by_range', rng=r) }}">{{ r|capitalize() }}</a>
       </li>
     {% endfor %}
-    <li><a href="{{ url_for('repo_rating.top') }}">Top</a></li>
+    <li><a href="{{ url_for('repo_rating.top') }}">Top&uarr;</a></li>
     {% if g.user %}
-      <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude</a></li>
+      <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude&rarr;</a></li>
     {% else %}
-      <li><a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude</a></li>
+      <li><a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude&rarr;</a></li>
     {% endif %}
   </ul>
 
