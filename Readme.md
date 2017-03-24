@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/kkamkou/gitmostwanted.com/badge.svg?branch=HEAD)](https://coveralls.io/github/kkamkou/gitmostwanted.com?branch=HEAD)
 
 # gitmostwanted
-Advanced explorer of github.com. The main goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
+Advanced explore of github.com. The main goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
 
 ## Donation
 If you would like to help the project, please consider these topics:
