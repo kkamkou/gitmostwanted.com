@@ -14,6 +14,13 @@ def load_user_from_session():
     g.user = User.query.get(session['user_id']) if 'user_id' in session else None
 
 
+@app.after_request
+def browser_cache_flush(response):
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'no-cache'
+    return response
+
+
 @user_oauth.route('/logout')
 def logout():
     session.pop('oauth_access_token', None)

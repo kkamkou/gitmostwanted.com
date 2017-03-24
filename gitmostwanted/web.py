@@ -1,7 +1,7 @@
 from gitmostwanted.app import app
 from gitmostwanted.lib.filter import number_humanize
 from gitmostwanted.blueprints import\
-    user_oauth, user_profile, user_attitude, repo_rating, repo_trending
+    repo_rating, repo_trending, user_attitude, user_oauth, user_profile
 
 app.register_blueprint(user_oauth.user_oauth)
 app.register_blueprint(repo_trending.repo_trending)
