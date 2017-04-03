@@ -1,4 +1,4 @@
-from flask import Blueprint, g, request, render_template
+from flask import Blueprint, g, render_template, request
 from gitmostwanted.app import db
 from gitmostwanted.models.user import UserAttitude
 from gitmostwanted.models.repo import Repo

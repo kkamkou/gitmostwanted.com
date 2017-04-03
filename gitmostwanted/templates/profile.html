@@ -6,8 +6,10 @@
 
 {% block body %}
   <ul class="breadcrumbs">
-    <li><a href="/">Trending</a></li>
+    <li><a href="/">&larr;Trending</a></li>
+    <li><a href="{{ url_for('repo_rating.top') }}">Top&uarr;</a></li>
     <li class="unavailable"><a href="#">Profile</a></li>
+    <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude&rarr;</a></li>
   </ul>
 
   {{  flashed_messages() }}
