@@ -6,14 +6,14 @@ from gitmostwanted.app import app, db
 user_oauth = Blueprint('user_oauth', __name__)
 oauth = service_oauth.instance(app)
 
-
+# @todo move the before_request method to a general place or a middleware
 @app.before_request
 def load_user_from_session():
     if str(request.url_rule) in ['/logout']:
         return None
     g.user = User.query.get(session['user_id']) if 'user_id' in session else None
 
-
+# @todo move the after_request method to a general place or a middleware
 @app.after_request
 def browser_cache_flush(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
