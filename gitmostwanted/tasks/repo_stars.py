@@ -29,7 +29,7 @@ def stars_mature(num_days):
     """
     jobs = []
 
-    repos = Repo.query.filter(Repo.mature.is_(True)).filter(Repo.status == 'new').limit(80)
+    repos = Repo.query.filter(Repo.mature.is_(True)).filter(Repo.status == 'new').limit(50)
     for repo in repos:
         job = Job(service, query.format(id=repo.id, date_from=date_from), batch=True)
         job.execute()
