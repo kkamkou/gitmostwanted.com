@@ -7,12 +7,15 @@ from sqlalchemy.sql import func, expression
 
 @celery.task()
 def metadata_maturity(num_months):
-    repos = Repo.query\
-        .filter(Repo.created_at <= datetime.now() + timedelta(days=num_months * 30 * -1))\
-        .filter(Repo.mature.is_(False))
-    for repo in repos:
-        repo.mature = True
+    cnt = func.count(RepoMean.repo_id).label("cnt")
+    repos = db.session.query(RepoMean.repo_id, cnt).join(Repo)\
+        .filter(Repo.mature.is_(False))\
+        .group_by(RepoMean.repo_id)\
+        .having(cnt >= num_months)
+    for (repo_id, cnt) in repos:
+        db.session.query(Repo).filter(Repo.id == repo_id).update({Repo.mature: True})
         db.session.commit()
+        log.info('{0} marked as mature ({1})'.format(repo_id, cnt))
     return repos.count()
 
 
