@@ -18,7 +18,7 @@ build:
       code: pycodestyle --max-line-length=100 --show-pep8 gitmostwanted
 
     - script:
-      name: tests an coverage
+      name: tests and coverage
       code: py.test --cov . --cov-report annotate gitmostwanted tests/unit
 
     - script:

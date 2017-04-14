@@ -2,7 +2,13 @@
   <li data-url="{{ repo.html_url }}" class="{{ repo.status }}">
     <div>
       <h4>
-        <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name }}</a>
+        <a href="{{ repo.html_url }}" target="_blank">
+          {% if repo.worth > 4 %}
+            <b>{{ repo.full_name }}</b>
+          {% else %}
+            {{ repo.full_name }}
+          {% endif %}
+        </a>
 
         {% if repo.mature %}
           <sup class="secondary label" title="Mature enough (Older than 3 months)">m</sup>
