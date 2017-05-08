@@ -1,20 +1,21 @@
-<h3 id="repoDetailsModalTitle">{{ entry.full_name }}</h3>
+<h3 id="repoDetailsModalTitle">
+  {{ entry.full_name }}
+  <a href="{{ entry.html_url }}" target="_blank"><i class="fi-social-github"></i></a>
+</h3>
 
 <div id="repoDetailsChart" style="height: 300px;width: 100%">Generating the popularity chart&hellip;</div>
 
-<p>
+<div>
   <b>Stars:</b> {{ entry.stargazers_count|number_humanize }}<br />
-
-  <b>GitHub:</b> <a href="{{ entry.html_url }}" target="_blank">{{ entry.html_url }}</a><br />
 
   {% if entry.language %}
     <b>Language:</b> {{ entry.language }}<br />
   {% endif %}
+</div>
 
-  {% if entry.description %}
-    <b>Description:</b><br /> {{ entry.description }}
-  {% endif %}
-</p>
+{% if entry.description %}
+  <div class="panel">{{ entry.description }}</div>
+{% endif %}
 
 {% if means %}
   <script type="text/javascript">
