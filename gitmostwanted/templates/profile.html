@@ -15,7 +15,10 @@
   {{  flashed_messages() }}
 
   <div class="row">
-    <h2><i class="fi-torso"></i> {{ account.username }}</h2>
+    <h2>
+      <i class="fi-social-github"></i>
+      <a href="https://github.com/{{ account.username }}" target="_blank">{{ account.username }}</a>
+    </h2>
     {% if account.id == g.user.id %}
       <ul class="button-group">
         <li>
