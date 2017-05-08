@@ -22,7 +22,7 @@ class WebTestCase(TestCase):
 
     def test_homepage(self):
         self.assertIn(
-            '<title>Trending - GitHub Explore</title>',
+            '<title>The most popular repositories - GitHub Explore</title>',
             self.app.get('/').data.decode('utf-8')
         )
 

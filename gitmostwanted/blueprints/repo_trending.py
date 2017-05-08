@@ -7,7 +7,7 @@ from gitmostwanted.app import db
 repo_trending = Blueprint('repo_trending', __name__)
 
 
-@repo_trending.route('/', defaults={'rng': 'day'})
+@repo_trending.route('/trending/', defaults={'rng': 'day'})
 @repo_trending.route('/trending/<rng>/')
 def list_by_range(rng):
     map_list = {'day': 'ReportAllDaily', 'week': 'ReportAllWeekly', 'month': 'ReportAllMonthly'}

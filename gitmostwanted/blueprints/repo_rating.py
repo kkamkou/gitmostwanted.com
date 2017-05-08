@@ -6,7 +6,7 @@ from gitmostwanted.models.repo import Repo
 repo_rating = Blueprint('repo_rating', __name__)
 
 
-@repo_rating.route('/top/', defaults={'page': 1, 'sort_by': 'wanted'})
+@repo_rating.route('/', defaults={'page': 1, 'sort_by': 'wanted'})
 @repo_rating.route('/top/<sort_by>/', defaults={'page': 1})
 @repo_rating.route('/top/<sort_by>/<int:page>')
 def top(sort_by, page):

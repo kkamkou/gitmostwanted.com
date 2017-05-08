@@ -8,7 +8,7 @@
 
 {% block body %}
   <ul class="breadcrumbs">
-    <li><a href="/">&larr;Trending</a></li>
+    <li><a href="{{ url_for('repo_trending.list_by_range') }}">&larr;Trending</a></li>
     <li class="unavailable"><a href="#">Top</a></li>
     {% if g.user %}
       <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude&rarr;</a></li>
@@ -54,6 +54,6 @@
     pagination(
       repos, lang=request.args.get('lang'), status=request.args.get('status'),
       mature=request.args.get('mature'), term=request.args.get('term')
-    )
+    ) if repos.pages
   }}
 {% endblock %}

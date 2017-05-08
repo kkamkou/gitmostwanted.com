@@ -2,12 +2,13 @@
 class Config:
     # Custom
     DEBUG_FILE = '/tmp/gmw.log'
+    ENVIRONMENT = 'development'
 
     # Flask
+    DEBUG = True
     PERMANENT_SESSION_LIFETIME = 1209600  # 14 days
     SECRET_KEY = ''
     TESTING = False
-    DEBUG = True
 
     # SQLAlchemy
     SQLALCHEMY_ECHO = False
@@ -28,6 +29,7 @@ class ConfigDevelopment(Config):
 
 
 class ConfigTesting(Config):
+    ENVIRONMENT = 'testing'
     GITHUB_AUTH = ('Test', '')
     SECRET_KEY = 'testing'  # noqa
     TESTING = True
@@ -35,3 +37,4 @@ class ConfigTesting(Config):
 
 class ConfigProduction(Config):
     DEBUG = False
+    ENVIRONMENT = 'production'
