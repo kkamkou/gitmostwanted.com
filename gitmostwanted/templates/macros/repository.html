@@ -3,7 +3,7 @@
     <div>
       <h4>
         <a href="{{ repo.html_url }}" target="_blank">
-          {% if repo.worth > 4 %}
+          {% if repo.worth >= config.REPOSITORY_WORTH_MINIMUM %}
             <b>{{ repo.full_name }}</b>
           {% else %}
             {{ repo.full_name }}
@@ -19,10 +19,12 @@
             title="{{ repo.status|capitalize() }}">{{ repo.status[0] }}</sup>
         {% endif %}
 
-        {% if repo.worth != 3 %}
-          <sup class="{{ 'success' if repo.worth > 3 else 'warning' }} label">
-            <i class="fi-arrow-{{ 'up' if repo.worth > 3 else 'down' }}"></i>
-          </sup>
+        {% if repo.worth != config.REPOSITORY_WORTH_MINIMUM %}
+          {% if repo.worth >= config.REPOSITORY_WORTH_MINIMUM %}
+            <sup class="success label"><i class="fi-arrow-up"></i></sup>
+          {% else %}
+            <sup class="warning label"><i class="fi-arrow-down"></i></sup>
+          {% endif %}
         {% endif %}
 
         {% if repo.language %}

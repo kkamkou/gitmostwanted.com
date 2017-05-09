@@ -4,6 +4,9 @@ class Config:
     DEBUG_FILE = '/tmp/gmw.log'
     ENVIRONMENT = 'development'
 
+    # Application related
+    REPOSITORY_WORTH_MINIMUM = 6
+
     # Flask
     DEBUG = True
     PERMANENT_SESSION_LIFETIME = 1209600  # 14 days

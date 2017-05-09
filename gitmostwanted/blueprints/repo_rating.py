@@ -1,5 +1,5 @@
 from flask import Blueprint, g, render_template, request
-from gitmostwanted.app import db
+from gitmostwanted.app import app, db
 from gitmostwanted.models.user import UserAttitude
 from gitmostwanted.models.repo import Repo
 
@@ -11,7 +11,7 @@ repo_rating = Blueprint('repo_rating', __name__)
 @repo_rating.route('/top/<sort_by>/<int:page>')
 def top(sort_by, page):
     query = Repo.filter_by_args(Repo.query, request.args)\
-        .filter((Repo.worth > 5) & (Repo.mature.is_(True)))
+        .filter((Repo.worth >= app.config['REPOSITORY_WORTH_MINIMUM']) & (Repo.mature.is_(True)))
     sorts = {
         'wanted': [Repo.worth.desc(), Repo.stargazers_count.desc()],
         'stars': [Repo.stargazers_count.desc()]
