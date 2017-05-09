@@ -24,7 +24,7 @@ class Repo(db.Model):
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
     worth = db.Column(
         SMALLINT(display_width=2), index=True, nullable=False,
-        server_default=app.config['REPOSITORY_WORTH_DEFAULT']
+        server_default=str(app.config['REPOSITORY_WORTH_DEFAULT'])
     )
     stargazers_count = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0')
     status_updated_at = db.Column(db.DateTime)
