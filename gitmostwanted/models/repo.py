@@ -4,7 +4,7 @@ from gitmostwanted.lib.status import Status
 from gitmostwanted.lib.regex import SearchTerm
 from gitmostwanted.lib.text import TextWithoutSmilies, TextNormalized
 from gitmostwanted.lib.url import Url
-from gitmostwanted.app import db
+from gitmostwanted.app import app, db
 from werkzeug.datastructures import ImmutableMultiDict
 from datetime import datetime
 
@@ -22,7 +22,10 @@ class Repo(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, index=True)
     checked_at = db.Column(db.DateTime, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
-    worth = db.Column(SMALLINT(display_width=2), nullable=False, server_default='3', index=True)
+    worth = db.Column(
+        SMALLINT(display_width=2), index=True, nullable=False,
+        server_default=app.config['REPOSITORY_WORTH_DEFAULT']
+    )
     stargazers_count = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0')
     status_updated_at = db.Column(db.DateTime)
     status = db.Column(

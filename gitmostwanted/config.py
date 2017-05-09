@@ -6,6 +6,7 @@ class Config:
 
     # Application related
     REPOSITORY_WORTH_MINIMUM = 6
+    REPOSITORY_WORTH_DEFAULT = 3
 
     # Flask
     DEBUG = True
