@@ -19,7 +19,7 @@ build:
 
     - script:
       name: tests and coverage
-      code: py.test --cov . --cov-report annotate gitmostwanted tests/unit
+      code: py.test --cov gitmostwanted --cov-report annotate
 
     - script:
       name: transfer code coverage
