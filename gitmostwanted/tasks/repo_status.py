@@ -1,8 +1,8 @@
-from gitmostwanted.models.repo import Repo, RepoStars, RepoMean
+from datetime import datetime, timedelta
 from gitmostwanted.app import db, celery, log
+from gitmostwanted.models.repo import Repo, RepoStars, RepoMean
 from sqlalchemy.sql import expression
 from statistics import variance, mean
-from datetime import datetime, timedelta
 from types import GeneratorType
 
 

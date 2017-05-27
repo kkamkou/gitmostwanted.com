@@ -6,6 +6,6 @@ class LibRegexSearchTermTestCase(TestCase):
     def test_detect_valid_input(self):
         self.assertRaises(ValueError, SearchTerm, '#')
         self.assertRaises(ValueError, SearchTerm, 'te')
-        self.assertEquals('%test%', str(SearchTerm('test')))
-        self.assertEquals('%dot.%', str(SearchTerm('dot.')))
-        self.assertEquals('%free-programming-books%', str(SearchTerm('free-programming-books')))
+        self.assertEqual('%test%', str(SearchTerm('test')))
+        self.assertEqual('%dot.%', str(SearchTerm('dot.')))
+        self.assertEqual('%free-programming-books%', str(SearchTerm('free-programming-books')))

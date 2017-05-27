@@ -31,7 +31,7 @@ class WebTestCase(TestCase):
         with app.test_request_context():
             resp = login()
             self.assertTrue(resp.headers['Location'].endswith('authorized'))
-            self.assertEquals(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 302)
 
     def test_provide_correct_redirect_url(self):
         env_overrides = dict(HTTP_REFERER='http_referer')

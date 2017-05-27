@@ -1,9 +1,8 @@
-from gitmostwanted.models.repo import Repo, RepoStars
-from gitmostwanted.app import app, db, celery
-from gitmostwanted.services import bigquery
-from gitmostwanted.lib.bigquery.job import Job
 from datetime import datetime, timedelta
-from time import sleep
+from gitmostwanted.app import app, db, celery
+from gitmostwanted.lib.bigquery.job import Job
+from gitmostwanted.models.repo import Repo, RepoStars
+from gitmostwanted.services import bigquery
 
 
 def results_of(j: Job):

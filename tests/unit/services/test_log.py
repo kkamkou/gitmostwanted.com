@@ -7,4 +7,4 @@ class ServicesLogTestCase(TestCase):
         app = mock.MagicMock(debug=False, logger=mock.MagicMock())
         with mock.patch('logging.handlers.TimedRotatingFileHandler'):
             instance(app)
-        self.assertEquals(app.logger.addHandler.call_count, 1)
+        self.assertEqual(app.logger.addHandler.call_count, 1)

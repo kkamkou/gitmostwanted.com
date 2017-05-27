@@ -1,7 +1,7 @@
-from gitmostwanted.lib.github.api import user_starred, user_starred_star
-from gitmostwanted.models.user import UserAttitude
-from gitmostwanted.models.repo import Repo
 from gitmostwanted.app import celery, db
+from gitmostwanted.lib.github.api import user_starred, user_starred_star
+from gitmostwanted.models.repo import Repo
+from gitmostwanted.models.user import UserAttitude
 
 
 @celery.task()

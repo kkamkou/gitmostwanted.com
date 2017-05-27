@@ -61,7 +61,7 @@ def metadata_trend(num_days):
         .all()
     for result in filter(lambda x: ',' in x[1], results):
         curr, prev = map(lambda v: float(v), result[1].split(','))
-        if curr < prev and (((prev - curr) / prev) * 100) > 10:
+        if is_worth_decreased(curr, prev):
             log.info(
                 'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
                 .format(result[0], curr, prev)
@@ -77,3 +77,10 @@ def metadata_erase():
     cnt = Repo.query.filter(Repo.worth < -5).delete()
     db.session.commit()
     return cnt
+
+
+# defines the logic to determinate if worth is really decreased or just slightly jumped down
+def is_worth_decreased(curr, prev):
+    if curr < 3:
+        return True
+    return curr < prev and ((prev - curr) / prev * 100) >= 10

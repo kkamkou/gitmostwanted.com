@@ -3,15 +3,17 @@
   <a href="{{ entry.html_url }}" target="_blank"><i class="fi-social-github"></i></a>
 </h3>
 
-<div id="repoDetailsChart" style="height: 300px;width: 100%">Generating the popularity chart&hellip;</div>
-
-<div>
-  <b>Stars:</b> {{ entry.stargazers_count|number_humanize }}<br />
-
+<div style="margin-bottom: 10px">
   {% if entry.language %}
-    <b>Language:</b> {{ entry.language }}<br />
+    <span class="label secondary">{{ entry.language }}</span>
   {% endif %}
+
+  <span class="label secondary">
+    {{ entry.stargazers_count|number_humanize }} <i class="fi-graph-bar"></i>
+  </span>
 </div>
+
+<div id="repoDetailsChart" style="height: 300px;width: 100%">Generating the popularity chart&hellip;</div>
 
 {% if entry.description %}
   <div class="panel">{{ entry.description }}</div>
@@ -33,10 +35,6 @@
 
         var holder = $('#repoDetailsChart'),
           options = {
-            chart: {
-              title: 'Popularity of the repository',
-              subtitle: 'shows the mean value'
-            },
             legend: {position: 'none'},
             animation: {
               duration: 300,

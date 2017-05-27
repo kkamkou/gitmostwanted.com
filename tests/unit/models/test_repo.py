@@ -7,7 +7,7 @@ class ModelsRepoTestCase(TestCase):
         entry = Repo(language='python')
 
         self.assertIsNone(entry.status_updated_at)
-        self.assertEquals(entry.language, 'python')
+        self.assertEqual(entry.language, 'python')
 
     def test_update_status_with_timestamp(self):
         entry = Repo()
@@ -17,23 +17,23 @@ class ModelsRepoTestCase(TestCase):
 
         entry.status = 'unknown'
         status_updated_at = entry.status_updated_at
-        self.assertEquals(entry.status, 'unknown')
+        self.assertEqual(entry.status, 'unknown')
         self.assertIsNotNone(status_updated_at)
 
         entry.status = 'unknown'
-        self.assertEquals(entry.status_updated_at, status_updated_at)
+        self.assertEqual(entry.status_updated_at, status_updated_at)
 
     def test_update_fields(self):
         entry = Repo()
 
         entry.homepage = 'example.com'
-        self.assertEquals(entry.homepage, 'http://example.com')
+        self.assertEqual(entry.homepage, 'http://example.com')
 
         entry.description = ''
-        self.assertEquals(entry.description, None)
+        self.assertEqual(entry.description, None)
 
         entry.description = 'atext' * 60
-        self.assertEquals(len(entry.description), 250)
+        self.assertEqual(len(entry.description), 250)
 
     def test_handle_incorrect_status(self):
         self.assertRaises(ValueError, Repo, status='abc')

@@ -9,15 +9,15 @@ class LibBigQueryResultTestCase(TestCase):
     def test_convert_incoming_obj(self):
         result = ResultJob(self.response_example())
 
-        self.assertEquals(len(result), 2)
-        self.assertEquals(next(result), ['29028775', 'facebook/react-native', '225'])
-        self.assertEquals(next(result), ['29028776', 'facebook/react-native2', '226'])
+        self.assertEqual(len(result), 2)
+        self.assertEqual(next(result), ['29028775', 'facebook/react-native', '225'])
+        self.assertEqual(next(result), ['29028776', 'facebook/react-native2', '226'])
         self.assertRaises(StopIteration, next, result)
 
     def test_convert_incoming_empty_obj(self):
         result = ResultJob(self.response_example_empty())
 
-        self.assertEquals(len(result), 0)
+        self.assertEqual(len(result), 0)
         self.assertRaises(StopIteration, next, result)
 
     def response_example_empty(self):
