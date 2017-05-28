@@ -3,6 +3,7 @@ from gitmostwanted.app import app, db, celery
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.models.repo import Repo, RepoStars
 from gitmostwanted.services import bigquery
+from time import sleep
 
 
 def results_of(j: Job):

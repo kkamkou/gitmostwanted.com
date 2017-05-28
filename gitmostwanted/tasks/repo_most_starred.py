@@ -5,6 +5,7 @@ from gitmostwanted.lib.github.api import repo_info
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.models import report
 from gitmostwanted.services import bigquery
+from time import sleep
 
 
 def results_of(j: Job):
