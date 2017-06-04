@@ -5,7 +5,7 @@ class Config:
     ENVIRONMENT = 'development'
 
     # Application related
-    REPOSITORY_WORTH_MINIMUM = 6
+    REPOSITORY_WORTH_SOLID = 6
     REPOSITORY_WORTH_DEFAULT = 3
 
     # Flask

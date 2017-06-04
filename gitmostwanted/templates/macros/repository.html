@@ -3,7 +3,7 @@
     <div>
       <h4>
         <a href="{{ repo.html_url }}" target="_blank">
-          {% if repo.worth >= config.REPOSITORY_WORTH_MINIMUM %}
+          {% if repo.worth >= config.REPOSITORY_WORTH_SOLID %}
             <b>{{ repo.full_name }}</b>
           {% else %}
             {{ repo.full_name }}
