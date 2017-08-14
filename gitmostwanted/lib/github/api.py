@@ -1,3 +1,8 @@
+"""
+@todo! GitHub API must be re-factored.
+       The current architecture is too complicated to paginate.
+"""
+
 from gitmostwanted.app import app
 import requests
 

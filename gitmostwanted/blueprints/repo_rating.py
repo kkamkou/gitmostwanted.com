@@ -21,9 +21,9 @@ def top(page, sort_by, filter_worth_by):
         filter_worth_by = 'solid'
 
     query = query.filter(
-        Repo.worth >= (
-            app.config['REPOSITORY_WORTH_SOLID'] if filter_worth_by == 'solid'
-            else app.config['REPOSITORY_WORTH_DEFAULT'] + 1
+        (Repo.worth >= app.config['REPOSITORY_WORTH_SOLID']) if filter_worth_by == 'solid' else (
+            (Repo.worth > app.config['REPOSITORY_WORTH_DEFAULT']) &
+            (Repo.worth < app.config['REPOSITORY_WORTH_SOLID'])
         )
     )
 
