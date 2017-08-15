@@ -1,6 +1,6 @@
 """
 @todo #113:3h GitHub API must be re-factored. The current architecture is too complicated to
-              paginate.
+ paginate.
 """
 
 from gitmostwanted.app import app
