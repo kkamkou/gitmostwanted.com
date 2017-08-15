@@ -1,5 +1,5 @@
 """
-@todo #113:3h GitHub API must be re-factored. The current architecture is too complicated to
+@todo #113:120m GitHub API must be re-factored. The current architecture is too complicated to
  paginate.
 """
 
