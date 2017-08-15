@@ -1,6 +1,6 @@
 """
- @todo #113:120m GitHub API must be re-factored. The current architecture is too complicated to
-  paginate.
+@todo #113:120m GitHub API must be re-factored. The current architecture is too complicated to
+ paginate.
 """
 
 from gitmostwanted.app import app

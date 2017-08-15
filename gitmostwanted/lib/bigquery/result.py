@@ -21,5 +21,5 @@ class ResultWithRows(ResultBase, Iterator, Sized):
         return self.__total_rows
 
 
-class ResultJob(ResultWithRows):  # @todo 3h add field names from schema
+class ResultJob(ResultWithRows):  # @todo #0:180m add field names from schema
     pass
