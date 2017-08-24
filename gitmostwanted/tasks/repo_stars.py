@@ -15,9 +15,9 @@ def results_of(j: Job):
 
 @celery.task()
 def stars_mature(num_days):
-    service = bigquery.instance(app)
     date_from = (datetime.now() + timedelta(days=num_days * -1)).strftime('%Y-%m-%d')
     date_to = datetime.now()
+    service = bigquery.instance(app)
 
     jobs = []
 
@@ -42,6 +42,23 @@ def stars_mature(num_days):
         db.session.commit()
 
 
+@celery.task()
+def stars_repo_reset(repo_id, date_from, date_to):
+    service = bigquery.instance(app)
+    query = query_stars_by_repo(repo_id=repo_id, date_from=date_from, date_to=date_to)
+
+    job = Job(service, query)
+    job.execute()
+
+    cnt = 0
+    for row in results_of(job[0]):
+        db.session.merge(RepoStars(repo_id=repo_id, stars=row[0], year=row[1], day=row[2]))
+        cnt += 1
+
+    return cnt
+
+
+# @todo #192:1h move BQ queries to a separate place
 def query_stars_by_repo(repo_id: int, date_from: datetime.datetime, date_to: datetime.datetime):
     query = """
         SELECT
