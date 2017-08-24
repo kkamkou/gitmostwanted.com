@@ -59,7 +59,7 @@ def stars_repo_reset(repo_id, date_from, date_to):
 
 
 # @todo #192:1h move BQ queries to a separate place
-def query_stars_by_repo(repo_id: int, date_from: datetime.datetime, date_to: datetime.datetime):
+def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
     query = """
         SELECT
             COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
