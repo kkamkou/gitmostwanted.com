@@ -15,24 +15,22 @@ def results_of(j: Job):
 
 @celery.task()
 def stars_mature(num_days):
-    date_from = (datetime.now() + timedelta(days=num_days * -1)).strftime('%Y-%m-%d')
     service = bigquery.instance(app)
-    query = """
-        SELECT
-            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
-        FROM
-            TABLE_DATE_RANGE(
-                [githubarchive:day.], TIMESTAMP('{date_from}'), CURRENT_TIMESTAMP()
-            )
-        WHERE repo.id = {id} AND type IN ('WatchEvent', 'ForkEvent')
-        GROUP BY y, doy
-    """
+    date_from = (datetime.now() + timedelta(days=num_days * -1)).strftime('%Y-%m-%d')
+    date_to = datetime.now()
+
     jobs = []
 
-    repos = Repo.query.filter(Repo.mature.is_(True)).filter(Repo.status == 'new').limit(40)
+    repos = Repo.query\
+        .filter(Repo.mature.is_(True))\
+        .filter(Repo.status == 'new')\
+        .limit(40)  # we are at the free plan
     for repo in repos:
-        job = Job(service, query.format(id=repo.id, date_from=date_from), batch=True)
+        query = query_stars_by_repo(repo_id=repo.id, date_from=date_from, date_to=date_to)
+
+        job = Job(service, query, batch=True)
         job.execute()
+
         jobs.append((job, repo))
 
     for job in jobs:
@@ -42,3 +40,18 @@ def stars_mature(num_days):
         job[1].status = 'unknown'
 
         db.session.commit()
+
+
+def query_stars_by_repo(repo_id: int, date_from: datetime.datetime, date_to: datetime.datetime):
+    query = """
+        SELECT
+            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
+        FROM
+            TABLE_DATE_RANGE([githubarchive:day.], TIMESTAMP('{date_from}'), TIMESTAMP('{date_to}'))
+        WHERE
+            repo.id = {id} AND type IN ('WatchEvent', 'ForkEvent')
+        GROUP BY y, doy
+    """
+    return query.format(
+        id=repo_id, date_from=date_from.strftime('%Y-%m-%d'), date_to=date_to.strftime('%Y-%m-%d')
+    )
