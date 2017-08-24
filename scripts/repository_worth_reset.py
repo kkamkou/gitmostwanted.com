@@ -22,7 +22,7 @@ for result in results:
 
     log.info(
         '#{0}: prev value is {1}, next value is {2} > worth is: {3} (now {4})'
-            .format(repo.id, prev, curr, cache[repo.id]['worth'], repo.worth)
+        .format(repo.id, prev, curr, cache[repo.id]['worth'], repo.worth)
     )
 
     repo.worth = cache[repo.id]['worth']

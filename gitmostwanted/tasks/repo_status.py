@@ -13,6 +13,7 @@ def status_detect(num_days, num_segments):
         result = db.session.query(RepoStars.day, RepoStars.stars)\
             .filter(RepoStars.repo_id == repo.id)\
             .order_by(expression.asc(RepoStars.day))\
+            .limit(num_days)\
             .all()
 
         val = 0 if not result else result_mean(

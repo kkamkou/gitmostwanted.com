@@ -51,9 +51,21 @@ def stars_repo_reset(repo_id, date_from, date_to):
     job.execute()
 
     cnt = 0
+    lst = {}
     for row in results_of(job):
+        key = '{} {}'.format(row[1], row[3])
+        lst[key] = lst.get(key, []) + [row[0]]
+
         db.session.merge(RepoStars(repo_id=repo_id, stars=row[0], year=row[1], day=row[2]))
         cnt += 1
+
+    for val, yj in lst:
+        avg = val  # call normalization
+        date = datetime.datetime.strptime(yj, '%Y %j')
+
+        # insert to the mean table
+
+    db.session.query(Repo).filter(Repo.id == repo_id).update({Repo.status: 'unknown'})
 
     db.session.commit()
 
@@ -64,7 +76,8 @@ def stars_repo_reset(repo_id, date_from, date_to):
 def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
     query = """
         SELECT
-            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy
+            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy,
+            MONTH(created_at) as mon
         FROM
             TABLE_DATE_RANGE([githubarchive:day.], TIMESTAMP('{date_from}'), TIMESTAMP('{date_to}'))
         WHERE
