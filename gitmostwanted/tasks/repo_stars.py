@@ -51,7 +51,7 @@ def stars_repo_reset(repo_id, date_from, date_to):
     job.execute()
 
     cnt = 0
-    for row in results_of(job[0]):
+    for row in results_of(job):
         db.session.merge(RepoStars(repo_id=repo_id, stars=row[0], year=row[1], day=row[2]))
         cnt += 1
 
