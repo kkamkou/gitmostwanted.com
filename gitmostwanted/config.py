@@ -33,6 +33,7 @@ class ConfigDevelopment(Config):
 
 
 class ConfigTesting(Config):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     ENVIRONMENT = 'testing'
     GITHUB_AUTH = ('Test', '')
     SECRET_KEY = 'testing'  # noqa
