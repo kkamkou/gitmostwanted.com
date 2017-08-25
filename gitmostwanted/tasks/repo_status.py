@@ -16,9 +16,8 @@ def status_detect(num_days, num_segments):
             .limit(num_days)\
             .all()
 
-        val = 0 if not result else result_mean(
-            result_split(list(result_normalize(result, num_days)), num_segments),
-            last_known_mean(repo.id)
+        val = 0 if not result else repo_mean(
+            result, num_days, num_segments, last_known_mean(repo.id)
         )
 
         repo.status = 'hopeless' if val < 1 else 'promising'
@@ -54,14 +53,21 @@ def last_known_mean(repo_id: int, default: float = 1.0):
     return default if not last_mean else last_mean.value
 
 
+def repo_mean(lst: list, lst_size: int, num_segments: int, default_gap_val: float):
+    return result_mean(
+        result_split(list(result_normalize(lst, lst_size)), num_segments),
+        default_gap_val
+    )
+
+
 def result_mean(chunks: GeneratorType, normalized_val: float):
     return mean([normalized_val if variance(chunk) >= 1000 else mean(chunk) for chunk in chunks])
 
 
-def result_normalize(lst: list, num_days: int):
+def result_normalize(lst: list, lst_size: int):
     fst = lst[0][0]
     lst = dict(lst)
-    for i in range(num_days):
+    for i in range(lst_size):
         key = fst + i
         yield 0 if key not in lst else lst[key]
 

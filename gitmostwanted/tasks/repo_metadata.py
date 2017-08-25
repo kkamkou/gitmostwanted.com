@@ -83,4 +83,4 @@ def metadata_erase():
 def is_worth_decreased(curr, prev):
     if curr < 3:
         return True
-    return curr < prev and ((prev - curr) / prev * 100) >= 10
+    return curr < prev and ((prev - curr) * 100 / prev) >= 10
