@@ -65,7 +65,7 @@ def result_mean(chunks: GeneratorType, normalized_val: float):
 
 
 def result_normalize(lst: list, lst_size: int):
-    fst = lst[0][0]
+    fst = sorted(lst)[0][0]
     lst = dict(lst)
     for i in range(lst_size):
         key = fst + i

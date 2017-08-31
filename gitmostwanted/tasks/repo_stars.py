@@ -53,7 +53,7 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
             TABLE_DATE_RANGE([githubarchive:day.], TIMESTAMP('{date_from}'), TIMESTAMP('{date_to}'))
         WHERE
             repo.id = {id} AND type IN ('WatchEvent', 'ForkEvent')
-        GROUP BY y, doy
+        GROUP BY y, mon, doy
     """
     return query.format(
         id=repo_id, date_from=date_from.strftime('%Y-%m-%d'), date_to=date_to.strftime('%Y-%m-%d')

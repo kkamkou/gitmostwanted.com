@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
-from gitmostwanted.app import app, log, db
+from datetime import datetime
+from gitmostwanted.app import app, db
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.models.repo import Repo, RepoMean, RepoStars
 from gitmostwanted.services import bigquery
@@ -15,17 +15,18 @@ def results_of(j: Job):  # @todo #0:15m copy-paste code in multiple tasks
     return j.results
 
 
-results = Repo\
+results = Repo.query\
+    .filter(Repo.status != 'unknown')\
     .filter(Repo.mature.is_(True))\
     .filter(Repo.stargazers_count > 1000)\
-    .order_by(RepoMean.repo_id.asc())\
-    .yield_per(100)\
+    .order_by(Repo.id.asc())\
+    .yield_per(10)\
     .all()
 for result in results:
     date_to = datetime.now()
     service = bigquery.instance(app)
     query = query_stars_by_repo(
-        repo_id=result.repo_id, date_from=datetime.datetime(year=date_to.year, month=1, day=1),
+        repo_id=result.id, date_from=datetime(year=date_to.year, month=1, day=1),
         date_to=datetime.now()
     )
 
@@ -36,19 +37,22 @@ for result in results:
     lst = {}
     for row in results_of(job):
         key = '{} {}'.format(row[1], row[3])
-        lst[key] = lst.get(key, ()) + ((row[0], row[0]),)
+        lst[key] = lst.get(key, ()) + ((int(row[2]), int(row[0])),)
 
-        db.session.merge(RepoStars(repo_id=repo_id, stars=row[0], year=row[1], day=row[2]))
+        db.session.merge(RepoStars(repo_id=result.id, stars=row[0], year=row[1], day=row[2]))
         cnt += 1
 
-    for val, yj in lst:
-        avg = val  # call normalization
-        date = datetime.datetime.strptime(yj, '%Y %j')
-
-        # insert to the mean table
-
-    db.session.query(Repo).filter(Repo.id == repo_id).update({Repo.status: 'unknown'})
-
+    db.session.query(RepoMean).filter(RepoMean.repo_id == result.id).delete()
     db.session.commit()
 
-    print(cnt)
+    for key in lst.keys():
+        avg = repo_mean(lst[key], 28, 4, last_known_mean(result.id))
+        db.session.add(
+            RepoMean(repo_id=result.id, created_at=datetime.strptime(key, '%Y %j'), value=avg)
+        )
+        db.session.commit()
+
+    db.session.query(Repo).filter(Repo.id == result.id).update({Repo.status: 'unknown'})
+    db.session.commit()
+
+    app.logger.info('Repository %d has %d days', result.id, cnt)
