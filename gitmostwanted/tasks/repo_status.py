@@ -45,7 +45,7 @@ def status_refresh(num_days):
         db.session.commit()
 
 
-def last_known_mean(repo_id: int, default: float = 1.0):
+def last_known_mean(repo_id: int, default: float = 0.0):
     last_mean = db.session.query(RepoMean.value) \
         .filter(RepoMean.repo_id == repo_id) \
         .order_by(expression.desc(RepoMean.created_at)) \
