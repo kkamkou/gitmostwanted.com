@@ -18,7 +18,7 @@ class TasksRepoStatusTestCase(TestCase):
         db.drop_all()
 
     def test_normalize_result(self):
-        result = result_normalize([[8, 8], [28, 28]], 28)
+        result = result_normalize([[28, 28], [8, 8]], 28)
         self.assertIsInstance(result, GeneratorType)
 
         lst = list(result)

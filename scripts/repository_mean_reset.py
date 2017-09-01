@@ -16,17 +16,17 @@ def results_of(j: Job):  # @todo #0:15m copy-paste code in multiple tasks
 
 
 results = Repo.query\
-    .filter(Repo.status != 'unknown')\
+    .filter(Repo.last_reset_at < datetime(year=2017, month=8, day=31))\
     .filter(Repo.mature.is_(True))\
     .filter(Repo.stargazers_count > 1000)\
-    .order_by(Repo.id.asc())\
+    .order_by(Repo.worth.desc())\
     .yield_per(10)\
     .all()
 for result in results:
-    date_to = datetime.now()
+    now = datetime.now()
     service = bigquery.instance(app)
     query = query_stars_by_repo(
-        repo_id=result.id, date_from=datetime(year=date_to.year, month=1, day=1),
+        repo_id=result.id, date_from=datetime(year=now.year, month=1, day=1),
         date_to=datetime.now()
     )
 
@@ -52,7 +52,8 @@ for result in results:
         )
         db.session.commit()
 
-    db.session.query(Repo).filter(Repo.id == result.id).update({Repo.status: 'unknown'})
+    db.session.query(Repo).filter(Repo.id == result.id)\
+        .update({Repo.status: 'unknown', Repo.last_reset_at: now})
     db.session.commit()
 
     app.logger.info('Repository %d has %d days', result.id, cnt)
