@@ -46,20 +46,15 @@ def stars_mature(num_days):
 # @todo #192:1h move BQ queries to a separate place
 def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
     query = """
-        #standardSQL
         SELECT
-            COUNT(1) AS stars,
-            EXTRACT(YEAR FROM created_at) AS y,
-            EXTRACT(DAYOFYEAR FROM created_at) AS doy,
-            EXTRACT(MONTH FROM created_at) AS mon
+            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy,
+            MONTH(created_at) as mon
         FROM
-            `githubarchive.month.*`
+            TABLE_DATE_RANGE([githubarchive:day.], TIMESTAMP('{date_from}'), TIMESTAMP('{date_to}'))
         WHERE
-            (_TABLE_SUFFIX BETWEEN '{date_from}' AND '{date_to}')
-            AND repo.id = {id}
-            AND type IN ('WatchEvent', 'ForkEvent')
+            repo.id = {id} AND type IN ('WatchEvent', 'ForkEvent')
         GROUP BY y, mon, doy
     """
     return query.format(
-        id=repo_id, date_from=date_from.strftime('%Y%m'), date_to=date_to.strftime('%Y%m')
+        id=repo_id, date_from=date_from.strftime('%Y-%m-%d'), date_to=date_to.strftime('%Y-%m-%d')
     )

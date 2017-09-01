@@ -8,7 +8,7 @@ from gitmostwanted.services import bigquery
 from time import sleep
 
 
-def results_of(j: Job):  # @todo #0:15m copy-paste code in multiple tasks
+def results_of(j: Job):
     while not j.complete:
         app.logger.debug('The job is not complete, waiting...')
         sleep(10)

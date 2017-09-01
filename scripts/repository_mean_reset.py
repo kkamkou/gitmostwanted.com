@@ -3,12 +3,11 @@ from gitmostwanted.app import app, db
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.models.repo import Repo, RepoMean, RepoStars
 from gitmostwanted.services import bigquery
-from gitmostwanted.tasks.repo_stars import query_stars_by_repo
 from gitmostwanted.tasks.repo_status import last_known_mean, repo_mean
 from time import sleep
 
 
-def results_of(j: Job):  # @todo #0:15m copy-paste code in multiple tasks
+def results_of(j: Job):
     while not j.complete:
         app.logger.debug('The job is not complete, waiting...')
         sleep(10)
@@ -60,3 +59,24 @@ for result in results:
     db.session.commit()
 
     app.logger.info('Repository %d has %d days', result.id, cnt)
+
+
+def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
+    query = """
+        #standardSQL
+        SELECT
+            COUNT(1) AS stars,
+            EXTRACT(YEAR FROM created_at) AS y,
+            EXTRACT(DAYOFYEAR FROM created_at) AS doy,
+            EXTRACT(MONTH FROM created_at) AS mon
+        FROM
+            `githubarchive.month.*`
+        WHERE
+            (_TABLE_SUFFIX BETWEEN '{date_from}' AND '{date_to}')
+            AND repo.id = {id}
+            AND type IN ('WatchEvent', 'ForkEvent')
+        GROUP BY y, mon, doy
+    """
+    return query.format(
+        id=repo_id, date_from=date_from.strftime('%Y%m'), date_to=date_to.strftime('%Y%m')
+    )
