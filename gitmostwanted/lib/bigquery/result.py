@@ -1,4 +1,4 @@
-from collections import Iterator, Sized
+from collections import Sized, Iterator
 
 
 class ResultBase:

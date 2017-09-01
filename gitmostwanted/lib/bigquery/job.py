@@ -1,5 +1,5 @@
-from gitmostwanted.lib.bigquery.service import ServiceGmw
 from gitmostwanted.lib.bigquery.result import ResultJob
+from gitmostwanted.lib.bigquery.service import ServiceGmw
 from itertools import chain
 from uuid import uuid4
 

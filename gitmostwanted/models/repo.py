@@ -28,6 +28,7 @@ class Repo(db.Model):
     )
     stargazers_count = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0')
     status_updated_at = db.Column(db.DateTime)
+    last_reset_at = db.Column(db.DateTime, index=True)
     status = db.Column(
         db.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),
         server_default='new', nullable=False, index=True

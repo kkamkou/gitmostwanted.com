@@ -1,9 +1,15 @@
+import logging
+
+
 def instance(app):
     """:rtype: logging.Logger"""
-    if app.debug:
+    if app.testing:
+        app.logger.disabled = True
         return app.logger
 
-    import logging
+    if app.debug:
+        app.logger.setLevel(logging.DEBUG)
+        return app.logger
 
     handler = logging.handlers\
         .TimedRotatingFileHandler(app.config['DEBUG_FILE'], when='d', backupCount=7)
