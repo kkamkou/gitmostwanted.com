@@ -49,9 +49,9 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
         #standardSQL
         SELECT
             COUNT(1) AS stars,
+            EXTRACT(YEAR FROM created_at) AS y,
             EXTRACT(DAYOFYEAR FROM created_at) AS doy,
-            EXTRACT(MONTH FROM created_at) AS mon,
-            EXTRACT(YEAR FROM created_at) AS y
+            EXTRACT(MONTH FROM created_at) AS mon            
         FROM
             `githubarchive.month.*`
         WHERE
