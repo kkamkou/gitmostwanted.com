@@ -74,8 +74,9 @@ def metadata_trend(num_days):
 
 @celery.task()
 def metadata_erase():
-    cnt = Repo.query.filter(Repo.worth < -5).delete()
-    db.session.commit()
+    # cnt = Repo.query.filter(Repo.worth < -5).delete()
+    # db.session.commit()
+    cnt = 0
     return cnt
 
 
