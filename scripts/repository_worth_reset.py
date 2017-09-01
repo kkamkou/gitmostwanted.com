@@ -1,14 +1,20 @@
 from gitmostwanted.app import log, db
 from gitmostwanted.models.repo import Repo, RepoMean
 from gitmostwanted.tasks.repo_metadata import is_worth_decreased
+import sys
 
 
 cache = {}
-results = db.session.query(Repo, RepoMean) \
-    .filter((Repo.id == RepoMean.repo_id) & Repo.mature.is_(True)) \
-    .order_by(RepoMean.created_at.asc()) \
-    .yield_per(100) \
-    .all()
+query = db.session.query(Repo, RepoMean)\
+    .filter((Repo.id == RepoMean.repo_id) & Repo.mature.is_(True))\
+    .order_by(RepoMean.created_at.asc())\
+    .yield_per(100)
+
+if sys.argv[0] and sys.argv[0].isdigit():
+    log.info('#{0} is used as the repository id'.format(sys.argv[0]))
+    query = query.filter(Repo.id == int(sys.argv[0]))
+
+results = query.all()
 for result in results:
     repo, mean = result
 
