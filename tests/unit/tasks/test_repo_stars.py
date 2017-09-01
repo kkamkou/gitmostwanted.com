@@ -17,7 +17,7 @@ class TasksRepoStarsTestCase(TestCase):
         yt = datetime.now() - timedelta(days=1)
         now = datetime.now()
         query = query_stars_by_repo(12, now, yt)
-        self.assertTrue("TIMESTAMP('{}')".format(yt.strftime('%Y-%m-%d')) in query)
-        self.assertTrue("TIMESTAMP('{}')".format(now.strftime('%Y-%m-%d')) in query)
+        self.assertTrue("'{}'".format(yt.strftime('%Y-%m')) in query)
+        self.assertTrue("'{}'".format(now.strftime('%Y-%m')) in query)
         self.assertTrue('repo.id = {}'.format(12) in query)
 

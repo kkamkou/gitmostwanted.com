@@ -30,7 +30,7 @@ for result in results:
     service = bigquery.instance(app)
     query = query_stars_by_repo(
         repo_id=result.id, date_from=datetime(year=now.year, month=1, day=1),
-        date_to=datetime.now()
+        date_to=datetime(year=now.year, month=now.month-1, day=1)
     )
 
     job = Job(service, query)
