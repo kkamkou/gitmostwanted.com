@@ -61,5 +61,5 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
         GROUP BY y, mon, doy
     """
     return query.format(
-        id=repo_id, date_from=date_from.strftime('%Y-%m'), date_to=date_to.strftime('%Y-%m')
+        id=repo_id, date_from=date_from.strftime('%Y%m'), date_to=date_to.strftime('%Y%m')
     )
