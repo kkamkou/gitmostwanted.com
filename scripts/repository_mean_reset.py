@@ -16,7 +16,10 @@ def results_of(j: Job):  # @todo #0:15m copy-paste code in multiple tasks
 
 
 results = Repo.query\
-    .filter(Repo.last_reset_at < datetime(year=2017, month=8, day=31))\
+    .filter(
+        (Repo.last_reset_at < datetime(year=2017, month=8, day=31))
+        | Repo.last_reset_at.is_(None)
+    )\
     .filter(Repo.mature.is_(True))\
     .filter(Repo.stargazers_count > 1000)\
     .order_by(Repo.worth.desc())\
