@@ -51,7 +51,7 @@ for result in results:
     for key in lst.keys():
         avg = repo_mean(lst[key], 28, 4, last_known_mean(result.id))
         db.session.add(
-            RepoMean(repo_id=result.id, created_at=datetime.strptime(key, '%Y %j'), value=avg)
+            RepoMean(repo_id=result.id, created_at=datetime.strptime(key, '%Y %m'), value=avg)
         )
         db.session.commit()
 
