@@ -1,10 +1,11 @@
 alembic
 celery[redis]>=4, <5
 flask
-flask-wtf
-flask-sqlalchemy
 flask-oauthlib
+flask-sqlalchemy
+flask-wtf
 google-api-python-client
+httplib2
 pymysql
 pyopenssl
-httplib2
+raven[flask]

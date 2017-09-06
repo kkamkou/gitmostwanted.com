@@ -7,4 +7,4 @@ class AppTestCase(TestCase):
         for key in dir(app):
             if key.find('__') == 0:
                 continue
-            self.assertIn(key, ['app', 'env', 'celery', 'db', 'log'])
+            self.assertIn(key, ['sentry', 'app', 'env', 'celery', 'db', 'log'])

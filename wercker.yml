@@ -58,7 +58,7 @@ deploy:
 
     - script:
       name: requirements
-      code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; pip install -r requirements.txt"
+      code: ssh gitmostwanted@gitmostwanted.com "source ~/.venv.sh; cd $PROJECT_SOURCE_DIR; pip install -U pip && pip install -r requirements.txt"
 
     - script:
       name: migrations

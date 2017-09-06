@@ -79,3 +79,15 @@ GOOGLE_BIGQUERY = {
     'json_key_path': None,
     'project_id': None
 }
+
+# sentry.io
+SENTRY_IO = {
+    'celery': {
+        'dsn': 'https://...@sentry.io/1234567890'
+    },
+    'flask': {
+        'dsn': 'https://...@sentry.io/1234567890',
+        'level': 'ERROR',
+        'logging': False
+    }
+}
