@@ -13,25 +13,32 @@ class Repo(db.Model):
     __tablename__ = 'repos'
 
     id = db.Column(db.BigInteger, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-    language = db.Column(db.String(25))
-    full_name = db.Column(db.String(120), nullable=False)
-    description = db.Column(db.String(250))
-    html_url = db.Column(db.String(150), nullable=False)
-    homepage = db.Column(db.String(150))
-    created_at = db.Column(db.DateTime, nullable=False, index=True)
     checked_at = db.Column(db.DateTime, index=True)
-    mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
-    worth = db.Column(
-        SMALLINT(display_width=2), index=True, nullable=False,
-        server_default=str(app.config['REPOSITORY_WORTH_DEFAULT'])
-    )
-    stargazers_count = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0')
-    status_updated_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, nullable=False, index=True)
+    description = db.Column(db.String(250))
+    forks_count = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0', index=True)
+    full_name = db.Column(db.String(120), nullable=False)
+    homepage = db.Column(db.String(150))
+    html_url = db.Column(db.String(150), nullable=False)
+    language = db.Column(db.String(25))
     last_reset_at = db.Column(db.DateTime, index=True)
+    mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
+    name = db.Column(db.String(80), nullable=False)
+    size = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0')
+    stargazers_count = db.Column(
+        INTEGER(unsigned=True), nullable=False, server_default='0', index=True
+    )
     status = db.Column(
         db.Enum('promising', 'new', 'unknown', 'deleted', 'hopeless'),
         server_default='new', nullable=False, index=True
+    )
+    status_updated_at = db.Column(db.DateTime)
+    subscribers_count = db.Column(
+        INTEGER(unsigned=True), nullable=False, server_default='0', index=True
+    )
+    worth = db.Column(
+        SMALLINT(display_width=2), index=True, nullable=False,
+        server_default=str(app.config['REPOSITORY_WORTH_DEFAULT'])
     )
 
     def __setattr__(self, key, value):

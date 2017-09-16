@@ -1,38 +1,41 @@
-db:
-  image: mysql:latest
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=gitmostwanted
-    - MYSQL_USER=gitmostwanted
-    - MYSQL_PASSWORD=gitmostwanted_pwd
-  command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+version: '3'
+services:
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gitmostwanted
+      - MYSQL_USER=gitmostwanted
+      - MYSQL_PASSWORD=gitmostwanted_pwd
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 
-redis:
-  image: redis:latest
+  redis:
+    image: redis:latest
 
-web:
-  build: .
-  user: gitmostwanted
-  entrypoint: ["/opt/entrypoint.sh", "web"]
-  ports:
-    - "5000:5000"
-  volumes:
-    - ./gitmostwanted:/opt/gitmostwanted
-    - .:/opt
-  environment:
-    - GMW_APP_SETTINGS=/opt/instance.cfg
-  links:
-    - db
-    - redis
+  web:
+    build: .
+    user: gitmostwanted
+    entrypoint: ["/opt/entrypoint.sh", "web"]
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./gitmostwanted:/opt/gitmostwanted
+      - .:/opt
+    environment:
+      - GMW_APP_SETTINGS=/opt/instance.cfg
+    depends_on:
+      - db
+      - redis
 
-celery:
-  build: .
-  user: gitmostwanted
-  entrypoint: ["/opt/entrypoint.sh", "celery"]
-  environment:
-    - GMW_APP_SETTINGS=/opt/instance.cfg
-  volumes_from:
-    - web
-  links:
-    - db
-    - redis
+  celery:
+    build: .
+    user: gitmostwanted
+    entrypoint: ["/opt/entrypoint.sh", "celery"]
+    environment:
+      - GMW_APP_SETTINGS=/opt/instance.cfg
+    volumes:
+      - ./gitmostwanted:/opt/gitmostwanted
+      - .:/opt
+    links:
+      - db
+      - redis

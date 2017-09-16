@@ -11,7 +11,7 @@ def fetch(uri: str, method: str = 'get', token: str = None):
     """:rtype: (str|None, int)"""
     uri = 'https://api.github.com/{0}'.format(uri)
     auth = app.config['GITHUB_AUTH']
-    headers = {}
+    headers = {'Accept': 'application/vnd.github.mercy-preview+json'}
     json = None
 
     if token:
