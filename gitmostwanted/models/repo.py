@@ -24,6 +24,7 @@ class Repo(db.Model):
     last_reset_at = db.Column(db.DateTime, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
     name = db.Column(db.String(80), nullable=False)
+    open_issues_count = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0')
     size = db.Column(INTEGER(unsigned=True), nullable=False, server_default='0')
     stargazers_count = db.Column(
         INTEGER(unsigned=True), nullable=False, server_default='0', index=True
