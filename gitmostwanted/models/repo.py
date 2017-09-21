@@ -41,6 +41,7 @@ class Repo(db.Model):
         SMALLINT(display_width=2), index=True, nullable=False,
         server_default=str(app.config['REPOSITORY_WORTH_DEFAULT'])
     )
+    worth_max = db.Column(SMALLINT(display_width=2), nullable=False, server_default='0')
 
     def __setattr__(self, key, value):
         if key == 'status' and self.status != value:
@@ -52,6 +53,9 @@ class Repo(db.Model):
 
         if key == 'description':
             value = str(TextWithoutSmilies(str(TextNormalized(value[:250])))) if value else None
+
+        if key == 'worth' and self.worth_max < value:
+            self.worth_max = value
 
         super().__setattr__(key, value)
 
