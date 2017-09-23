@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from gitmostwanted.app import app, db
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.models.repo import Repo, RepoMean, RepoStars
@@ -35,19 +35,15 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
     )
 
 
+now = datetime.now()
+service = bigquery.instance(app)
 results = Repo.query\
-    .filter(
-        (Repo.last_reset_at < datetime(year=2017, month=8, day=31))
-        | Repo.last_reset_at.is_(None)
-    )\
-    .filter(Repo.mature.is_(True))\
+    .filter((Repo.last_reset_at < now + timedelta(days=-1)) | Repo.last_reset_at.is_(None))\
     .filter(Repo.stargazers_count > 1000)\
     .order_by(Repo.worth.desc())\
     .yield_per(10)\
     .all()
 for result in results:
-    now = datetime.now()
-    service = bigquery.instance(app)
     query = query_stars_by_repo(
         repo_id=result.id, date_from=datetime(year=now.year, month=1, day=1),
         date_to=datetime(year=now.year, month=now.month-1, day=1)
