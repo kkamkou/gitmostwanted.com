@@ -7,9 +7,9 @@
 {% endif %}
 
 {% if filter_worth_by == 'solid' %}
-  {% set page_title = page_title + ' (solid)' %}
+  {% set page_title = '{} ({})'.format(page_title, 'solid') %}
 {% elif filter_worth_by == 'rising' %}
-  {% set page_title = page_title + ' (rising)' %}
+  {% set page_title = '{} ({})'.format(page_title, 'rising') %}
 {% endif %}
 
 {% from "macros/attitude.html" import user_attitude %}
