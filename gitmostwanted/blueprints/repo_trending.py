@@ -23,7 +23,7 @@ def list_by_range(rng):
         query = UserAttitude.join_by_user_and_repo(query, g.user.id, Repo.id)\
             .add_columns(UserAttitude.attitude)
 
-    return render_template('index.html', entries=query, languages=Repo.language_distinct())
+    return render_template('index.html', entries=query, languages=Repo.language_distinct(), rng=rng)
 
 
 @repo_trending.route('/trending/details/<int:repo_id>')

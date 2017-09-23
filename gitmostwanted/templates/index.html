@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 
-{% set page_title = 'Trending' %}
+{% if rng in ['day', 'week', 'month']  %}
+  {% set page_title = 'Trending ({})'.format(rng) %}
+{% else %}
+  {% set page_title = 'Trending' %}
+{% endif %}
 
 {% from "macros/attitude.html" import user_attitude %}
 {% from "macros/repository.html" import repository, repository_filter %}
@@ -8,7 +12,7 @@
 {% block body %}
   <ul class="breadcrumbs">
     {% for r in ['day', 'week', 'month'] %}
-      <li {{ 'class=unavailable' if request.view_args.get('rng') == r }}>
+      <li {{ 'class=unavailable' if rng == r }}>
         <a href="{{ url_for('repo_trending.list_by_range', rng=r) }}">{{ r|capitalize() }}</a>
       </li>
     {% endfor %}
@@ -16,7 +20,9 @@
     {% if g.user %}
       <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude&rarr;</a></li>
     {% else %}
-      <li><a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude&rarr;</a></li>
+      <li>
+        <a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude&rarr;</a>
+      </li>
     {% endif %}
   </ul>
 

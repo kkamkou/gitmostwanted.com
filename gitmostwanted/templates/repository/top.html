@@ -1,6 +1,16 @@
 {% extends "layout.html" %}
 
-{% set page_title = 'The most popular repositories' %}
+{% if sort_by == 'stars' %}
+  {% set page_title = 'The most popular repositories' %}
+{% elif sort_by == 'wanted' %}
+  {% set page_title = 'The most interesting repositories' %}
+{% endif %}
+
+{% if filter_worth_by == 'solid' %}
+  {% set page_title = page_title + ' (solid)' %}
+{% elif filter_worth_by == 'rising' %}
+  {% set page_title = page_title + ' (rising)' %}
+{% endif %}
 
 {% from "macros/attitude.html" import user_attitude %}
 {% from "macros/navigation.html" import pagination %}

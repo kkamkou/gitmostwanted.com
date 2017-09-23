@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 
-{% set page_title = 'Attitude' %}
+{% if attitude in ['like', 'dislike', 'neutral'] %}
+  {% set page_title = 'Attitude ({})'.format(attitude) %}
+{% else %}
+  {% set page_title = 'Attitude' %}
+{% endif %}
 
 {% from "macros/attitude.html" import user_attitude %}
 {% from "macros/navigation.html" import pagination %}
