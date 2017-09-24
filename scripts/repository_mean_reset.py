@@ -38,9 +38,9 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
 now = datetime.now()
 service = bigquery.instance(app)
 results = Repo.query\
-    .filter((Repo.last_reset_at < now + timedelta(days=-1)) | Repo.last_reset_at.is_(None))\
+    .filter(Repo.last_reset_at.is_(None))\
     .filter(Repo.stargazers_count > 1000)\
-    .order_by(Repo.worth.desc())\
+    .order_by(Repo.stargazers_count.desc())\
     .yield_per(10)\
     .all()
 for result in results:
