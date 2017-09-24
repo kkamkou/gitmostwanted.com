@@ -33,8 +33,6 @@ for result in results:
     )
 
     repo.worth = cache[repo.id]['worth']
-
-    if cache[repo.id]['mature'] > 2:
-        repo.mature = True
+    repo.mature = cache[repo.id]['mature'] > 2
 
     db.session.commit()
