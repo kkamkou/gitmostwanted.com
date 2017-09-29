@@ -29,16 +29,18 @@ def metadata_refresh(num_days):
         .yield_per(25)\
         .limit(300)  # GitHub allows only 3000 calls per day within a token
     for repo in repos:
-        repo.checked_at = datetime.now()
-
         details, code = api.repo_info(repo.full_name)
         if not details:
             if 400 <= code < 500:
                 repo.worth -= 1
+                db.session.commit()
                 log.info(
-                    '{0} is not found, the "worth" has been decreased by 1'.format(repo.full_name)
+                    '{0} is not found, the "worth" has been decreased by 1'
+                    .format(repo.full_name)
                 )
             continue
+
+        repo.checked_at = datetime.now()
 
         for key in [
             'description', 'forks_count', 'homepage', 'language', 'open_issues_count', 'size',
