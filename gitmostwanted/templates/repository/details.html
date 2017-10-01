@@ -8,8 +8,16 @@
     <span class="label secondary">{{ entry.language }}</span>
   {% endif %}
 
-  <span class="label secondary">
+  <span class="label secondary" title="Stars">
     {{ entry.stargazers_count|number_humanize }} <i class="fi-graph-bar"></i>
+  </span>
+
+  <span class="label secondary" title="Forks">
+    {{ entry.forks_count|number_humanize }} <i class="fi-share"></i>
+  </span>
+
+  <span class="label secondary" title="Subscribers">
+    {{ entry.subscribers_count|number_humanize }} <i class="fi-eye"></i>
   </span>
 </div>
 
