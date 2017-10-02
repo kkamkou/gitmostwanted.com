@@ -37,7 +37,7 @@
         var data = google.visualization.arrayToDataTable([
           ['Date', 'Popularity']
           {% for mean in means %}
-            , ["{{ mean.created_at }}",  {{ mean.value }}]
+            , [new Date("{{ mean.created_at }}"),  {{ mean.value }}]
           {% endfor %}
         ]);
 
