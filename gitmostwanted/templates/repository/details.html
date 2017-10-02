@@ -44,14 +44,13 @@
         var holder = $('#repoDetailsChart'),
           options = {
             axisTitlesPosition: 'in',
+            chartArea: {height: holder.css('height'), width: holder.css('width')},
             colors: ['#008CBA'],
             hAxis: {viewWindowMode: 'maximized'},
-            height: holder.css('height'),
             legend: {position: 'none'},
             trendlines: {
               0: {color: '#B9B9B9', degree: 7, showR2: true, tooltip: false, type: 'polynomial'}
-            },
-            width: holder.css('width')
+            }
           };
 
         setTimeout(function () {
