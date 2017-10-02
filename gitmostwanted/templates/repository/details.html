@@ -44,7 +44,7 @@
         var holder = $('#repoDetailsChart'),
           options = {
             axisTitlesPosition: 'in',
-            chartArea: {height: holder.css('height'), width: ~~(holder.css('width') * 0.95)},
+            chartArea: {height: holder.css('height'), width: holder.css('width') - 60},
             colors: ['#008CBA'],
             hAxis: {viewWindowMode: 'maximized'},
             legend: {position: 'none'},
