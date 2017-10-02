@@ -30,7 +30,7 @@
 {% if means %}
   <script type="text/javascript">
       if (!google.charts.Line) {
-        google.charts.load('current', {'packages': ['line']});
+        google.charts.load('current', {'packages': ['corechart']});
       }
 
       google.charts.setOnLoadCallback(function () {
@@ -43,18 +43,20 @@
 
         var holder = $('#repoDetailsChart'),
           options = {
+            axisTitlesPosition: 'in',
+            colors: ['#008CBA'],
+            hAxis: {viewWindowMode: 'maximized'},
+            height: holder.css('height'),
             legend: {position: 'none'},
-            animation: {
-              duration: 300,
-              startup: true
+            trendlines: {
+              0: {color: '#B9B9B9', degree: 7, showR2: true, tooltip: false, type: 'polynomial'}
             },
-            width: holder.css('width'),
-            height: holder.css('height')
+            width: holder.css('width')
           };
 
         setTimeout(function () {
-          (new google.charts.Line(holder.get(0)))
-            .draw(data, google.charts.Line.convertOptions(options));
+          (new google.charts.ScatterChart(holder.get(0)))
+            .draw(data, options);
         }, 200);
       });
   </script>
