@@ -21,7 +21,7 @@
   </span>
 </div>
 
-<div id="repoDetailsChart" style="height: 300px;width: 100%">Generating the popularity chart&hellip;</div>
+<div id="repoDetailsChart" style="min-height: 200px;">Generating the popularity chart&hellip;</div>
 
 {% if entry.description %}
   <div class="panel">{{ entry.description }}</div>
@@ -41,19 +41,21 @@
           {% endfor %}
         ]);
 
-        var holder = $('#repoDetailsChart'),
-          options = {
+        setTimeout(function () {
+          var holder = $('#repoDetailsChart');
+          holder.width(holder.parent().width() + 10)
+            .height(~~(holder.parent().height() / 2));
+
+          var options = {
             axisTitlesPosition: 'in',
-            chartArea: {height: holder.css('height'), width: holder.css('width') - 60},
+            chartArea: {top: 10, height: holder.height() - 55, width: holder.width() - 80},
             colors: ['#008CBA'],
-            hAxis: {viewWindowMode: 'maximized'},
             legend: {position: 'none'},
             trendlines: {
               0: {color: '#B9B9B9', degree: 7, showR2: true, tooltip: false, type: 'polynomial'}
             }
           };
 
-        setTimeout(function () {
           (new google.visualization.ScatterChart(holder.get(0)))
             .draw(data, options);
         }, 200);
