@@ -44,16 +44,18 @@
         setTimeout(function () {
           var holder = $('#repoDetailsChart');
           holder.width(holder.parent().width() + 10)
-            .height(~~(holder.parent().height() / 2));
+            .height(~~(holder.parent().height() * 0.6));
 
           var options = {
             axisTitlesPosition: 'in',
             chartArea: {top: 10, height: holder.height() - 55, width: holder.width() - 80},
             colors: ['#008CBA'],
+            hAxis: {gridlines: {color: '#EEE'}},
             legend: {position: 'none'},
             trendlines: {
               0: {color: '#B9B9B9', degree: 7, showR2: true, tooltip: false, type: 'polynomial'}
-            }
+            },
+            vAxis: {gridlines: {color: '#F3F3F3'}}
           };
 
           (new google.visualization.ScatterChart(holder.get(0)))
