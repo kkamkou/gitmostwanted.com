@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from gitmostwanted.app import log, db, celery
+from gitmostwanted.app import app, log, db, celery
 from gitmostwanted.lib.github import api
 from gitmostwanted.models.repo import Repo, RepoMean
 from sqlalchemy.sql import func, expression
@@ -79,10 +79,10 @@ def metadata_trend(num_days):
 
 @celery.task()
 def metadata_erase():
-    # cnt = Repo.query.filter(Repo.worth < -5).delete()
-    # db.session.commit()
-    cnt = 0
-    return cnt
+    Repo.query\
+        .filter((Repo.worth < -5) & (Repo.worth_max <= app.config['REPOSITORY_WORTH_DEFAULT']))\
+        .delete()
+    db.session.commit()
 
 
 # defines the logic to determinate if worth is really decreased or just slightly jumped down
