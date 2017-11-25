@@ -50,7 +50,9 @@ def authorized():
     session['oauth_access_token'] = (resp['access_token'], resp['scope'].split(','))
 
     me = oauth.github.get('user')
-    session['user_id'] = user_get_or_create(me.data['id'], me.data['email'], me.data['login']).id
+    if me.data:
+        user = user_get_or_create(me.data['id'], me.data['email'], me.data['login'])
+        session['user_id'] = user.id
 
     return redirect(next_url)
 
@@ -60,13 +62,12 @@ def tokengetter():
     return session.get('oauth_access_token')
 
 
-def user_get_or_create(uid, uemail, uname):
+def user_get_or_create(uid: int, user_email: str, user_name: str):
     entity = User.query.filter_by(github_id=uid).first()
-    if entity:
-        return entity
-    entity = User(github_id=uid, username=uname, email=uemail or None)
-    db.session.add(entity)
-    db.session.commit()
+    if not entity:
+        entity = User(github_id=uid, username=user_name, email=user_email or None)
+        db.session.add(entity)
+        db.session.commit()
     return entity
 
 
