@@ -8,13 +8,13 @@ class Job:
     """:type num_retries: int"""
     num_retries = 5
 
-    def __init__(self, api: ServiceGmw, query_str: str, batch: bool=False):
+    def __init__(self, api: ServiceGmw, query_str: str, batch: bool = False):
         self.__complete = self.__id = False
         self.__query_str = query_str
         self.__batch = batch
         self.__api = api
 
-    def __insert(self, query_str: str, batch: bool=False):
+    def __insert(self, query_str: str, batch: bool = False):
         body = {
             'jobReference': {
                 'projectId': self.__api.project_id,
