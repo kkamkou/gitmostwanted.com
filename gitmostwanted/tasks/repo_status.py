@@ -30,7 +30,10 @@ def status_detect(num_days, num_segments):
 def status_refresh(num_days):
     repos = Repo.query\
         .filter(Repo.status.in_(('promising', 'hopeless')))\
-        .filter(Repo.status_updated_at <= datetime.now() + timedelta(days=num_days * -1))
+        .filter(
+            Repo.status_updated_at.is_(None) |
+            (Repo.status_updated_at <= datetime.now() + timedelta(days=num_days * -1))
+        )
     for repo in repos:
         RepoStars.query.filter(RepoStars.repo_id == repo.id).delete()
 
