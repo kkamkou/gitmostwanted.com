@@ -6,6 +6,7 @@ flask-sqlalchemy
 flask-wtf
 google-api-python-client
 httplib2
+oauth2client
 pymysql
 pyopenssl
 raven[flask]

@@ -20,4 +20,3 @@ class TasksRepoStarsTestCase(TestCase):
         self.assertTrue("TIMESTAMP('{}')".format(yt.strftime('%Y-%m-%d')) in query)
         self.assertTrue("TIMESTAMP('{}')".format(now.strftime('%Y-%m-%d')) in query)
         self.assertTrue('repo.id = {}'.format(12) in query)
-

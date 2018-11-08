@@ -3,7 +3,7 @@ import unicodedata
 
 
 class TextWithoutSmilies:
-    pattern = '\s*:[a-z0-9_-]+:\s*'
+    pattern = r'\s*:[a-z0-9_-]+:\s*'
 
     def __init__(self, text: str):
         self.__text = text
