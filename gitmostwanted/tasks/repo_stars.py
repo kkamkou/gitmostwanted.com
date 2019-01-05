@@ -22,6 +22,7 @@ def stars_mature(num_days):
     repos = Repo.query\
         .filter(Repo.mature.is_(True))\
         .filter(Repo.status == 'new')\
+        .order_by(Repo.checked_at.asc())\
         .limit(40)  # we are at the free plan
     for repo in repos:
         query = query_stars_by_repo(
