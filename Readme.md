@@ -48,4 +48,4 @@ cp instance.cfg.distr instance.cfg
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2015-2018 Kanstantsin Kamkou <2ka.by>
+Copyright (c) 2015-2019 Kanstantsin Kamkou <2ka.by>
