@@ -7,11 +7,20 @@ from itertools import chain
 from types import GeneratorType
 from unittest import TestCase
 
+from gitmostwanted.models.repo import Repo
+
 
 class TasksRepoStatusTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         db.create_all()
+        db.session.add(
+            Repo(
+                created_at=datetime.now(), description='test', full_name='test/test',
+                html_url='http://py.test', id=1, name='test'
+            )
+        )
+        db.session.commit()
 
     @classmethod
     def tearDownClass(cls):
