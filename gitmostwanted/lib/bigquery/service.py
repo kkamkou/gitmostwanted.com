@@ -14,7 +14,7 @@ class Service:
         auth = ServiceAccountCredentials.from_json_keyfile_name(json_key_path, scope)
         self.resource = discovery.build(service_name, version, http=auth.authorize(Http()))
 
-    def jobs(self):  # @todo! #58/DEV polish me
+    def jobs(self):  # @todo #58/DEV polish me
         return self.resource.jobs()
 
 
