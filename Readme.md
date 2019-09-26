@@ -3,13 +3,13 @@
 [![Coverage Status](https://coveralls.io/repos/github/kkamkou/gitmostwanted.com/badge.svg?branch=HEAD)](https://coveralls.io/github/kkamkou/gitmostwanted.com?branch=HEAD)
 
 # gitmostwanted
-Advanced explore of github.com. The main goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
+Advanced explore of github.com. Our goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
 
 ## Buy me a coffee
 [![Buy me a coffee](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://2ka.by/coffee?project=gitmostwanted.com)
 
 If you would like to help the project, please consider these topics:
-- GMW uses [Google BigQuery](https://cloud.google.com/bigquery/pricing) and the service is pretty expensive.
+- GMW uses [Google BigQuery](https://cloud.google.com/bigquery/pricing) and the service is **pretty** expensive.
 - GMW is located on a private machine and hosted by [ProfitBricks](https://www.profitbricks.de/).
 
 ## Run (Python3)
@@ -41,9 +41,9 @@ cp instance.cfg.distr instance.cfg
 ```
 
 ## Contribution
-- Fork this repo
-- Modify the source code and create a Pull Request
-- Please, follow [these code standards](https://github.com/amontalenti/elements-of-python-style)
+- Fork this repo.
+- Modify the source code and create a new Pull Request.
+- Please follow [these code standards](https://github.com/amontalenti/elements-of-python-style).
 
 ## License
 The MIT License (MIT)
