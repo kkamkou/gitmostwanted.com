@@ -3,6 +3,6 @@ from flask import Blueprint, render_template
 static_content = Blueprint('static_content', __name__)
 
 
-@static_content.route('/static/donations/')
-def donations():
-    return render_template('static/donations.html')
+@static_content.route('/static/sponsorship/')
+def sponsorship():
+    return render_template('static/sponsorship.html')

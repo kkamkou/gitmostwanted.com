@@ -5,9 +5,6 @@
 # gitmostwanted
 Advanced explore of github.com. Our goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
 
-## Buy me a coffee
-[![Buy me a coffee](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://2ka.by/coffee?project=gitmostwanted.com)
-
 If you would like to help the project, please consider these topics:
 - GMW uses [Google BigQuery](https://cloud.google.com/bigquery/pricing) and the service is **pretty** expensive.
 - GMW is located on a private machine and hosted by [ProfitBricks](https://www.profitbricks.de/).
@@ -32,7 +29,7 @@ py.test --pep8 gitmostwanted tests/unit
 ```
 
 ## Docker
-The first time [it'll fail](https://github.com/docker/compose/issues/374)
+Run it two times as the first time **it'll fail** (see: #224).
 
 ```bash
 cp instance.cfg.distr instance.cfg
@@ -44,8 +41,3 @@ cp instance.cfg.distr instance.cfg
 - Fork this repo.
 - Modify the source code and create a new Pull Request.
 - Please follow [these code standards](https://github.com/amontalenti/elements-of-python-style).
-
-## License
-The MIT License (MIT)
-
-Copyright (c) 2015-2019 Kanstantsin Kamkou <2ka.by>
