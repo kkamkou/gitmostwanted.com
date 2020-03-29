@@ -1,10 +1,16 @@
 from flask import Blueprint, g, redirect, request, session, url_for
-from gitmostwanted.services import oauth as service_oauth
-from gitmostwanted.models.user import User
+
 from gitmostwanted.app import app, db
+from gitmostwanted.models.user import User
+from gitmostwanted.services import oauth as service_oauth
 
 user_oauth = Blueprint('user_oauth', __name__)
+
 oauth = service_oauth.instance(app)
+oauth.register(
+    'github', **app.config['GITHUB_OAUTH'],
+    fetch_token=lambda: session.get('oauth_access_token')
+)
 
 
 # @todo #1:15min move before_request method to a general place or a middleware
@@ -32,8 +38,8 @@ def logout():
 
 @user_oauth.route('/oauth/login')
 def login():
-    return oauth.github.authorize(
-        callback=url_for('user_oauth.authorized', next=url_next(), _external=True),
+    return oauth.github.authorize_redirect(
+        redirect_uri=url_for('user_oauth.authorized', next=url_next(), _external=True),
         scope=request.args.get('scope')
     )
 
@@ -42,24 +48,20 @@ def login():
 def authorized():
     next_url = url_next() or url_for('/')
 
-    resp = oauth.github.authorized_response()
+    resp = oauth.github.authorize_access_token()
     if resp is None or 'access_token' not in resp:
         return redirect(next_url)
 
     session.permanent = True
     session['oauth_access_token'] = (resp['access_token'], resp['scope'].split(','))
 
-    me = oauth.github.get('user')
-    if me.data:
-        user = user_get_or_create(me.data['id'], me.data['email'], me.data['login'])
+    result = oauth.github.get('user')
+    if result:
+        json = result.json()
+        user = user_get_or_create(json['id'], json['email'], json['login'])
         session['user_id'] = user.id
 
     return redirect(next_url)
-
-
-@oauth.github.tokengetter
-def tokengetter():
-    return session.get('oauth_access_token')
 
 
 def user_get_or_create(uid: int, user_email: str, user_name: str):

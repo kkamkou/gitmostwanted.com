@@ -1,12 +1,11 @@
 alembic
-celery[redis]>=4, <5
+authlib
+celery[redis]
 flask
-flask-oauthlib
 flask-sqlalchemy
 flask-wtf
 google-api-python-client
-httplib2
-oauth2client
+google-auth
 pymysql
 pyopenssl
 sentry-sdk[flask]

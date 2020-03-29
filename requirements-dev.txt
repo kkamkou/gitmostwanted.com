@@ -1,0 +1,6 @@
+-r requirements.txt
+coveralls
+pycodestyle
+pytest
+pytest-cov
+responses

@@ -1,6 +1,5 @@
-from oauth2client.service_account import ServiceAccountCredentials
 from apiclient import discovery
-from httplib2 import Http
+from google.oauth2 import service_account
 
 
 class Service:
@@ -11,8 +10,9 @@ class Service:
         self, json_key_path: str, service_name: str, version: str,
         scope: str
     ):
-        auth = ServiceAccountCredentials.from_json_keyfile_name(json_key_path, scope)
-        self.resource = discovery.build(service_name, version, http=auth.authorize(Http()))
+        credentials = service_account.Credentials\
+            .from_service_account_file(json_key_path, scopes=[scope])
+        self.resource = discovery.build(service_name, version, credentials=credentials)
 
     def jobs(self):  # @todo #58/DEV polish me
         return self.resource.jobs()

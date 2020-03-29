@@ -25,6 +25,7 @@ class Config:
 
     # Oauth
     GITHUB_AUTH = (None, None)
+    GITHUB_OAUTH = {}
 
 
 class ConfigDevelopment(Config):
