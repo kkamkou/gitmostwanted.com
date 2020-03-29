@@ -9,4 +9,4 @@ httplib2
 oauth2client
 pymysql
 pyopenssl
-raven[flask]
+sentry-sdk[flask]

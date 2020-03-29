@@ -83,11 +83,15 @@ GOOGLE_BIGQUERY = {
 # sentry.io
 SENTRY_IO = {
     'celery': {
+        'dsn': 'https://...@sentry.io/1234567890',
+        'configuration': {
+            'debug': False
+        }
+    },
+    'sqlalchemy': {
         'dsn': 'https://...@sentry.io/1234567890'
     },
     'flask': {
-        'dsn': 'https://...@sentry.io/1234567890',
-        'level': 'ERROR',
-        'logging': False
+        'dsn': 'https://...@sentry.io/1234567890'
     }
 }

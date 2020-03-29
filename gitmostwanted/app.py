@@ -9,9 +9,10 @@ app = Flask(__name__)
 app.config.from_object('gitmostwanted.config.Config' + env)
 app.config.from_envvar('GMW_APP_SETTINGS', silent=True)
 
+service_sentry.register(app)
+
 celery = service_celery.instance(app)
 db = service_db.instance(app)
 log = service_log.instance(app)
-sentry = service_sentry.instance(app)
 
 del environ, Flask, service_celery, service_db, service_log, service_sentry
