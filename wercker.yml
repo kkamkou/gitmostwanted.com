@@ -12,7 +12,7 @@ build:
         cp -R "$WERCKER_SOURCE_DIR/scripts" "$WERCKER_OUTPUT_DIR"
 
     - pip-install:
-      packages_list: pip pycodestyle pytest==3.10.1 pytest-cov==1.8.1 responses coveralls
+      requirements_file: requirements-dev.txt
 
     - script:
       name: code style
