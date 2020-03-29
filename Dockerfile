@@ -1,4 +1,4 @@
-FROM python:3.4
+FROM python:3.5
 
 RUN groupadd -r gitmostwanted \
   && useradd -r -g gitmostwanted gitmostwanted \
