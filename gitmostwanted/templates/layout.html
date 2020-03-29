@@ -52,8 +52,12 @@
 
       <section class="top-bar-section">
         <ul class="right">
-          <li><a href="https://github.com/kkamkou/gitmostwanted.com"
-            target="_blank">Fork it!</a></li>
+          <li>
+            <a href="https://github.com/kkamkou/gitmostwanted.com" target="_blank">
+              <i class="fi-social-github" title="Fork it!"></i>
+              <span class="visible-for-small-only">Fork it!</span>
+            </a>
+          </li>
           <li><a href="{{ url_for('static_content.sponsorship') }}">Sponsorship</a></li>
           {% if not g.user %}
             <li><a href="#" data-reveal-id="whatIsGmwModal">What is it?</a></li>
