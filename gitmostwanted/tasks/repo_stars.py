@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
+from time import sleep
+
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.models.repo import Repo, RepoStars
 from gitmostwanted.services import bigquery
-from time import sleep
 
 
 def results_of(j: Job):  # @todo #0:15m copy-paste code in multiple tasks
@@ -23,7 +24,7 @@ def stars_mature(num_days):
         .filter(Repo.mature.is_(True))\
         .filter(Repo.status == 'new')\
         .order_by(Repo.checked_at.asc())\
-        .limit(40)  # we are at the free plan
+        .limit(50)  # we are at the free plan
     for repo in repos:
         query = query_stars_by_repo(
             repo_id=repo.id, date_from=datetime.now() + timedelta(days=num_days * -1),
@@ -39,9 +40,15 @@ def stars_mature(num_days):
         for row in results_of(job[0]):
             db.session.add(RepoStars(repo_id=job[1].id, stars=row[0], year=row[1], day=row[2]))
 
+        status_old = job[1].status
         job[1].status = 'unknown'
 
         db.session.commit()
+
+        app.logger.info(
+            'Repository {0} got a new status {1} (was: {2})'
+            .format(job[1].id, job[1].status, status_old)
+        )
 
 
 # @todo #192:1h move BQ queries to a separate place

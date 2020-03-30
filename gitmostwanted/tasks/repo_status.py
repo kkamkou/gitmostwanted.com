@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
-from gitmostwanted.app import db, celery, log
-from gitmostwanted.models.repo import Repo, RepoStars, RepoMean
-from sqlalchemy.sql import expression
 from statistics import variance, mean
 from types import GeneratorType
+
+from sqlalchemy.sql import expression
+
+from gitmostwanted.app import db, celery, log
+from gitmostwanted.models.repo import Repo, RepoStars, RepoMean
 
 
 @celery.task()
@@ -20,7 +22,13 @@ def status_detect(num_days, num_segments):
             result, num_days, num_segments, last_known_mean(repo.id)
         )
 
+        status_old = repo.status
         repo.status = 'hopeless' if val < 1 else 'promising'
+
+        log.info(
+            'Repository status of {0}({1}) has been changed to {2} (was: {3})'
+            .format(repo.id, repo.full_name, repo.status, status_old)
+        )
 
         db.session.merge(RepoMean(repo=repo, value=val, created_at=datetime.now()))
         db.session.commit()

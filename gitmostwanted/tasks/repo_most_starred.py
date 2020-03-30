@@ -1,11 +1,12 @@
 from datetime import date, datetime, timedelta
+from time import sleep
+
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.lib.github.api import repo_info
-from gitmostwanted.models.repo import Repo
 from gitmostwanted.models import report
+from gitmostwanted.models.repo import Repo
 from gitmostwanted.services import bigquery
-from time import sleep
 
 
 def results_of(j: Job):
@@ -104,6 +105,11 @@ def most_starred_sync(model_name: str, query: str):
                     name=info['name']
                 )
             )
+        )
+
+        app.logger.info(
+            'Repository {0}({1}) has a new number of watchers {2}'
+            .format(row[0], info['full_name'], row[2])
         )
 
     db.session.commit()

@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
+
+from sqlalchemy.sql import func, expression
+
 from gitmostwanted.app import app, log, db, celery
 from gitmostwanted.lib.github import api
 from gitmostwanted.models.repo import Repo, RepoMean
-from sqlalchemy.sql import func, expression
 
 
 @celery.task()
@@ -15,7 +17,7 @@ def metadata_maturity(num_months):
     for (repo_id, cnt) in repos:
         db.session.query(Repo).filter(Repo.id == repo_id).update({Repo.mature: True})
         db.session.commit()
-        log.info('{0} marked as mature ({1})'.format(repo_id, cnt))
+        log.info('{0} is marked as mature ({1})'.format(repo_id, cnt))
     return repos.count()
 
 
@@ -50,6 +52,8 @@ def metadata_refresh(num_days):
                 setattr(repo, key, details[key])
 
         db.session.commit()
+
+        log.info('Repository {0}({1}) has been updated'.format(repo.id, repo.full_name))
     return repos.count()
 
 
@@ -79,9 +83,10 @@ def metadata_trend(num_days):
 
 @celery.task()
 def metadata_erase():
-    Repo.query\
+    cnt = Repo.query\
         .filter((Repo.worth < -5) & (Repo.worth_max <= app.config['REPOSITORY_WORTH_DEFAULT']))\
         .delete()
+    log.info('{0} repositories has been removed (worthless)'.format(cnt))
     db.session.commit()
 
 
