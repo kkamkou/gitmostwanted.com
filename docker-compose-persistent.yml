@@ -2,9 +2,9 @@ version: '3.7'
 services:
   db:
     volumes:
-      - /home/gitmostwanted/data/mysql:/var/lib/mysql
+      - /home/github_gitmostwanted/data/mysql:/var/lib/mysql
 
   redis:
     entrypoint: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - /home/gitmostwanted/data/redis:/data
+      - /home/github_gitmostwanted/data/redis:/data
