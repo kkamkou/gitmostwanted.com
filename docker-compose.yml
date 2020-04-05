@@ -8,14 +8,17 @@ services:
       - MYSQL_USER=gitmostwanted
       - MYSQL_PASSWORD=gitmostwanted_pwd
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    restart: unless-stopped
 
   redis:
     image: redis:latest
+    restart: unless-stopped
 
   web:
     build: .
     user: gitmostwanted
     entrypoint: ["/opt/gitmostwanted/entrypoint.sh", "web"]
+    restart: unless-stopped
     ports:
       - "5000:5000"
     volumes:
@@ -29,6 +32,7 @@ services:
   celery:
     build: .
     user: gitmostwanted
+    restart: unless-stopped
     entrypoint: ["/opt/gitmostwanted/entrypoint.sh", "celery"]
     environment:
       - GMW_APP_SETTINGS=/opt/gitmostwanted/instance.cfg
