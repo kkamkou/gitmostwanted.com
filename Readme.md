@@ -33,7 +33,19 @@ Run it two times as the first time **it'll fail** (see: #224).
 
 ```bash
 cp instance.cfg.distr instance.cfg
+# modify instance.cfg if needed
+```
+
+### Non-persistent
+```bash
 [sudo] docker-compose up -d
+# open http://127.0.0.1:5000/ in your browser
+```
+
+### Persistent variant
+```bash
+# modify paths in docker-compose-persistent.yml
+[sudo] docker-compose -f docker-compose.yml -f docker-compose-persistent.yml up -d
 # open http://127.0.0.1:5000/ in your browser
 ```
 

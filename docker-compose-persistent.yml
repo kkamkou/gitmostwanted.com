@@ -8,3 +8,7 @@ services:
     entrypoint: ["redis-server", "--appendonly", "yes"]
     volumes:
       - /home/github_gitmostwanted/data/redis:/data
+
+  celery:
+    volumes:
+      - /home/github_gitmostwanted/data/celery:/data

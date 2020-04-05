@@ -12,10 +12,10 @@ case "$1" in
 
     celery)
         celery --app=gitmostwanted.app.celery purge --force
-        rm -f /tmp/{celery.pid,celerybeat-schedule.dat,celerybeat-schedule.dir}
+        rm -f /tmp/celery.pid
         celery worker --app=gitmostwanted.app.celery --beat \
             --events --loglevel=INFO --pidfile=/tmp/celery.pid \
-            --schedule=/tmp/celerybeat-schedule
+            --schedule=/data/celerybeat-schedule --logfile=/data/celery.log
         ;;
 
     *)
