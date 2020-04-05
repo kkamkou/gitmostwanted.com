@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   db:
     image: mysql:latest
@@ -15,14 +15,13 @@ services:
   web:
     build: .
     user: gitmostwanted
-    entrypoint: ["/opt/entrypoint.sh", "web"]
+    entrypoint: ["/opt/gitmostwanted/entrypoint.sh", "web"]
     ports:
       - "5000:5000"
     volumes:
-      - ./gitmostwanted:/opt/gitmostwanted
-      - .:/opt
+      - .:/opt/gitmostwanted
     environment:
-      - GMW_APP_SETTINGS=/opt/instance.cfg
+      - GMW_APP_SETTINGS=/opt/gitmostwanted/instance.cfg
     depends_on:
       - db
       - redis
@@ -30,12 +29,11 @@ services:
   celery:
     build: .
     user: gitmostwanted
-    entrypoint: ["/opt/entrypoint.sh", "celery"]
+    entrypoint: ["/opt/gitmostwanted/entrypoint.sh", "celery"]
     environment:
-      - GMW_APP_SETTINGS=/opt/instance.cfg
+      - GMW_APP_SETTINGS=/opt/gitmostwanted/instance.cfg
     volumes:
-      - ./gitmostwanted:/opt/gitmostwanted
-      - .:/opt
+      - .:/opt/gitmostwanted
     links:
       - db
       - redis

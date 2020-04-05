@@ -6,7 +6,7 @@ sleep 5
 
 case "$1" in
     web)
-        (cd ..; alembic upgrade head)
+        alembic upgrade head
         python -m gitmostwanted.web
         ;;
 

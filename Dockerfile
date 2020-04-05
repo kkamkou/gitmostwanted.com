@@ -1,4 +1,4 @@
-FROM python:3.5
+FROM python:latest
 
 RUN groupadd -r gitmostwanted \
   && useradd -r -g gitmostwanted gitmostwanted \
@@ -10,7 +10,7 @@ VOLUME ["/opt/gitmostwanted"]
 
 ADD requirements.txt ./
 
-ENV PYTHONPATH /opt
+ENV PYTHONPATH /opt/gitmostwanted
 
 RUN pip install -U pip \
   && pip install -r requirements.txt
