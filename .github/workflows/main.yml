@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      
+
     - name: initialize submodules
       run: git submodule update --init --recursive
-    
+
     - name: artifacts
-      run: |        
+      run: |
         mkdir /tmp/output
         mv -t /tmp/output alembic.ini requirements.txt gitmostwanted migration scripts docker-compose.yml docker-compose-persistent.yml
 
@@ -27,15 +27,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    steps:        
+    steps:
       - uses: webfactory/ssh-agent@v0.2.0
         with:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  
+
       - uses: actions/download-artifact@v1
         with:
           name: artifacts
-      
+
       - name: known_hosts update
         run: echo "${{ secrets.KNOWN_HOSTS_ENTRY }}" >> ~/.ssh/known_hosts
 
