@@ -7,7 +7,7 @@ Advanced explore of github.com. Our goal is to highlight the most interesting re
 
 If you would like to help the project, please consider these topics:
 - GMW uses [Google BigQuery](https://cloud.google.com/bigquery/pricing) and the service is **pretty** expensive.
-- GMW is located on a private machine and hosted by [ProfitBricks](https://www.profitbricks.de/).
+- GMW is located on a private machine.
 
 ## Run (Python3)
 
