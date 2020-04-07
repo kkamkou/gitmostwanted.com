@@ -1,3 +1,5 @@
+# this file is used during the deployment process
+
 version: '3.7'
 services:
   db:
@@ -12,3 +14,9 @@ services:
   celery:
     volumes:
       - /home/github_gitmostwanted/data/celery:/data
+
+  web:
+    environment:
+      - GMW_APP_ENV=production
+      - GMW_APP_SETTINGS=/home/github_gitmostwanted/gitmostwanted/instance.cfg
+

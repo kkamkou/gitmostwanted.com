@@ -38,15 +38,14 @@ cp instance.cfg.distr instance.cfg
 
 ### Non-persistent
 ```bash
-[sudo] docker-compose up -d
-# open http://127.0.0.1:5000/ in your browser
+[sudo] docker-compose up --detach
 ```
 
 ### Persistent variant
 ```bash
-# modify paths in docker-compose-persistent.yml
-[sudo] docker-compose -f docker-compose.yml -f docker-compose-persistent.yml up -d
-# open http://127.0.0.1:5000/ in your browser
+# modify paths and envs in docker-compose-persistent.yml
+[sudo] docker-compose \
+    -f docker-compose.yml -f docker-compose-persistent.yml up --detach
 ```
 
 ## Contribution
