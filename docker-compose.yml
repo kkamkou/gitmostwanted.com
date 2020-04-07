@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  db:
+  gmw_db:
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -10,11 +10,11 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     restart: unless-stopped
 
-  redis:
+  gmw_redis:
     image: redis:latest
     restart: unless-stopped
 
-  web:
+  gmw_web:
     build: .
     user: gitmostwanted
     entrypoint: ["sh", "/opt/gitmostwanted/entrypoint.sh", "web"]
@@ -26,10 +26,10 @@ services:
     environment:
       - GMW_APP_SETTINGS=/opt/gitmostwanted/instance.cfg
     depends_on:
-      - db
-      - redis
+      - gmw_db
+      - gmw_redis
 
-  celery:
+  gmw_celery:
     build: .
     user: gitmostwanted
     restart: unless-stopped
@@ -39,5 +39,5 @@ services:
     volumes:
       - .:/opt/gitmostwanted
     links:
-      - db
-      - redis
+      - gmw_db
+      - gmw_redis

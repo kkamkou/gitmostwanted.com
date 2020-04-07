@@ -2,21 +2,38 @@
 
 version: '3.7'
 services:
-  db:
+  gmw_db:
     volumes:
       - /home/github_gitmostwanted/data/mysql:/var/lib/mysql
+    labels:
+      - "traefik.enable=false"
 
-  redis:
+  gmw_redis:
     entrypoint: ["redis-server", "--appendonly", "yes"]
     volumes:
       - /home/github_gitmostwanted/data/redis:/data
+    labels:
+      - "traefik.enable=false"
 
-  celery:
+  gmw_celery:
     volumes:
       - /home/github_gitmostwanted/data/celery:/data
+      - /home/github_gitmostwanted/gitmostwanted:/etc/gitmostwanted
+    labels:
+      - "traefik.enable=false"
 
-  web:
+  gmw_web:
+    volumes:
+      - /home/github_gitmostwanted/gitmostwanted:/etc/gitmostwanted
     environment:
       - GMW_APP_ENV=production
-      - GMW_APP_SETTINGS=/home/github_gitmostwanted/gitmostwanted/instance.cfg
+      - GMW_APP_SETTINGS=/etc/gitmostwanted/instance.cfg
+    networks:
+      - gmw_network
+    labels:
+      - "traefik.http.routers.gmw_web.rule=Host(`gitmostwanted.com`)"
 
+networks:
+  gmw_network:
+    external:
+      name: traefik_default
