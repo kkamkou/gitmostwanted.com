@@ -11,7 +11,8 @@ case "$1" in
         ;;
 
     celery)
-        celery --app=gitmostwanted.app.celery purge --force
+        [[ "${GMW_APP_ENV}" -ne "production" ]] \
+            && celery --app=gitmostwanted.app.celery purge --force || true
         rm -f /tmp/celery.pid
         celery worker --app=gitmostwanted.app.celery --beat \
             --events --loglevel=INFO --pidfile=/tmp/celery.pid \

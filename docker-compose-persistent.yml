@@ -23,6 +23,9 @@ services:
     volumes:
       - /home/github_gitmostwanted/data/celery:/data
       - /home/github_gitmostwanted/gitmostwanted:/etc/gitmostwanted
+    environment:
+      - GMW_APP_ENV=production
+      - GMW_APP_SETTINGS=/etc/gitmostwanted/instance.cfg
     labels:
       - "traefik.enable=false"
     networks:
