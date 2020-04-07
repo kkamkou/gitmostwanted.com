@@ -7,6 +7,8 @@ services:
       - /home/github_gitmostwanted/data/mysql:/var/lib/mysql
     labels:
       - "traefik.enable=false"
+    networks:
+      - gmw_network
 
   gmw_redis:
     entrypoint: ["redis-server", "--appendonly", "yes"]
@@ -14,6 +16,8 @@ services:
       - /home/github_gitmostwanted/data/redis:/data
     labels:
       - "traefik.enable=false"
+    networks:
+      - gmw_network
 
   gmw_celery:
     volumes:
@@ -21,6 +25,8 @@ services:
       - /home/github_gitmostwanted/gitmostwanted:/etc/gitmostwanted
     labels:
       - "traefik.enable=false"
+    networks:
+      - gmw_network
 
   gmw_web:
     volumes:
