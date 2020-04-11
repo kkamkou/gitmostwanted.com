@@ -19,8 +19,6 @@ services:
     user: gitmostwanted
     entrypoint: ["sh", "/opt/gitmostwanted/entrypoint.sh", "web"]
     restart: unless-stopped
-    ports:
-      - "5000:5000"
     volumes:
       - .:/opt/gitmostwanted
     environment:
