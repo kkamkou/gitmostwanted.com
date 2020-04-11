@@ -29,7 +29,7 @@ py.test --pep8 gitmostwanted tests/unit
 ```
 
 ## Docker
-Run it two times as the first time **it'll fail** (see: #224).
+Run it two times as the first time **it'll fail** (see: #224). Default port is `5000`.
 
 ```bash
 cp instance.cfg.distr instance.cfg
