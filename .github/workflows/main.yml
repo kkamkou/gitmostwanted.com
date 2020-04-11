@@ -41,4 +41,4 @@ jobs:
         run: echo "${{secrets.KNOWN_HOSTS_ENTRY}}" >> ~/.ssh/known_hosts
 
       - name: source-code upload
-        run: rsync -az --delete-after artifacts/ ${{secrets.SSH_LOGIN}}@88.198.242.237:/home/github_gitmostwanted/artifacts/${{GITHUB_SHA::8}}
+        run: rsync -az --delete-after artifacts/ ${{secrets.SSH_LOGIN}}@88.198.242.237:/home/github_gitmostwanted/artifacts/${GITHUB_SHA::8}
