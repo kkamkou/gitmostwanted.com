@@ -31,14 +31,14 @@ jobs:
     steps:
       - uses: webfactory/ssh-agent@v0.2.0
         with:
-            ssh-private-key: ${secrets.SSH_PRIVATE_KEY}
+            ssh-private-key: ${{secrets.SSH_PRIVATE_KEY}}
 
       - uses: actions/download-artifact@v1
         with:
           name: artifacts
 
       - name: known_hosts update
-        run: echo "${secrets.KNOWN_HOSTS_ENTRY}" >> ~/.ssh/known_hosts
+        run: echo "${{secrets.KNOWN_HOSTS_ENTRY}}" >> ~/.ssh/known_hosts
 
       - name: source-code upload
-        run: rsync -az --delete-after artifacts/ ${{secrets.SSH_LOGIN}}@88.198.242.237:/home/github_gitmostwanted/artifacts/${GITHUB_SHA::8}
+        run: rsync -az --delete-after artifacts/ ${{secrets.SSH_LOGIN}}@88.198.242.237:/home/github_gitmostwanted/artifacts/${{GITHUB_SHA::8}}
