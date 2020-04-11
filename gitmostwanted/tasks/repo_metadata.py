@@ -84,7 +84,7 @@ def metadata_trend(num_days):
 @celery.task()
 def metadata_erase():
     cnt = Repo.query\
-        .filter((Repo.worth < -5) & (Repo.worth_max <= app.config['REPOSITORY_WORTH_DEFAULT']))\
+        .filter((Repo.worth < -5) & (Repo.worth_max <= app.config['REPOSITORY_WORTH_DEFAULT'] * 3))\
         .delete()
     log.info('{0} repositories has been removed (worthless)'.format(cnt))
     db.session.commit()

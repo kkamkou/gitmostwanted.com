@@ -30,7 +30,9 @@ def status_detect(num_days, num_segments):
             .format(repo.id, repo.full_name, repo.status, status_old)
         )
 
-        db.session.merge(RepoMean(repo=repo, value=val, created_at=datetime.now()))
+        db.session.merge(
+            RepoMean(repo=repo, value=val, created_at=datetime.today().strftime('%Y-%m-%d'))
+        )
         db.session.commit()
 
 
