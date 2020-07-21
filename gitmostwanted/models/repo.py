@@ -49,7 +49,7 @@ class Repo(db.Model):
             self.status_updated_at = datetime.now()
 
         if key == 'homepage':
-            value = str(Url(value)) if value else None
+            value = str(Url(value[:150])) if value else None
 
         if key == 'description':
             value = str(TextWithoutSmilies(str(TextNormalized(value[:250])))) if value else None

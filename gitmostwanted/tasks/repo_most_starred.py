@@ -99,7 +99,7 @@ def most_starred_sync(model_name: str, query: str):
                     created_at=datetime.strptime(info['created_at'], '%Y-%m-%dT%H:%M:%SZ'),
                     description=info['description'],
                     full_name=info['full_name'],
-                    homepage=info['homepage'][:150],
+                    homepage=info['homepage'],
                     html_url=info['html_url'],
                     language=info['language'],
                     name=info['name']
