@@ -24,7 +24,7 @@ def stars_mature(num_days):
         .filter(Repo.mature.is_(True))\
         .filter(Repo.status == 'new')\
         .order_by(Repo.checked_at.asc())\
-        .limit(40)  # we are at the free plan
+        .limit(100)  # donations will increase this number
     for repo in repos:
         query = query_stars_by_repo(
             repo_id=repo.id, date_from=datetime.now() + timedelta(days=num_days * -1),
