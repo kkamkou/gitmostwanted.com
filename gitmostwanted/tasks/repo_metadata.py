@@ -52,8 +52,8 @@ def metadata_refresh(num_days):
             if getattr(repo, key) != details[key]:
                 setattr(repo, key, details[key])
 
-        if 'license' in details:
-            license = getattr(details['license'], 'key', 'unlicense')
+        if 'license' in details and details['license'] is not None:
+            license = details['license'].get('key', 'unlicense')
             if license != repo.license:
                 setattr(repo, 'license', license)
 
