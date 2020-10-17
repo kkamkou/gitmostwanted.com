@@ -30,6 +30,13 @@
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         {% for (repo, attitude) in repos.items %}
           {% call(repo) repository(repo) %}
+            {% if repo.mature %}
+              <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
+                 class="button tiny secondary right" title="Details"
+                 data-reveal-id="repoDetailsModal"
+                 data-reveal-ajax="true">{{ repo.stargazers_count|number_humanize }}
+                <i class="fi-graph-bar"></i></a>
+            {% endif %}
             {{ user_attitude(repo.id, attitude) }}
           {% endcall %}
         {% else %}
@@ -38,6 +45,9 @@
       </ul>
     </div>
   </div>
+
+  <div id="repoDetailsModal" class="reveal-modal" data-reveal data-options="animation:false"
+    aria-labelledby="repoDetailsModal" aria-hidden="true" role="dialog"></div>
 
   {{
     pagination(

@@ -34,10 +34,19 @@
       <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
         {% for (entry, attitude) in entries %}
           {% call(repo) repository(entry.repo) %}
+
             <div class="right">
               <span class="label secondary">
                 +{{ entry.cnt_watch|number_humanize }} <i class="fi-star"></i>
               </span>
+              {% if repo.mature %}
+                <span class="label info">
+                  <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}" title="Details"
+                    data-reveal-id="repoDetailsModal" data-reveal-ajax="true">
+                    {{ repo.stargazers_count|number_humanize }} <i class="fi-graph-bar"></i>
+                  </a>
+                </span>
+              {% endif %}
             </div>
 
             {% if g.user %}
@@ -50,4 +59,7 @@
       </ul>
     </div>
   </div>
+
+  <div id="repoDetailsModal" class="reveal-modal" data-reveal data-options="animation:false"
+    aria-labelledby="repoDetailsModal" aria-hidden="true" role="dialog"></div>
 {% endblock %}

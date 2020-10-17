@@ -24,14 +24,3 @@ def list_by_range(rng):
             .add_columns(UserAttitude.attitude)
 
     return render_template('index.html', entries=query, languages=Repo.language_distinct(), rng=rng)
-
-
-@repo_trending.route('/trending/details/<int:repo_id>')
-def details(repo_id):
-    repo = Repo.query.get(repo_id)
-    if not repo:
-        return abort(404)
-
-    means = RepoMean.query.filter(RepoMean.repo_id == repo_id)
-
-    return render_template('repository/details.html', entry=repo, means=means)
