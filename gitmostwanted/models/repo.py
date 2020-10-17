@@ -21,6 +21,7 @@ class Repo(db.Model):
     homepage = db.Column(db.String(150))
     html_url = db.Column(db.String(150), nullable=False)
     language = db.Column(db.String(25))
+    license = db.Column(db.String(15))
     last_reset_at = db.Column(db.DateTime, index=True)
     mature = db.Column(db.Boolean, nullable=False, server_default=expression.false(), index=True)
     name = db.Column(db.String(80), nullable=False)
