@@ -37,8 +37,8 @@ def metadata_refresh(num_days):
                 repo.worth -= 1
                 db.session.commit()
                 log.info(
-                    '{0} is not found, the "worth" has been decreased by 1'
-                    .format(repo.full_name)
+                    '{0} is not found (code={1}), the "worth" has been decreased by 1'
+                    .format(repo.full_name, code)
                 )
             continue
 
@@ -50,6 +50,11 @@ def metadata_refresh(num_days):
         ]:
             if getattr(repo, key) != details[key]:
                 setattr(repo, key, details[key])
+
+        if 'license' in details:
+            license = getattr(details['license'], 'key', 'unlicense')
+            if license != repo.license:
+                setattr(repo, 'license', license)
 
         db.session.commit()
 
