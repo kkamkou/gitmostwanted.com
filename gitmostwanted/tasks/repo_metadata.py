@@ -9,7 +9,7 @@ from gitmostwanted.models.repo import Repo, RepoMean
 
 @celery.task()
 def metadata_maturity(num_months):
-    cnt = func.count(RepoMean.repo_id).label("cnt")
+    cnt = func.count(RepoMean.repo_id).label('cnt')
     repos = db.session.query(RepoMean.repo_id, cnt).join(Repo)\
         .filter(Repo.mature.is_(False))\
         .group_by(RepoMean.repo_id)\
@@ -25,7 +25,7 @@ def metadata_maturity(num_months):
 def metadata_refresh(num_days):
     repos = Repo.query\
         .filter(
-            Repo.status.isnot('deleted') & (
+            (Repo.status != 'deleted') & (
                 Repo.checked_at.is_(None) |
                 (Repo.checked_at <= datetime.now() + timedelta(days=num_days * -1))
             )
