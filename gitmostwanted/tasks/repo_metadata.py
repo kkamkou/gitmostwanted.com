@@ -25,8 +25,10 @@ def metadata_maturity(num_months):
 def metadata_refresh(num_days):
     repos = Repo.query\
         .filter(
-            Repo.checked_at.is_(None) |
-            (Repo.checked_at <= datetime.now() + timedelta(days=num_days * -1))
+            Repo.status.isnot('deleted') & (
+                Repo.checked_at.is_(None) |
+                (Repo.checked_at <= datetime.now() + timedelta(days=num_days * -1))
+            )
         )\
         .yield_per(25)\
         .limit(300)  # GitHub allows only 3000 calls per day within a token
