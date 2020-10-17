@@ -15,69 +15,70 @@
   </head>
 
   <body>
-    <nav class="top-bar" data-topbar data-options="is_hover: false" role="navigation" style="margin-bottom: 2px">
-      <ul class="title-area">
-        <li class="name">
-          <h1><a href="{{ url_for('repo_rating.top') }}">GitHub Explore</a></h1>
-        </li>
-        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-      </ul>
-
-      <!-- what is GMW modal -->
-      <div id="whatIsGmwModal" class="reveal-modal" data-reveal aria-labelledby="whatIsGmwModalTitle"
-        aria-hidden="true" role="dialog">
-        <h3 id="whatIsGmwModalTitle">What's It All About?</h3>
-        <p>
-          Each promoted or created by a famous company repository is popular at the beginning. Also it is possible to have a
-          number of them which are in trend right now (publications, marketing, events).
-          It doesn't mean that those repositories are useful. As an example, compare these two links:
-          <a href="{{ url_for('repo_rating.top') }}">Top</a> vs
-          <a href="https://github.com/search?o=desc&q=stars%3A%3E10000&s=stars&type=Repositories" target="_blank">GitHub search</a>
-          ordered by stars
-        </p>
-        <p>
-          The gitmostwanted.com project analyses <a href="https://www.githubarchive.org/" target="_blank">githubarchive</a>
-          data in order to highlight the most interesting repositories and exclude others. You can find some concepts in the
-          <a href="https://github.com/kkamkou/gitmostwanted.com/wiki" target="_blank">Wiki</a>.
-        </p>
-        <h3>Why should I login?</h3>
-        <p>
-          GMW is like a personal database, where you store <code>liked</code> repositories. As soon as GWM
-          gets 200 registered users, it'll be possible to find people closer/similar to you by preference.
-          Right now you can synchronise your stars with GitHub and share the public profile link
-          (<code>http://gitmostwanted.com/USER_NAME</code>) with friends/teammates. Have fun!
-        </p>
-        <a class="close-reveal-modal" aria-label="Close">&#215;</a>
-      </div>
-
-      <section class="top-bar-section">
-        <ul class="right">
-          <li>
-            <a href="https://github.com/kkamkou/gitmostwanted.com" target="_blank">
-              <i class="fi-social-github" title="Fork it!"></i>
-              <span class="visible-for-small-only">Fork it!</span>
-            </a>
-          </li>
-          <li><a href="{{ url_for('static_content.sponsorship') }}">Sponsorship</a></li>
-          {% if not g.user %}
-            <li><a href="#" data-reveal-id="whatIsGmwModal">What is it?</a></li>
-            <li><a href="{{ url_for('user_oauth.login', scope='user:email') }}">Login via GitHub</a></li>
-          {% else %}
-            <li class="has-dropdown">
-              <a href="#">{{ g.user.username }}</a>
-              <ul class="dropdown">
-                  <li><a href="{{ url_for('user_profile.overview', name=g.user.username) }}">Profile</a></li>
-                  <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Unchecked</a></li>
-                  <li><a href="{{ url_for('user_oauth.logout') }}">Log-out</a></li>
-              </ul>
-            </li>
-          {% endif %}
-        </ul>
-      </section>
-    </nav>
-
     <div class="wrapper">
+      <nav class="top-bar" data-topbar data-options="is_hover: false" role="navigation" style="margin-bottom: 2px">
+        <ul class="title-area">
+          <li class="name">
+            <h1><a href="{{ url_for('repo_rating.top') }}">GitHub Explore</a></h1>
+          </li>
+          <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+        </ul>
+
+        <!-- what is GMW modal -->
+        <div id="whatIsGmwModal" class="reveal-modal" data-reveal aria-labelledby="whatIsGmwModalTitle"
+          aria-hidden="true" role="dialog">
+          <h3 id="whatIsGmwModalTitle">What's It All About?</h3>
+          <p>
+            Each promoted or created by a famous company repository is popular at the beginning. Also it is possible to have a
+            number of them which are in trend right now (publications, marketing, events).
+            It doesn't mean that those repositories are useful. As an example, compare these two links:
+            <a href="{{ url_for('repo_rating.top') }}">Top</a> vs
+            <a href="https://github.com/search?o=desc&q=stars%3A%3E10000&s=stars&type=Repositories" target="_blank">GitHub search</a>
+            ordered by stars
+          </p>
+          <p>
+            The gitmostwanted.com project analyses <a href="https://www.githubarchive.org/" target="_blank">githubarchive</a>
+            data in order to highlight the most interesting repositories and exclude others. You can find some concepts in the
+            <a href="https://github.com/kkamkou/gitmostwanted.com/wiki" target="_blank">Wiki</a>.
+          </p>
+          <h3>Why should I login?</h3>
+          <p>
+            GMW is like a personal database, where you store <code>liked</code> repositories. As soon as GWM
+            gets 200 registered users, it'll be possible to find people closer/similar to you by preference.
+            Right now you can synchronise your stars with GitHub and share the public profile link
+            (<code>http://gitmostwanted.com/USER_NAME</code>) with friends/teammates. Have fun!
+          </p>
+          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+        </div>
+
+        <section class="top-bar-section">
+          <ul class="right">
+            <li>
+              <a href="https://github.com/kkamkou/gitmostwanted.com" target="_blank">
+                <i class="fi-social-github" title="Fork it!"></i>
+                <span class="visible-for-small-only">Fork it!</span>
+              </a>
+            </li>
+            <li><a href="{{ url_for('static_content.sponsorship') }}">Sponsorship</a></li>
+            {% if not g.user %}
+              <li><a href="#" data-reveal-id="whatIsGmwModal">What is it?</a></li>
+              <li><a href="{{ url_for('user_oauth.login', scope='user:email') }}">Login via GitHub</a></li>
+            {% else %}
+              <li class="has-dropdown">
+                <a href="#">{{ g.user.username }}</a>
+                <ul class="dropdown">
+                    <li><a href="{{ url_for('user_profile.overview', name=g.user.username) }}">Profile</a></li>
+                    <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Unchecked</a></li>
+                    <li><a href="{{ url_for('user_oauth.logout') }}">Log-out</a></li>
+                </ul>
+              </li>
+            {% endif %}
+          </ul>
+        </section>
+      </nav>
+
       {% block body %}{% endblock %}
+
       <div class="footer-push"></div>
     </div>
 
