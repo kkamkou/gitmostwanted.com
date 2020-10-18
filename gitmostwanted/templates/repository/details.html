@@ -1,5 +1,5 @@
 <h3 id="repoDetailsModalTitle">
-  {{ entry.full_name }}
+  <span onclick="$('#repository-details').toggle()">{{ entry.full_name }}</span>
   <a href="{{ entry.html_url }}" target="_blank"><i class="fi-social-github"></i></a>
 </h3>
 
@@ -19,13 +19,26 @@
   <span class="label secondary" title="Subscribers">
     {{ entry.subscribers_count|number_humanize }} <i class="fi-eye"></i>
   </span>
+
+  {% if entry.license %}
+    <span class="label secondary" title="License">
+      {{ entry.license }} <i class="fi-shield"></i>
+    </span>
+  {% endif %}
 </div>
 
-<div id="repoDetailsChart" style="min-height: 200px;">Generating the popularity chart&hellip;</div>
+<div id="repoDetailsChart" style="min-height: 500px;">Generating the popularity chart&hellip;</div>
 
 {% if entry.description %}
   <div class="panel">{{ entry.description }}</div>
 {% endif %}
+
+<div id="repository-details" class="hide">
+  <span class="label" title="Status">{{ entry.status }}</span>
+  <span class="label secondary" title="Worth">{{ entry.worth }}</span>
+  <span class="label secondary" title="Status updated at">{{ entry.status_updated_at.isoformat(timespec='minutes') }}</span>
+  <span class="label secondary" title="Checked at">{{ entry.checked_at.isoformat(timespec='minutes') }}</span>
+</div>
 
 {% if means %}
   <script type="text/javascript">
