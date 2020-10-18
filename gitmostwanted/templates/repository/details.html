@@ -63,12 +63,15 @@
             axisTitlesPosition: 'in',
             chartArea: {top: 10, height: holder.height() - 55, width: holder.width() - 80},
             colors: ['#008CBA'],
-            hAxis: {gridlines: {color: '#EEE'}},
+            fontSize: 12,
+            hAxis: {gridlines: {color: '#EEE'},},
             legend: {position: 'none'},
+            lineWidth: 3,
+            pointsVisible: false,
             trendlines: {
-              0: {color: '#B9B9B9', degree: 2, showR2: true, tooltip: false, type: 'polynomial'}
+              0: {color: '#B9B9B9', degree: 2, enableInteractivity: false, showR2: true, tooltip: false, type: 'polynomial'}
             },
-            vAxis: {gridlines: {color: '#F3F3F3'}}
+            vAxis: {gridlines: {color: '#F3F3F3'}, viewWindowMode: 'maximized'}
           };
 
           (new google.visualization.ScatterChart(holder.get(0)))
