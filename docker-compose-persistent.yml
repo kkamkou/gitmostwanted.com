@@ -40,8 +40,8 @@ services:
     networks:
       - gmw_network
     labels:
-      - "traefik.http.routers.gmw_web.rule=Host(`gitmostwanted.com`)"
-      - "traefik.http.services.gmw_web.loadbalancer.server.port=5000"
+      - "traefik.https.routers.gmw_web.rule=Host(`gitmostwanted.com`)"
+      - "traefik.https.services.gmw_web.loadbalancer.server.port=5000"
 
 networks:
   gmw_network:
