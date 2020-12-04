@@ -5,8 +5,6 @@ services:
   gmw_db:
     volumes:
       - /home/github_gitmostwanted/data/mysql:/var/lib/mysql
-    labels:
-      - "traefik.enable=false"
     networks:
       - gmw_network
 
@@ -14,8 +12,6 @@ services:
     entrypoint: ["redis-server", "--appendonly", "yes"]
     volumes:
       - /home/github_gitmostwanted/data/redis:/data
-    labels:
-      - "traefik.enable=false"
     networks:
       - gmw_network
 
@@ -26,8 +22,6 @@ services:
     environment:
       - GMW_APP_ENV=production
       - GMW_APP_SETTINGS=/etc/gitmostwanted/instance.cfg
-    labels:
-      - "traefik.enable=false"
     networks:
       - gmw_network
 
@@ -39,9 +33,6 @@ services:
       - GMW_APP_SETTINGS=/etc/gitmostwanted/instance.cfg
     networks:
       - gmw_network
-    labels:
-      - "traefik.https.routers.gmw_web.rule=Host(`gitmostwanted.com`)"
-      - "traefik.https.services.gmw_web.loadbalancer.server.port=5000"
 
 networks:
   gmw_network:
