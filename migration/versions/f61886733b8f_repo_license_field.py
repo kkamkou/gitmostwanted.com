@@ -17,7 +17,7 @@ from sqlalchemy.dialects import mysql
 
 
 def upgrade():
-    op.add_column('repos', sa.Column('license', mysql.VARCHAR(length=15), nullable=True))
+    op.add_column('repos', sa.Column('license', mysql.VARCHAR(length=20), nullable=True))
     op.create_index(op.f('ix_repos_license'), 'repos', ['license'])
 
 
