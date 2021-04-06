@@ -50,7 +50,7 @@
         var data = google.visualization.arrayToDataTable([
           ['Date', 'Popularity']
           {% for mean in means %}
-            , [new Date("{{ mean.created_at }}"),  {{ mean.value }}]
+            , [new Date("{{ mean.created_at }}"),  {{ '%.1f' | format(mean.value) }}]
           {% endfor %}
         ]);
 
@@ -64,7 +64,7 @@
             chartArea: {top: 10, height: holder.height() - 55, width: holder.width() - 80},
             colors: ['#008CBA'],
             fontSize: 12,
-            hAxis: {gridlines: {color: '#EEE'},},
+            hAxis: {gridlines: {color: '#EEE'}},
             legend: {position: 'none'},
             lineWidth: 3,
             pointsVisible: false,
@@ -74,6 +74,7 @@
             vAxis: {gridlines: {color: '#F3F3F3'}, viewWindowMode: 'maximized'}
           };
 
+          (new google.visualization.DateFormat({pattern: "MMM dd, yyyy"})).format(data, 0);
           (new google.visualization.ScatterChart(holder.get(0)))
             .draw(data, options);
         }, 200);
