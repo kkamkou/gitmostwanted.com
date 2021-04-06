@@ -1,4 +1,4 @@
-from collections import Sized, Iterator
+from collections.abc import Sized, Iterator
 
 
 class ResultBase:
@@ -7,6 +7,7 @@ class ResultBase:
 
 class ResultWithRows(ResultBase, Iterator, Sized):
     def __init__(self, obj: str):
+        super().__init__()
         self.__iter = 0
         self.__total_rows = int(obj['totalRows'])
         self.__rows = list(map(lambda x: x['f'], obj['rows']) if self.__total_rows > 0 else [])
