@@ -1,0 +1,3 @@
+--source=.
+--exclude Readme.md
+--exclude .pylintrc
