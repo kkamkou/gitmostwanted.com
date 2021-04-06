@@ -1,6 +1,7 @@
 ![CI](https://github.com/kkamkou/gitmostwanted.com/workflows/CI/badge.svg)
 [![Code Climate](https://codeclimate.com/github/kkamkou/gitmostwanted.com/badges/gpa.svg)](https://codeclimate.com/github/kkamkou/gitmostwanted.com)
 [![Coverage Status](https://coveralls.io/repos/github/kkamkou/gitmostwanted.com/badge.svg?branch=HEAD)](https://coveralls.io/github/kkamkou/gitmostwanted.com?branch=HEAD)
+[![0pdd](https://www.0pdd.com/svg?name=kkamkou/gitmostwanted.com)](https://www.0pdd.com/p?name=kkamkou/gitmostwanted.com)
 
 # gitmostwanted
 Advanced explore of github.com. Our goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
