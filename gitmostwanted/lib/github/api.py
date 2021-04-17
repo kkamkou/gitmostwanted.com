@@ -3,8 +3,9 @@
  paginate.
 """
 
-from gitmostwanted.app import app
 import requests
+
+from gitmostwanted.app import app
 
 
 def fetch(uri: str, method: str = 'get', token: str = None):

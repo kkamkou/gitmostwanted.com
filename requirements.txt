@@ -8,4 +8,6 @@ google-api-python-client
 google-auth
 pymysql
 pyopenssl
+requests
 sentry-sdk[flask]
+sqlalchemy

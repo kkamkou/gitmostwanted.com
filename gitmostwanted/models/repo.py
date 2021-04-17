@@ -1,12 +1,28 @@
+from datetime import datetime
+
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.dialects.mysql import INTEGER, SMALLINT
 from sqlalchemy.sql import expression
-from gitmostwanted.lib.status import Status
+from werkzeug.datastructures import ImmutableMultiDict
+
+from gitmostwanted.app import app, db
 from gitmostwanted.lib.regex import SearchTerm
+from gitmostwanted.lib.status import Status
 from gitmostwanted.lib.text import TextWithoutSmilies, TextNormalized
 from gitmostwanted.lib.url import Url
-from gitmostwanted.app import app, db
-from werkzeug.datastructures import ImmutableMultiDict
-from datetime import datetime
+
+
+class RepoTopics(db.Model):
+    __tablename__ = 'repos_topics'
+    __table_args__ = (UniqueConstraint('repo_id', 'title', name='uc_repos_topics_repo_id_title'),)
+
+    id = db.Column(db.BigInteger, primary_key=True)
+    repo_id = db.Column(
+        db.BigInteger,
+        db.ForeignKey('repos.id', name='fk_repos_topics_repo_id', ondelete='CASCADE'),
+        nullable=False
+    )
+    title = db.Column(db.String(30), nullable=False)
 
 
 class Repo(db.Model):
@@ -38,6 +54,7 @@ class Repo(db.Model):
     subscribers_count = db.Column(
         INTEGER(unsigned=True), nullable=False, server_default='0', index=True
     )
+    topics = db.relationship(RepoTopics, cascade='all, delete-orphan')
     worth = db.Column(
         SMALLINT(display_width=2), index=True, nullable=False,
         server_default=str(app.config['REPOSITORY_WORTH_DEFAULT'])

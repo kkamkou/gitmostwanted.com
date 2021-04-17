@@ -4,7 +4,7 @@ from sqlalchemy.sql import func, expression
 
 from gitmostwanted.app import app, log, db, celery
 from gitmostwanted.lib.github import api
-from gitmostwanted.models.repo import Repo, RepoMean
+from gitmostwanted.models.repo import Repo, RepoMean, RepoTopics
 
 
 @celery.task()
@@ -53,9 +53,19 @@ def metadata_refresh(num_days):
                 setattr(repo, key, details[key])
 
         if 'license' in details and details['license'] is not None:
-            license = details['license'].get('key', 'unlicense')
-            if license != repo.license:
-                setattr(repo, 'license', license)
+            license_tmp = details['license'].get('key', 'unlicense')
+            if license_tmp != repo.license:
+                setattr(repo, 'license', license_tmp)
+
+        if 'topics' in details and len(details['topics']) > 0:
+            topics = set(map(lambda x: x[:30], details['topics']))
+            diff = topics.difference(repo.topics)
+            if len(diff) > 0:
+                log.info(
+                    'Repository {0}({1}) has a new list of topics: {2}'
+                    .format(repo.id, repo.full_name, diff)
+                )
+                repo.topics = list(map(lambda x: RepoTopics(title=x), topics))
 
         db.session.commit()
 
@@ -79,7 +89,7 @@ def metadata_trend(num_days):
         if is_worth_decreased(curr, prev):
             log.info(
                 'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
-                .format(result[0], curr, prev)
+                    .format(result[0], curr, prev)
             )
             db.session.query(Repo)\
                 .filter(Repo.id == result[0])\
