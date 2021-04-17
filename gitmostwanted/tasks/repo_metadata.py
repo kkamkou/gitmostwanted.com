@@ -89,7 +89,7 @@ def metadata_trend(num_days):
         if is_worth_decreased(curr, prev):
             log.info(
                 'Mean value of {0} is {1}, previous was {2}. The "worth" has been decreased by 1'
-                    .format(result[0], curr, prev)
+                .format(result[0], curr, prev)
             )
             db.session.query(Repo)\
                 .filter(Repo.id == result[0])\
