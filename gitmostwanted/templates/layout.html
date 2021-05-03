@@ -59,7 +59,7 @@
                 <span class="visible-for-small-only">Fork it!</span>
               </a>
             </li>
-            <li><a href="{{ url_for('static_content.sponsorship') }}">Sponsorship</a></li>
+            <!--<li><a href="{{ url_for('static_content.sponsorship') }}">Sponsorship</a></li>-->
             {% if not g.user %}
               <li><a href="#" data-reveal-id="whatIsGmwModal">What is it?</a></li>
               <li><a href="{{ url_for('user_oauth.login', scope='user:email') }}">Login via GitHub</a></li>
