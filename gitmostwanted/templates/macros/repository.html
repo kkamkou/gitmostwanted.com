@@ -21,9 +21,9 @@
 
         {% if repo.worth != config.REPOSITORY_WORTH_DEFAULT %}
           {% if repo.worth > config.REPOSITORY_WORTH_DEFAULT %}
-            <sup class="success label"><i class="fi-arrow-up"></i></sup>
+            <sup class="secondary label" title="Worth checking out"><i class="fi-lightbulb"></i></sup>
           {% else %}
-            <sup class="warning label"><i class="fi-arrow-down"></i></sup>
+            <sup class="secondary label" title="Losing popularity"><i class="fi-skull"></i></sup>
           {% endif %}
         {% endif %}
 
