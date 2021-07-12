@@ -43,3 +43,7 @@ jobs:
 
       - name: source-code upload
         run: rsync -az --delete-after artifacts/ ${{secrets.SSH_LOGIN}}@88.198.242.237:/home/github_gitmostwanted/artifacts/${GITHUB_SHA::8}
+
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: artifacts
