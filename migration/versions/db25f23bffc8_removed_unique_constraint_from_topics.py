@@ -15,7 +15,7 @@ depends_on = None
 
 def upgrade():
     op.create_index(op.f('ix_repos_topics_repo_id_title'), 'repos_topics', ['repo_id', 'title'])
-    op.drop_constraint('uc_repos_topics_repo_id_title', 'repos_topics', type_='foreignkey')
+    op.drop_constraint('uc_repos_topics_repo_id_title', 'repos_topics', type_='unique')
 
 
 def downgrade():
