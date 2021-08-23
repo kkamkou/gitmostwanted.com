@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -11,8 +11,7 @@ case "$1" in
         ;;
 
     celery)
-        [[ "${GMW_APP_ENV}" -ne "production" ]] \
-            && celery --app=gitmostwanted.app.celery purge --force || true
+        ([ "${GMW_APP_ENV}" != "production" ] && celery --app=gitmostwanted.app.celery purge --force) || true
         rm -f /tmp/celery.pid
         celery worker --app=gitmostwanted.app.celery --beat \
             --events --loglevel=INFO --pidfile=/tmp/celery.pid \
@@ -20,6 +19,6 @@ case "$1" in
         ;;
 
     *)
-        echo $"Usage: $0 {web|celery}"
+        echo "Usage: ${0} {web|celery}"
         exit 1
 esac
