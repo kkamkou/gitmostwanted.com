@@ -17,7 +17,7 @@ services:
   gmw_web:
     build: .
     user: gitmostwanted
-    entrypoint: ["sh", "/opt/gitmostwanted/entrypoint.sh", "web"]
+    entrypoint: ["bash", "/opt/gitmostwanted/entrypoint.sh", "web"]
     restart: unless-stopped
     volumes:
       - .:/opt/gitmostwanted
@@ -35,7 +35,7 @@ services:
     build: .
     user: gitmostwanted
     restart: unless-stopped
-    entrypoint: ["sh", "/opt/gitmostwanted/entrypoint.sh", "celery"]
+    entrypoint: ["bash", "/opt/gitmostwanted/entrypoint.sh", "celery"]
     environment:
       - GMW_APP_SETTINGS=/opt/gitmostwanted/instance.cfg
     volumes:
