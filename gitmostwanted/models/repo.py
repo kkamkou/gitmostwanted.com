@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from sqlalchemy import UniqueConstraint
 from sqlalchemy.dialects.mysql import INTEGER, SMALLINT
 from sqlalchemy.sql import expression
 from werkzeug.datastructures import ImmutableMultiDict
@@ -14,7 +13,7 @@ from gitmostwanted.lib.url import Url
 
 class RepoTopics(db.Model):
     __tablename__ = 'repos_topics'
-    __table_args__ = (UniqueConstraint('repo_id', 'title', name='uc_repos_topics_repo_id_title'),)
+    __table_args__ = (db.Index('ix_repos_topics_repo_id_title', 'repo_id', 'title'),)
 
     id = db.Column(db.BigInteger, primary_key=True)
     repo_id = db.Column(
