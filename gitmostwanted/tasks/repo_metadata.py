@@ -27,10 +27,11 @@ def metadata_refresh(num_days):
         .filter(
             (Repo.status != 'deleted') & (
                 Repo.checked_at.is_(None) |
-                (Repo.checked_at <= datetime.now() + timedelta(days=num_days * -1))
+                (Repo.checked_at <= datetime.now() - timedelta(days=num_days))
             )
         )\
-        .limit(300)  # GitHub allows only 3000 calls per day within a token
+        .limit(1000)  # GitHub allows only 5000 calls per day within a token
+
     for repo in repos:
         details, code = api.repo_info(repo.full_name)
         if not details:
@@ -81,7 +82,7 @@ def metadata_trend(num_days):
                 RepoMean.value.op('ORDER BY')(expression.desc(RepoMean.created_at))
             ), ',', 2)
         )\
-        .filter(RepoMean.created_at >= datetime.now() + timedelta(days=num_days * -1))\
+        .filter(RepoMean.created_at >= datetime.now() - timedelta(days=num_days))\
         .group_by(RepoMean.repo_id)\
         .all()
     for result in filter(lambda x: ',' in x[1], results):
