@@ -27,13 +27,14 @@
   {% endif %}
 </div>
 
-<div id="repoDetailsChart" style="min-height: 400px;">Generating the popularity chart&hellip;</div>
+<div id="repoDetailsChart" style="min-height: 400px; margin-bottom: 4px;">Generating the popularity chart&hellip;</div>
 
 {% if entry.description %}
   <div class="panel">{{ entry.description }}</div>
 {% endif %}
 
 <div id="repository-details" class="hide">
+  <span class="label secondary" title="Id">{{ entry.id }}</span>
   <span class="label" title="Status">{{ entry.status }}</span>
   <span class="label secondary" title="Worth">{{ entry.worth }}</span>
   <span class="label secondary" title="Status updated at">{{ entry.status_updated_at.isoformat(timespec='minutes') }}</span>
