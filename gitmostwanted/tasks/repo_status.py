@@ -26,8 +26,8 @@ def status_detect(num_days, num_segments):
         repo.status = 'hopeless' if val < 1 else 'promising'
 
         log.info(
-            'Repository status of {0}({1}) has been changed to {2} (was: {3})'
-            .format(repo.id, repo.full_name, repo.status, status_old)
+            'Repository status of {0}({1}) has been changed to {2} (was: {3}), val: {4}'
+            .format(repo.id, repo.full_name, repo.status, status_old, val)
         )
 
         db.session.merge(
