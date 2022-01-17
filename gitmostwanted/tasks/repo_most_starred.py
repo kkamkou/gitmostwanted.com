@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import datetime
 from time import sleep
 
 import arrow
@@ -30,7 +30,7 @@ def most_starred_day():
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
             LIMIT 50
-        """.format((date.today() - timedelta(1)).strftime('%Y%m%d'))
+        """.format(arrow.utcnow().shift(days=-1).format('YYYYMMDD'))
     )
 
 
