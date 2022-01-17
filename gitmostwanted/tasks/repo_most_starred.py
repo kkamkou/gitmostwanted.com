@@ -1,6 +1,8 @@
 from datetime import date, datetime, timedelta
 from time import sleep
 
+import arrow
+
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.lib.github.api import repo_info
@@ -34,48 +36,42 @@ def most_starred_day():
 
 @celery.task()
 def most_starred_week():
+    rng = arrow.utcnow().shift(days=-1).span('week')
     most_starred_sync(
         'ReportAllWeekly',
         """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
-                TABLE_DATE_RANGE_STRICT(
-                    [githubarchive:day.],
-                    DATE_ADD(CURRENT_TIMESTAMP(), -8, 'DAY'),
-                    DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
-                )
+                TABLE_DATE_RANGE([githubarchive:day.], TIMESTAMP('{0}'), TIMESTAMP('{1}'))
             WHERE type = 'WatchEvent'
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
             LIMIT 50
-        """
+        """.format(rng[0].format('YYYYMMDD'), rng[1].format('YYYYMMDD'))
     )
 
 
 @celery.task()
 def most_starred_month():
+    rng = arrow.utcnow().shift(days=-1).span('month')
     most_starred_sync(
         'ReportAllMonthly',
         """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
             FROM
-                TABLE_DATE_RANGE_STRICT(
-                    [githubarchive:day.],
-                    DATE_ADD(CURRENT_TIMESTAMP(), -31, 'DAY'),
-                    DATE_ADD(CURRENT_TIMESTAMP(), -1, 'DAY')
-                )
+                TABLE_DATE_RANGE([githubarchive:day.], TIMESTAMP('{0}'), TIMESTAMP('{1}'))
             WHERE type = 'WatchEvent'
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
             LIMIT 50
-        """
+        """.format(rng[0].format('YYYYMMDD'), rng[1].format('YYYYMMDD'))
     )
 
 
 def most_starred_sync(model_name: str, query: str):
-    app.logger.info('Importing repos of %s', model_name)
+    app.logger.info('Importing repos of %s (query: %s)', model_name, query)
 
     model = getattr(report, model_name)
     service = bigquery.instance(app)

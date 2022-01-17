@@ -11,3 +11,4 @@ pyopenssl
 requests
 sentry-sdk[flask]
 sqlalchemy
+arrow
