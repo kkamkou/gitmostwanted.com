@@ -22,6 +22,6 @@ def list_by_range(rng):
         query = query.add_columns(db.null())
     else:
         query = UserAttitude.join_by_user_and_repo(query, g.user.id, Repo.id)\
-            .add_columns(UserAttitude.attitude)
+            .with_entities(model, UserAttitude.attitude)
 
     return render_template('index.html', entries=query, languages=Repo.language_distinct(), rng=rng)
