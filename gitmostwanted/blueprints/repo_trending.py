@@ -1,8 +1,9 @@
-from flask import abort, Blueprint, g, request, render_template
-from gitmostwanted.models.repo import Repo, RepoMean
-from gitmostwanted.models.user import UserAttitude
-from gitmostwanted.models import report
+from flask import Blueprint, g, request, render_template
+
 from gitmostwanted.app import db
+from gitmostwanted.models import report
+from gitmostwanted.models.repo import Repo
+from gitmostwanted.models.user import UserAttitude
 
 repo_trending = Blueprint('repo_trending', __name__)
 

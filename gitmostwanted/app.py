@@ -1,9 +1,13 @@
-from flask import Flask
-from gitmostwanted.services import\
-    celery as service_celery, db as service_db, log as service_log, sentry as service_sentry
 from os import environ
 
+from flask import Flask
+
+from gitmostwanted.services import \
+    celery as service_celery, db as service_db, log as service_log, sentry as service_sentry
+
 env = environ.get('GMW_APP_ENV', 'development').capitalize()
+
+print("env:\n\tGMW_APP_ENV: " + env)
 
 app = Flask(__name__)
 app.config.from_object('gitmostwanted.config.Config' + env)
