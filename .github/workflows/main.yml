@@ -38,6 +38,9 @@ jobs:
           name: artifacts
           path: artifacts
 
+      - name: restoring permissions
+        run: chmod +x artifacts/entrypoint.sh
+
       - name: known_hosts update
         run: echo "${{secrets.KNOWN_HOSTS_ENTRY}}" >> ~/.ssh/known_hosts
 
