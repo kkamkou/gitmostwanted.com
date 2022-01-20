@@ -1,8 +1,9 @@
 # pylint: disable=C1001
 class Config:
+    ENVIRONMENT = 'development'
+
     # Custom
     DEBUG_FILE = '/tmp/gmw.log'
-    ENVIRONMENT = 'development'
 
     # Application related
     REPOSITORY_WORTH_SOLID = 6
@@ -19,10 +20,6 @@ class Config:
     SQLALCHEMY_POOL_RECYCLE = 3600
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Celery
-    CELERY_TIMEZONE = 'Europe/Berlin'
-    CELERY_BROKER_URL = ''
-
     # Oauth
     GITHUB_AUTH = (None, None)
     GITHUB_OAUTH = {}
@@ -34,13 +31,16 @@ class ConfigDevelopment(Config):
 
 
 class ConfigTesting(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     ENVIRONMENT = 'testing'
+
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     GITHUB_AUTH = ('Test', '')
     SECRET_KEY = 'testing'  # noqa
     TESTING = True
 
 
 class ConfigProduction(Config):
-    DEBUG = False
     ENVIRONMENT = 'production'
+
+    DEBUG = False
+

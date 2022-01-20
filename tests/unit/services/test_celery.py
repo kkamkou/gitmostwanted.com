@@ -1,25 +1,26 @@
-from gitmostwanted.services.celery import instance
-from unittest import TestCase, mock
+from unittest import mock
+
+import pytest
+
 from gitmostwanted.web import app
 
 
-class ServicesCeleryTestCase(TestCase):
-    def test_use_flask_context(self):
-        context = mock.MagicMock()
+@pytest.fixture(scope='session')
+def celery_parameters():
+    return {'task_cls': 'lib.celery.flask_context_task:FlaskContextTask'}
 
-        app.app_context = lambda: context
-        app.config['CELERY_ALWAYS_EAGER'] = True
-        app.config['CELERY_IGNORE_RESULT'] = True
 
-        cell = instance(app)
+def test_use_flask_context(celery_app, celery_worker):
+    context = mock.MagicMock()
 
-        class FakeTask(cell.Task):
-            name = 'test'
+    app.app_context = lambda: context
 
-            def run(self): pass
+    @celery_app.task
+    def test():
+        return 1
 
-        task = FakeTask()
-        cell.tasks.register(task)
-        task.delay()
+    celery_worker.reload()
 
-        context.__enter__.assert_called_once_with()
+    test.delay().get(timeout=10)
+
+    context.__enter__.assert_called_once_with()
