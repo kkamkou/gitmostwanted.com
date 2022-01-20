@@ -5,7 +5,7 @@ import arrow
 
 from gitmostwanted.app import app, db, celery
 from gitmostwanted.lib.bigquery.job import Job
-from gitmostwanted.lib.github.api import repo_info
+from gitmostwanted.lib.github.api import repo_info_by_id
 from gitmostwanted.models import report
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.services import bigquery
@@ -82,7 +82,7 @@ def most_starred_sync(model_name: str, query: str):
     job.execute()
 
     for row in results_of(job):
-        info, code = repo_info(row[1])
+        info, code = repo_info_by_id(row[0])
         if not info:
             continue
 

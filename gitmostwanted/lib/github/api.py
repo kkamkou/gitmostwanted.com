@@ -32,6 +32,10 @@ def fetch(uri: str, method: str = 'get', token: str = None):
     return json, result.status_code
 
 
+def repo_info_by_id(repo_id: int):
+    return fetch('repositories/{}'.format(repo_id))
+
+
 def repo_info(full_name: str):
     return fetch('repos/{}'.format(full_name))
 
