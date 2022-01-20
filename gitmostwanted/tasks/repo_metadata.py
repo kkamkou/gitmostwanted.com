@@ -47,8 +47,8 @@ def metadata_refresh(num_days):
         repo.checked_at = datetime.now()
 
         for key in [
-            'description', 'forks_count', 'homepage', 'language', 'open_issues_count', 'size',
-            'stargazers_count', 'subscribers_count'
+            'description', 'forks_count', 'full_name', 'homepage', 'language', 'open_issues_count',
+            'size', 'stargazers_count', 'subscribers_count'
         ]:
             if getattr(repo, key) != details[key]:
                 setattr(repo, key, details[key])
