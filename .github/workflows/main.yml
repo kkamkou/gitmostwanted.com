@@ -18,7 +18,7 @@ jobs:
       run: |
         mkdir /tmp/output
         mv -t /tmp/output alembic.ini requirements.txt Dockerfile gitmostwanted migration scripts \
-          docker-compose.yml docker-compose-persistent.yml entrypoint.sh
+          celeryconfig.py docker-compose.yml docker-compose-persistent.yml entrypoint.sh
 
     - uses: actions/upload-artifact@v2
       with:
