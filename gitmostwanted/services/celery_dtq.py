@@ -7,5 +7,5 @@ def instance(app):
         app.import_name,
         broker=app.config.get('CELERY_URL_BROKER'),
         backend=app.config.get('CELERY_URL_BACKEND'),
-        task_cls='lib.celery.flask_context_task:FlaskContextTask'
+        task_cls='gitmostwanted.lib.celery.flask_context_task:FlaskContextTask'
     )
