@@ -29,6 +29,12 @@
 
 <div id="repoDetailsChart" style="min-height: 400px; margin-bottom: 4px;">Generating the popularity chart&hellip;</div>
 
+<div style="margin-bottom: 10px;">
+  {% for topic in entry.topics %}
+    <span class="label secondary">{{ topic.title }}</span>
+  {% endfor %}
+</div>
+
 {% if entry.description %}
   <div class="panel">{{ entry.description }}</div>
 {% endif %}
@@ -76,7 +82,7 @@
             vAxis: {gridlines: {color: '#F3F3F3'}, viewWindowMode: 'maximized'}
           };
 
-          (new google.visualization.DateFormat({pattern: "MMM dd, yyyy"})).format(data, 0);
+          (new google.visualization.DateFormat({pattern: "MMM, yyyy"})).format(data, 0);
           (new google.visualization.ScatterChart(holder.get(0)))
             .draw(data, options);
         }, 200);
