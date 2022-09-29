@@ -43,8 +43,12 @@
   <span class="label secondary" title="Id">{{ entry.id }}</span>
   <span class="label" title="Status">{{ entry.status }}</span>
   <span class="label secondary" title="Worth">{{ entry.worth }}</span>
-  <span class="label secondary" title="Status updated at">{{ entry.status_updated_at.isoformat(timespec='minutes') }}</span>
-  <span class="label secondary" title="Checked at">{{ entry.checked_at.isoformat(timespec='minutes') }}</span>
+  {% if entry.status_updated_at %}
+    <span class="label secondary" title="Status updated at">{{ entry.status_updated_at.isoformat(timespec='minutes') }}</span>
+  {% endif %}
+  {% if entry.checked_at %}
+    <span class="label secondary" title="Checked at">{{ entry.checked_at.isoformat(timespec='minutes') }}</span>
+  {% endif %}
 </div>
 
 {% if means %}
