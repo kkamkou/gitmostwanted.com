@@ -30,10 +30,10 @@ beat_schedule = {
         'schedule': crontab(minute=0, hour=5, day_of_month=1),
         'args': [56]
     },
-    'most-starred-day': {
-        'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_day',
-        'schedule': crontab(minute=0, hour=8)
-    },
+#    'most-starred-day': {
+#        'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_day',
+#        'schedule': crontab(minute=0, hour=8)
+#    },
     'most-starred-week': {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_week',
         'schedule': crontab(minute=0, hour=9, day_of_week=0)

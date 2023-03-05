@@ -8,11 +8,11 @@ from gitmostwanted.models.user import UserAttitude
 repo_trending = Blueprint('repo_trending', __name__)
 
 
-@repo_trending.route('/trending/', defaults={'rng': 'day'})
+@repo_trending.route('/trending/', defaults={'rng': 'week'})
 @repo_trending.route('/trending/<rng>/')
 def list_by_range(rng):
-    map_list = {'day': 'ReportAllDaily', 'week': 'ReportAllWeekly', 'month': 'ReportAllMonthly'}
-    model = getattr(report, map_list.get(rng, map_list.get('day')))
+    map_list = {'week': 'ReportAllWeekly', 'month': 'ReportAllMonthly'}
+    model = getattr(report, map_list.get(rng, map_list.get('week')))
 
     query = Repo.filter_by_args(model.query, request.args)\
         .join(Repo)\

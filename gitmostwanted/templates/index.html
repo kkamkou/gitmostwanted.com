@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% if rng in ['day', 'week', 'month']  %}
+{% if rng in ['week', 'month']  %}
   {% set page_title = 'Trending ({})'.format(rng) %}
 {% else %}
   {% set page_title = 'Trending' %}
@@ -11,7 +11,7 @@
 
 {% block body %}
   <ul class="breadcrumbs">
-    {% for r in ['day', 'week', 'month'] %}
+    {% for r in ['week', 'month'] %}
       <li {{ 'class=unavailable' if rng == r }}>
         <a href="{{ url_for('repo_trending.list_by_range', rng=r) }}">{{ r|capitalize() }}</a>
       </li>
