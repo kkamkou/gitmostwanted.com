@@ -6,7 +6,7 @@ class ResultBase:
 
 
 class ResultWithRows(ResultBase, Iterator, Sized):
-    def __init__(self, obj: str):
+    def __init__(self, obj: dict):
         super().__init__()
         self.__iter = 0
         self.__total_rows = int(obj['totalRows'])

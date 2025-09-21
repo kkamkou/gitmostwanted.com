@@ -1,8 +1,8 @@
+import sys
+
 from gitmostwanted.app import log, db
 from gitmostwanted.models.repo import Repo, RepoMean
 from gitmostwanted.tasks.repo_metadata import is_worth_decreased
-import sys
-
 
 cache = {}
 query = db.session.query(Repo, RepoMean)\

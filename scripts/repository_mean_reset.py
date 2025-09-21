@@ -1,10 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+from time import sleep
+
 from gitmostwanted.app import app, db
 from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.models.repo import Repo, RepoMean, RepoStars
 from gitmostwanted.services import bigquery
 from gitmostwanted.tasks.repo_status import last_known_mean, repo_mean
-from time import sleep
 
 
 def results_of(j: Job):

@@ -46,7 +46,7 @@ def login():
 
 @user_oauth.route('/oauth/authorized')
 def authorized():
-    next_url = url_next() or url_for('/')
+    next_url = url_next() or url_for('repo_rating.top')
 
     resp = oauth.github.authorize_access_token()
     if resp is None or 'access_token' not in resp:
