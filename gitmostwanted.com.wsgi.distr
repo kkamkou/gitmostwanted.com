@@ -1,6 +1,8 @@
 import os
+import pathlib
 
 os.environ['GMW_APP_SETTINGS'] = '/path/to/instance.cfg'
 os.environ['GMW_APP_ENV'] = 'production'
+os.environ['GMW_GITHUB_SHA'] = pathlib.Path('github.sha').read_text().strip()
 
 from gitmostwanted.web import app as application

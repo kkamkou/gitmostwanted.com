@@ -10,6 +10,7 @@ env = environ.get('GMW_APP_ENV', 'development').capitalize()
 app = Flask(__name__)
 app.config.from_object('gitmostwanted.config.Config' + env)
 app.config.from_envvar('GMW_APP_SETTINGS', silent=True)
+app.config.from_prefixed_env(prefix='GMW')
 
 service_sentry.register(app)
 
