@@ -7,7 +7,7 @@ services:
       - MYSQL_DATABASE=gitmostwanted
       - MYSQL_USER=gitmostwanted
       - MYSQL_PASSWORD=gitmostwanted_pwd
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --mysql-native-password=ON
     restart: unless-stopped
 
   gmw_redis:
