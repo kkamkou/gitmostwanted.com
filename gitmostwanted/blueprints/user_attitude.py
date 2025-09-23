@@ -53,7 +53,7 @@ def list_by_attitude(attitude, page):
 
     q = Repo.filter_by_args(q, request.args)
 
-    entries = q.paginate(page if page > 0 else 1, per_page=20, error_out=False)
+    entries = q.paginate(page=page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:
         return list_by_attitude(attitude, entries.pages)
 

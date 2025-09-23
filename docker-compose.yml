@@ -1,13 +1,13 @@
 version: '3.7'
 services:
   gmw_db:
-    image: mysql:latest
+    image: mysql:8.4
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=gitmostwanted
       - MYSQL_USER=gitmostwanted
       - MYSQL_PASSWORD=gitmostwanted_pwd
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --default-authentication-plugin=mysql_native_password
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     restart: unless-stopped
 
   gmw_redis:
@@ -23,13 +23,13 @@ services:
       - .:/opt/gitmostwanted
     environment:
       - GMW_APP_SETTINGS=/opt/gitmostwanted/instance.cfg
+      - GMW_GITHUB_SHA=${GMW_GITHUB_SHA}
     depends_on:
       - gmw_db
       - gmw_redis
 # uncomment the following lines if you want to bind it to localhost (http://localhost:5000).
 #    ports:
 #      - "5000:5000"
-
 
   gmw_celery:
     build: .

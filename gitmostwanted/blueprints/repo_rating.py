@@ -36,7 +36,7 @@ def top(page, sort_by, filter_worth_by):
         query = UserAttitude.join_by_user_and_repo(query, g.user.id, Repo.id)\
             .add_columns(UserAttitude.attitude)
 
-    entries = query.paginate(page if page > 0 else 1, per_page=20, error_out=False)
+    entries = query.paginate(page=page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:
         return top(entries.pages, sort_by, filter_worth_by)
 

@@ -49,6 +49,13 @@ cp instance.cfg.distr instance.cfg
     -f docker-compose.yml -f docker-compose-persistent.yml up --detach
 ```
 
+## Backup tools
+```bash
+# gitmostwantedcom-gmw_db-1 - docker image tag for the db instance
+# gitmostwantedcom_default - the network of the db docker instance
+[sudo] docker run --rm --link gitmostwantedcom-gmw_db-1:db --network=gitmostwantedcom_default -p 8081:8080 adminer
+```
+
 ## Contribution
 - Fork this repo.
 - Modify the source code and create a new Pull Request.
