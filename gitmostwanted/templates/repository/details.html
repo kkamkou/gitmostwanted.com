@@ -58,7 +58,7 @@
       }
 
       google.charts.setOnLoadCallback(function () {
-        var data = google.visualization.arrayToDataTable([
+        const data = google.visualization.arrayToDataTable([
           ['Date', 'Popularity']
           {% for mean in means %}
             , [new Date("{{ mean.created_at }}"),  {{ '%.1f' | format(mean.value) }}]
@@ -66,17 +66,17 @@
         ]);
 
         setTimeout(function () {
-          var holder = $('#repoDetailsChart');
+          const holder = $('#repoDetailsChart');
           holder.width(holder.parent().width() + 10)
             .height(~~(holder.parent().height() * 0.6));
 
-          var options = {
+          const options = {
             axisTitlesPosition: 'in',
             chartArea: {top: 10, height: holder.height() - 55, width: holder.width() - 80},
             colors: ['#008CBA'],
             curveType: 'function',
             fontSize: 12,
-            hAxis: {gridlines: {color: '#EEE'}},
+            hAxis: {gridlines: {color: '#EEE'}, format: 'MMM yy', maxValue: new Date(Date.now() + 1209600000)},
             legend: {position: 'none'},
             lineWidth: 3,
             pointsVisible: false,
