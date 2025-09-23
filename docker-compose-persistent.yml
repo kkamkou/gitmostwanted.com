@@ -31,6 +31,7 @@ services:
     environment:
       - GMW_APP_ENV=production
       - GMW_APP_SETTINGS=/etc/gitmostwanted/instance.cfg
+      - GMW_GITHUB_SHA=${GMW_GITHUB_SHA}
     networks:
       - gmw_network
 
