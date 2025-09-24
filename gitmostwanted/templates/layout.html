@@ -29,24 +29,25 @@
           aria-hidden="true" role="dialog">
           <h3 id="whatIsGmwModalTitle">What's It All About?</h3>
           <p>
-            Each promoted or created by a famous company repository is popular (hyped) at the beginning. Also it is possible to have a
-            number of them which are in trend right now (artificial manipulations and/or publications, marketing, events).
-            This does not mean that these repositories are useful. As an example, compare two links:
+            Repositories often get hyped when they are created or promoted by big companies. Marketing, events, or other tricks
+            can also push some projects into the spotlight. But this doesn’t always mean the repositories are actually useful.<br>
+            For example, compare:
             <a href="{{ url_for('repo_rating.top') }}">Top</a> vs
             <a href="https://github.com/search?o=desc&q=stars%3A%3E10000&s=stars&type=Repositories" target="_blank">GitHub search</a>
-            ordered by stars
+            ordered by stars.
           </p>
           <p>
-            The gitmostwanted.com project analyses <a href="https://www.githubarchive.org/" target="_blank">githubarchive</a>
-            data in order to highlight the most interesting repositories and exclude others. You can find some concepts in the
+            The <strong>gitmostwanted.com</strong> project looks at
+            <a href="https://www.githubarchive.org/" target="_blank">githubarchive</a> and highlights the most interesting
+            repositories while filtering out the rest. You can read more in the
             <a href="https://github.com/kkamkou/gitmostwanted.com/wiki" target="_blank">Wiki</a>.
           </p>
-          <h3>Why should I login?</h3>
+          <h3>Why login?</h3>
           <p>
-            GMW is like a personal database, where you store <code>liked</code> repositories. As soon as GWM
-            gets 200 registered users, it'll be possible to find people closer/similar to you by preference.
-            Right now you can synchronise your stars with GitHub and share the public profile link
-            (<code>https://gitmostwanted.com/USER_NAME</code>) with friends/teammates. Have fun!
+            GMW is like your own database where you save <code>liked</code> repositories.
+            Once there are 200+ users, it will also suggest people with similar preferences.
+            For now, you can sync your GitHub stars and share your public profile link
+            (<code>https://gitmostwanted.com/USER_NAME</code>) with friends or teammates. Have fun!
           </p>
           <a class="close-reveal-modal" aria-label="Close">&#215;</a>
         </div>
