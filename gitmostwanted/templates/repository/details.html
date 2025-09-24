@@ -71,12 +71,23 @@
             .height(~~(holder.parent().height() * 0.6));
 
           const options = {
+            explorer: {
+              actions: ['dragToZoom', 'rightClickToReset'],
+              axis: 'horizontal',
+              keepInBounds: true,
+              maxZoomIn: 4,
+              maxZoomOut: 1
+            },
             axisTitlesPosition: 'in',
-            chartArea: {top: 10, height: holder.height() - 55, width: holder.width() - 80},
+            chartArea: {
+              top: 10,
+              height: holder.height() - 55,
+              width: holder.width() > 579 ? holder.width() - 80 : holder.width()
+            },
             colors: ['#008CBA'],
             curveType: 'function',
             fontSize: 12,
-            hAxis: {gridlines: {color: '#EEE'}, format: 'MMM yy', maxValue: new Date()},
+            hAxis: {gridlines: {color: '#EEE'}, format: 'MMM yy', maxValue: new Date(Date.now() + 1209600000)},
             legend: {position: 'none'},
             lineWidth: 3,
             pointsVisible: false,
