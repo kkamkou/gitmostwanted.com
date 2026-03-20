@@ -55,14 +55,19 @@ def stars_mature(num_days):
 def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
     query = """
         SELECT
-            COUNT(1) AS stars, YEAR(created_at) AS y, DAYOFYEAR(created_at) AS doy,
-            MONTH(created_at) as mon
-        FROM
-            TABLE_DATE_RANGE([githubarchive:day.], TIMESTAMP('{date_from}'), TIMESTAMP('{date_to}'))
+            COUNT(1) AS stars,
+            EXTRACT(YEAR FROM created_at) AS y,
+            EXTRACT(DAYOFYEAR FROM created_at) AS doy,
+            EXTRACT(MONTH FROM created_at) AS mon
+        FROM `githubarchive.day.*`
         WHERE
-            repo.id = {id} AND type IN ('WatchEvent', 'ForkEvent')
+            _TABLE_SUFFIX BETWEEN '{start_suffix}' AND '{end_suffix}'
+            AND repo.id = {id}
+            AND type IN ('WatchEvent', 'ForkEvent')
         GROUP BY y, mon, doy
     """
     return query.format(
-        id=repo_id, date_from=date_from.strftime('%Y-%m-%d'), date_to=date_to.strftime('%Y-%m-%d')
+        id=repo_id,
+        start_suffix=date_from.strftime('%Y%m%d'),
+        end_suffix=date_to.strftime('%Y%m%d')
     )
