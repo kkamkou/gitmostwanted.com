@@ -59,7 +59,7 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
             EXTRACT(YEAR FROM created_at) AS y,
             EXTRACT(DAYOFYEAR FROM created_at) AS doy,
             EXTRACT(MONTH FROM created_at) AS mon
-        FROM `githubarchive.day.*`
+        FROM `githubarchive.day.2*`
         WHERE
             _TABLE_SUFFIX BETWEEN '{start_suffix}' AND '{end_suffix}'
             AND repo.id = {id}
@@ -68,6 +68,6 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
     """
     return query.format(
         id=repo_id,
-        start_suffix=date_from.strftime('%Y%m%d'),
-        end_suffix=date_to.strftime('%Y%m%d')
+        start_suffix=date_from.strftime('%Y%m%d')[1:],
+        end_suffix=date_to.strftime('%Y%m%d')[1:]
     )

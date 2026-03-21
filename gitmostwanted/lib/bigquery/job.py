@@ -23,7 +23,8 @@ class Job:
             'configuration': {
                 'query': {
                     'query': query_str,
-                    'priority': 'BATCH' if batch else 'INTERACTIVE'
+                    'priority': 'BATCH' if batch else 'INTERACTIVE',
+                    'useLegacySql': False
                 }
             }
         }

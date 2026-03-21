@@ -42,14 +42,14 @@ def most_starred_week():
         """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
-            FROM `githubarchive.day.*`
+            FROM `githubarchive.day.2*`
             WHERE
                 _TABLE_SUFFIX BETWEEN '{0}' AND '{1}'
                 AND type = 'WatchEvent'
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
             LIMIT 50
-        """.format(rng[0].format('YYYYMMDD'), rng[1].format('YYYYMMDD'))
+        """.format(rng[0].format('YYYYMMDD')[1:], rng[1].format('YYYYMMDD')[1:])
     )
 
 
@@ -61,14 +61,14 @@ def most_starred_month():
         """
             SELECT
                 repo.id, repo.name, COUNT(1) AS cnt
-            FROM `githubarchive.day.*`
+            FROM `githubarchive.day.2*`
             WHERE
                 _TABLE_SUFFIX BETWEEN '{0}' AND '{1}'
                 AND type = 'WatchEvent'
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
             LIMIT 50
-        """.format(rng[0].format('YYYYMMDD'), rng[1].format('YYYYMMDD'))
+        """.format(rng[0].format('YYYYMMDD')[1:], rng[1].format('YYYYMMDD')[1:])
     )
 
 
