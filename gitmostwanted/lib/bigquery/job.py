@@ -18,7 +18,7 @@ class Job:
         body = {
             'jobReference': {
                 'projectId': self.__api.project_id,
-                'job_id': str(uuid4())
+                'jobId': str(uuid4())
             },
             'configuration': {
                 'query': {

@@ -7,7 +7,8 @@ from gitmostwanted.web import app
 
 @pytest.fixture(scope='session')
 def celery_parameters():
-    return {'task_cls': 'lib.celery.flask_context_task:FlaskContextTask'}
+    return {'task_cls': 'gitmostwanted.lib.celery.flask_context_task:FlaskContextTask'}
+
 
 
 def test_use_flask_context(celery_app, celery_worker):

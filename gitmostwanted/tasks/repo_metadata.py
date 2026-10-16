@@ -60,7 +60,7 @@ def metadata_refresh(num_days):
 
         if 'topics' in details and len(details['topics']) > 0:
             topics = set(map(lambda x: x[:30], details['topics']))
-            diff = topics.difference(repo.topics)
+            diff = topics.difference(set(t.title for t in repo.topics))
             if len(diff) > 0:
                 log.info(
                     'Repository {0}({1}) has a new list of topics: {2}'
