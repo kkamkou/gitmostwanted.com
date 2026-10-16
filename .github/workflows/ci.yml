@@ -17,7 +17,7 @@ jobs:
         python-version: ["3.10", "3.11", "3.12"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
 
@@ -43,7 +43,7 @@ jobs:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
 
@@ -68,7 +68,7 @@ jobs:
     needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
-      - uses: webfactory/ssh-agent@v0.8.0
+      - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{secrets.SSH_PRIVATE_KEY}}
 
@@ -86,6 +86,6 @@ jobs:
       - name: source-code upload
         run: rsync -az --delete-after artifacts/ ${{secrets.SSH_LOGIN}}@88.198.242.237:/home/github_gitmostwanted/artifacts/${GITHUB_SHA::8}
 
-      - uses: geekyeggo/delete-artifact@v4
+      - uses: geekyeggo/delete-artifact@v5
         with:
           name: artifacts
