@@ -26,7 +26,7 @@ def fetch(uri: str, method: str = 'get', token: str = None):
     except requests.HTTPError as e:
         app.logger.info(
             "Request to {} is failed ({}, {}): {}\n{}\n"
-            .format(result.url, method, e.strerror, result.status_code, result.text)
+            .format(result.url, method, str(e), result.status_code, result.text)
         )
 
     return json, result.status_code

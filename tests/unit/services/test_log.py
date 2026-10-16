@@ -8,3 +8,9 @@ class ServicesLogTestCase(TestCase):
         with mock.patch('logging.handlers.TimedRotatingFileHandler'):
             instance(app)
         self.assertEqual(app.logger.addHandler.call_count, 1)
+
+    def test_logging_handlers_imported(self):
+        import logging
+        self.assertTrue(hasattr(logging, 'handlers'))
+        self.assertTrue(hasattr(logging.handlers, 'TimedRotatingFileHandler'))
+

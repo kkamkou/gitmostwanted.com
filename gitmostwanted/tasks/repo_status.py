@@ -74,7 +74,15 @@ def repo_mean(lst: list, lst_size: int, num_segments: int, default_gap_val: floa
 
 
 def result_mean(chunks: GeneratorType, normalized_val: float):
-    return mean([normalized_val if variance(chunk) >= 1000 else mean(chunk) for chunk in chunks])
+    means = []
+    for chunk in chunks:
+        if not chunk:
+            continue
+        if len(chunk) < 2 or variance(chunk) >= 1000:
+            means.append(normalized_val)
+        else:
+            means.append(mean(chunk))
+    return mean(means) if means else normalized_val
 
 
 def result_normalize(lst: list, lst_size: int):

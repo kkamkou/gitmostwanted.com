@@ -1,4 +1,5 @@
-from unittest import TestCase
+from unittest import TestCase, mock
+from gitmostwanted.lib.bigquery.job import Job
 from gitmostwanted.lib.bigquery.result import ResultJob
 
 
@@ -73,3 +74,25 @@ class LibBigQueryResultTestCase(TestCase):
             'totalBytesProcessed': '5568164',
             'totalRows': '2'
         }
+
+
+class LibBigQueryJobTestCase(TestCase):
+    def test_job_insert_payload(self):
+        mock_api = mock.MagicMock()
+        mock_api.project_id = 'test-project'
+        mock_jobs = mock.MagicMock()
+        mock_api.jobs.return_value = mock_jobs
+        mock_jobs.insert.return_value.execute.return_value = {
+            'jobReference': {'jobId': 'job_123'}
+        }
+
+        job = Job(mock_api, 'SELECT 1')
+        job_id = job.execute()
+
+        self.assertEqual(job_id, 'job_123')
+        mock_jobs.insert.assert_called_once()
+        _, kwargs = mock_jobs.insert.call_args
+        body = kwargs['body']
+        self.assertIn('jobId', body['jobReference'])
+        self.assertNotIn('job_id', body['jobReference'])
+

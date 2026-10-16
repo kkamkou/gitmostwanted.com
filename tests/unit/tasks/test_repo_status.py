@@ -57,10 +57,24 @@ class TasksRepoStatusTestCase(TestCase):
         def gn_mixed():
             yield [10, 99999, 10]
 
+        def gn_single():
+            yield [42]
+
+        def gn_empty():
+            yield []
+
+        def gn_none():
+            return
+            yield
+
         self.assertEqual(result_mean(gn_normal(), 1), 15)
         self.assertEqual(result_mean(gn_mixed(), 1), 1)
         self.assertEqual(result_mean(gn_mixed(), 10), 10)
         self.assertEqual(result_mean(chain(gn_mixed(), gn_normal()), 1), 8)
+        self.assertEqual(result_mean(gn_single(), 5), 5)
+        self.assertEqual(result_mean(gn_empty(), 5), 5)
+        self.assertEqual(result_mean(gn_none(), 5), 5)
+
 
     def test_calculate_repo_mean(self):
         self.assertEqual(repo_mean([[0, 1], [1, 2], [2, 3], [3, 100]], 8, 2, 1000), 250.375)

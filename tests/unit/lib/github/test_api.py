@@ -28,6 +28,16 @@ class GithubApiTestCase(TestCase):
         )
         self.assertTupleEqual(api.rate_limit(), (self._body_rate_limit(), 200))
 
+    @responses.activate
+    def test_fetch_http_error(self):
+        responses.add(
+            responses.GET, 'https://api.github.com/error_endpoint', status=500,
+            body='Internal Server Error'
+        )
+        data, code = api.fetch('error_endpoint')
+        self.assertIsNone(data)
+        self.assertEqual(code, 500)
+
     def _body_rate_limit(self):
         return {
             'resources': {
@@ -38,7 +48,7 @@ class GithubApiTestCase(TestCase):
         }
 
     def _body_repo_info(self):
-        {
+        return {
             'id': 31981526,
             'name': 'gitmostwanted.com',
             'full_name': 'kkamkou/gitmostwanted.com',
