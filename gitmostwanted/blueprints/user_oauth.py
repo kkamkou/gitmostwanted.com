@@ -16,9 +16,9 @@ oauth.register(
 # @todo #1:15min move before_request method to a general place or a middleware
 @app.before_request
 def load_user_from_session():
-    if str(request.url_rule) in ['/logout']:
-        return None
-    g.user = User.query.get(session['user_id']) if 'user_id' in session else None
+    if str(request.url_rule) not in ['/logout']:
+        g.user = db.session.get(User, session['user_id']) if 'user_id' in session else None
+    return None
 
 
 # @todo #2:15min move after_request method to a general place or a middleware

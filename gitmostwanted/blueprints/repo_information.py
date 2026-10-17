@@ -1,4 +1,6 @@
 from flask import abort, Blueprint, render_template
+
+from gitmostwanted.app import db
 from gitmostwanted.models.repo import Repo, RepoMean
 
 repo_information = Blueprint('repo_information', __name__)
@@ -6,7 +8,7 @@ repo_information = Blueprint('repo_information', __name__)
 
 @repo_information.route('/repository/details/<int:repo_id>')
 def details(repo_id):
-    repo = Repo.query.get(repo_id)
+    repo = db.session.get(Repo, repo_id)
     if not repo:
         return abort(404)
 

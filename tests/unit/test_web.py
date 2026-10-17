@@ -1,8 +1,11 @@
-from gitmostwanted.blueprints.user_oauth import login, url_next
-from gitmostwanted.web import app
-from gitmostwanted.app import db
 from unittest import TestCase, skipIf
+
 import flask
+
+from gitmostwanted.app import db
+from gitmostwanted.blueprints.user_oauth import login, url_next
+from gitmostwanted.models.user import User
+from gitmostwanted.web import app
 
 
 class WebTestCase(TestCase):
@@ -50,3 +53,14 @@ class WebTestCase(TestCase):
             self.assertIsInstance(a.get('/logout'), flask.Response)
             self.assertNotIn('oauth_access_token', flask.session)
             self.assertNotIn('user_id', flask.session)
+
+    def test_load_user_from_session(self):
+        user = User(github_id=999, username='testuser', email='test@example.com')
+        db.session.add(user)
+        db.session.commit()
+
+        with self.app as c:
+            with c.session_transaction() as sess:
+                sess['user_id'] = user.id
+            c.get('/')
+            self.assertEqual(flask.g.user.id, user.id)

@@ -1,8 +1,21 @@
+from datetime import date, datetime
 from unittest import TestCase
-from gitmostwanted.models.repo import Repo
+
+from gitmostwanted.app import db
+from gitmostwanted.models.repo import Repo, RepoMean
 
 
 class ModelsRepoTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from gitmostwanted.app import db
+        db.create_all()
+
+    @classmethod
+    def tearDownClass(cls):
+        from gitmostwanted.app import db
+        db.drop_all()
+
     def test_accept_kwargs_in_constructor(self):
         entry = Repo(language='python')
 
@@ -37,3 +50,14 @@ class ModelsRepoTestCase(TestCase):
 
     def test_handle_incorrect_status(self):
         self.assertRaises(ValueError, Repo, status='abc')
+
+    def test_repo_mean_default_date(self):
+        r = Repo(id=1, full_name='test/repo', html_url='http://example.com', created_at=datetime.now(), name='repo')
+        db.session.add(r)
+        db.session.commit()
+
+        rm = RepoMean(repo_id=1, value=12.5)
+        db.session.add(rm)
+        db.session.flush()
+        self.assertEqual(rm.created_at, date.today())
+        db.session.rollback()

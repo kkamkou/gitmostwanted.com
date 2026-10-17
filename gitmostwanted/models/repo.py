@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy.dialects.mysql import INTEGER, SMALLINT
 from sqlalchemy.sql import expression
@@ -139,6 +139,6 @@ class RepoMean(db.Model):
     )
     created_at = db.Column(
         db.Date,
-        default=datetime.today().strftime('%Y-%m-%d'), nullable=False, primary_key=True
+        default=date.today, nullable=False, primary_key=True
     )
     value = db.Column(db.Float(), nullable=False)

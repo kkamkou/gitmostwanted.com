@@ -1,7 +1,8 @@
 from flask import abort, Blueprint, g, jsonify, render_template, request
-from gitmostwanted.models.user import UserAttitude
-from gitmostwanted.models.repo import Repo
+
 from gitmostwanted.app import db
+from gitmostwanted.models.repo import Repo
+from gitmostwanted.models.user import UserAttitude
 
 user_attitude = Blueprint('user_attitude', __name__)
 
@@ -21,7 +22,7 @@ def change(repo_id, attitude):
     if not verify_attitude(attitude):
         return abort(403)
 
-    if not Repo.query.get(repo_id):
+    if not db.session.get(Repo, repo_id):
         return abort(404)
 
     db.session.merge(UserAttitude(user_id=g.user.id, repo_id=repo_id, attitude=attitude))
