@@ -16,7 +16,7 @@
 
         {% if repo.status in ('promising', 'hopeless') %}
           <sup class="{{ 'success' if repo.status == 'promising' else 'warning' }} label"
-            title="{{ repo.status|capitalize() }}">{{ repo.status[0] }}</sup>
+            title="{{ 'Promising / Rising (Strong star growth momentum)' if repo.status == 'promising' else 'Hopeless (Declining star growth momentum)' }}">{{ repo.status[0] }}</sup>
         {% endif %}
 
         {% if repo.worth != config.REPOSITORY_WORTH_DEFAULT %}
@@ -103,7 +103,7 @@
           </div>
           <div class="small-1 columns">
             <span class="label success has-tip" data-tooltip aria-haspopup="true"
-              title="Show only Promising repositories">P</span>
+              title="Show only Promising (Rising) repositories with star growth momentum">P</span>
           </div>
 
           <div class="small-2 medium-2 text-right columns">
@@ -115,7 +115,7 @@
           </div>
           <div class="small-1 columns">
             <span class="label warning has-tip" data-tooltip aria-haspopup="true"
-              title="Show only Hopeless repositories">H</span>
+              title="Show only Hopeless repositories with declining star growth">H</span>
           </div>
 
           <div class="small-2 medium-2 text-right columns">
