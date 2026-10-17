@@ -6,6 +6,16 @@
 # gitmostwanted
 Advanced explore of github.com. Our goal is to highlight the most interesting repositories and exclude others. You can find some concepts in the [Wiki](https://github.com/kkamkou/gitmostwanted.com/wiki).
 
+## Terminology & Categories
+
+| Category / Badge             | Meaning                                                                                                      |
+|:-----------------------------|:-------------------------------------------------------------------------------------------------------------|
+| **Wanted**                   | Repositories liked or added to a watchlist by registered community users.                                    |
+| **Rising** (`P` / Promising) | Repositories showing strong positive star growth trajectory and momentum based on BigQuery daily statistics. |
+| **Solid**                    | High-worth repositories that have achieved sustained credibility (`worth >= 6`).                             |
+| **Hopeless** (`H`)           | Repositories with declining or stagnant star growth momentum.                                                |
+| **Mature** (`m`)             | Repositories created more than 3 months ago.                                                                 |
+
 If you would like to help the project, please consider these topics:
 - GMW uses [Google BigQuery](https://cloud.google.com/bigquery/pricing) and the service is **pretty** expensive.
 - GMW is located on a private machine.
