@@ -45,9 +45,15 @@ results = Repo.query\
     .yield_per(10)\
     .all()
 for result in results:
+    if now.month == 1:
+        date_from = datetime(year=now.year - 1, month=1, day=1)
+        date_to = datetime(year=now.year - 1, month=12, day=1)
+    else:
+        date_from = datetime(year=now.year, month=1, day=1)
+        date_to = datetime(year=now.year, month=now.month - 1, day=1)
+
     query = query_stars_by_repo(
-        repo_id=result.id, date_from=datetime(year=now.year, month=1, day=1),
-        date_to=datetime(year=now.year, month=now.month-1, day=1)
+        repo_id=result.id, date_from=date_from, date_to=date_to
     )
 
     job = Job(service, query)

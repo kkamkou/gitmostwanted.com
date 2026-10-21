@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from statistics import variance, mean
 from types import GeneratorType
 
@@ -12,11 +12,17 @@ from gitmostwanted.models.repo import Repo, RepoStars, RepoMean
 def status_detect(num_days, num_segments):
     repos = Repo.query.filter(Repo.status == 'unknown')
     for repo in repos:
-        result = db.session.query(RepoStars.day, RepoStars.stars)\
+        result = db.session.query(RepoStars.year, RepoStars.day, RepoStars.stars)\
             .filter(RepoStars.repo_id == repo.id)\
-            .order_by(expression.asc(RepoStars.day))\
+            .order_by(expression.asc(RepoStars.year), expression.asc(RepoStars.day))\
             .limit(num_days)\
             .all()
+
+        if result:
+            result = [
+                ((datetime(y, 1, 1) + timedelta(days=d - 1)).toordinal(), s)
+                for y, d, s in result
+            ]
 
         val = 0 if not result else repo_mean(
             result, num_days, num_segments, last_known_mean(repo.id)
@@ -30,9 +36,7 @@ def status_detect(num_days, num_segments):
             .format(repo.id, repo.full_name, repo.status, status_old, val)
         )
 
-        db.session.merge(
-            RepoMean(repo=repo, value=val, created_at=datetime.today().strftime('%Y-%m-%d'))
-        )
+        db.session.merge(RepoMean(repo=repo, value=val, created_at=date.today()))
         db.session.commit()
 
 
