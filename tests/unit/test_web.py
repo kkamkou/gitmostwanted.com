@@ -29,6 +29,12 @@ class WebTestCase(TestCase):
             self.app.get('/').data.decode('utf-8')
         )
 
+    def test_trending_ranges(self):
+        for rng in ['week', 'month', 'quarter', 'year']:
+            res = self.app.get('/trending/{}'.format(rng), follow_redirects=True)
+            self.assertEqual(res.status_code, 200)
+            self.assertIn('Trending ({})'.format(rng), res.data.decode('utf-8'))
+
     @skipIf('OAUTH_GITHUB' not in app.config, "Requires GitHub auth")
     def test_login_via_github(self):
         with app.test_request_context():

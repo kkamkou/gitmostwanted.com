@@ -10,6 +10,18 @@ from gitmostwanted.models import report
 from gitmostwanted.models.repo import Repo
 from gitmostwanted.services import bigquery
 
+SQL_MOST_STARRED_RANGE = """
+    SELECT
+        repo.id, repo.name, COUNT(1) AS cnt
+    FROM `githubarchive.day.2*`
+    WHERE
+        _TABLE_SUFFIX BETWEEN '{0}' AND '{1}'
+        AND type = 'WatchEvent'
+    GROUP BY repo.id, repo.name
+    ORDER BY cnt DESC
+    LIMIT 50
+"""
+
 
 def results_of(j: Job):
     while not j.complete:
@@ -34,42 +46,32 @@ def most_starred_day():
     )
 
 
+def most_starred_by_span(model_name: str, span_name: str):
+    rng = arrow.utcnow().shift(days=-1).span(span_name)
+    most_starred_sync(
+        model_name,
+        SQL_MOST_STARRED_RANGE.format(rng[0].format('YYYYMMDD')[1:], rng[1].format('YYYYMMDD')[1:])
+    )
+
+
 @celery.task()
 def most_starred_week():
-    rng = arrow.utcnow().shift(days=-1).span('week')
-    most_starred_sync(
-        'ReportAllWeekly',
-        """
-            SELECT
-                repo.id, repo.name, COUNT(1) AS cnt
-            FROM `githubarchive.day.2*`
-            WHERE
-                _TABLE_SUFFIX BETWEEN '{0}' AND '{1}'
-                AND type = 'WatchEvent'
-            GROUP BY repo.id, repo.name
-            ORDER BY cnt DESC
-            LIMIT 50
-        """.format(rng[0].format('YYYYMMDD')[1:], rng[1].format('YYYYMMDD')[1:])
-    )
+    most_starred_by_span('ReportAllWeekly', 'week')
 
 
 @celery.task()
 def most_starred_month():
-    rng = arrow.utcnow().shift(days=-1).span('month')
-    most_starred_sync(
-        'ReportAllMonthly',
-        """
-            SELECT
-                repo.id, repo.name, COUNT(1) AS cnt
-            FROM `githubarchive.day.2*`
-            WHERE
-                _TABLE_SUFFIX BETWEEN '{0}' AND '{1}'
-                AND type = 'WatchEvent'
-            GROUP BY repo.id, repo.name
-            ORDER BY cnt DESC
-            LIMIT 50
-        """.format(rng[0].format('YYYYMMDD')[1:], rng[1].format('YYYYMMDD')[1:])
-    )
+    most_starred_by_span('ReportAllMonthly', 'month')
+
+
+@celery.task()
+def most_starred_quarter():
+    most_starred_by_span('ReportAllQuarterly', 'quarter')
+
+
+@celery.task()
+def most_starred_year():
+    most_starred_by_span('ReportAllYearly', 'year')
 
 
 def most_starred_sync(model_name: str, query: str):

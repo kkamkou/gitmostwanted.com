@@ -42,6 +42,14 @@ beat_schedule = {
         'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_month',
         'schedule': crontab(minute=0, hour=10, day_of_month=1)
     },
+    'most-starred-quarter': {
+        'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_quarter',
+        'schedule': crontab(minute=0, hour=10, day_of_month=1, month_of_year='1,4,7,10')
+    },
+    'most-starred-year': {
+        'task': 'gitmostwanted.tasks.repo_most_starred.most_starred_year',
+        'schedule': crontab(minute=0, hour=11, day_of_month=1, month_of_year=1)
+    },
     'status-refresh': {
         'task': 'gitmostwanted.tasks.repo_status.status_refresh',
         'schedule': crontab(minute=0, hour=3),

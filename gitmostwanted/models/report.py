@@ -1,6 +1,7 @@
+from sqlalchemy.ext.declarative import declared_attr
+
 from gitmostwanted.app import db
 from gitmostwanted.models.repo import Repo
-from sqlalchemy.ext.declarative import declared_attr
 
 
 class ReportBase(db.Model):
@@ -27,3 +28,11 @@ class ReportAllWeekly(ReportBase):
 
 class ReportAllMonthly(ReportBase):
     __tablename__ = 'report_all_monthly'
+
+
+class ReportAllQuarterly(ReportBase):
+    __tablename__ = 'report_all_quarterly'
+
+
+class ReportAllYearly(ReportBase):
+    __tablename__ = 'report_all_yearly'
