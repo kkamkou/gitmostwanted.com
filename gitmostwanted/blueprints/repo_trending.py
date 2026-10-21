@@ -11,7 +11,12 @@ repo_trending = Blueprint('repo_trending', __name__)
 @repo_trending.route('/trending/', defaults={'rng': 'week'})
 @repo_trending.route('/trending/<rng>/')
 def list_by_range(rng):
-    map_list = {'week': 'ReportAllWeekly', 'month': 'ReportAllMonthly'}
+    map_list = {
+        'week': 'ReportAllWeekly',
+        'month': 'ReportAllMonthly',
+        'quarter': 'ReportAllQuarterly',
+        'year': 'ReportAllYearly'
+    }
     model = getattr(report, map_list.get(rng, map_list.get('week')))
 
     query = Repo.filter_by_args(model.query, request.args)\
