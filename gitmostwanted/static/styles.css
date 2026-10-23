@@ -1222,6 +1222,40 @@ a:hover {
   font-size: 0.9rem;
 }
 
+.chart-era-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.era-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.era-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.era-swatch-covid {
+  background: rgba(245, 158, 11, 0.22);
+  border: 1px dashed rgba(245, 158, 11, 0.7);
+}
+
+.era-swatch-ai {
+  background: rgba(168, 85, 247, 0.22);
+  border: 1px dashed rgba(168, 85, 247, 0.7);
+}
+
 .details-chart {
   width: 100%;
   min-height: 340px;

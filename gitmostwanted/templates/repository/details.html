@@ -50,6 +50,16 @@
   {% endif %}
 
   {% if mean_rows %}
+    <div class="chart-era-legend" aria-label="Historical eras">
+      <span class="era-legend-item">
+        <span class="era-swatch era-swatch-covid"></span>
+        <span>COVID (2020&ndash;2022)</span>
+      </span>
+      <span class="era-legend-item">
+        <span class="era-swatch era-swatch-ai"></span>
+        <span>AI Boom (Late 2022&ndash;Present)</span>
+      </span>
+    </div>
     <div id="repoDetailsChart" class="details-chart">Generating the popularity chart&hellip;</div>
   {% else %}
     <div id="repoDetailsChart" class="details-chart details-chart-empty">
@@ -81,6 +91,113 @@
 {% if mean_rows %}
   <script type="text/javascript">
     (function () {
+      function drawEraOverlays(chart, holder, isDark, maxHorizon) {
+        var svg = holder.querySelector('svg');
+        if (!svg || !chart) {
+          return;
+        }
+        svg.querySelectorAll('.gmw-era-overlay').forEach(function (el) {
+          el.remove();
+        });
+
+        var cli = chart.getChartLayoutInterface();
+        if (!cli) {
+          return;
+        }
+        var bbox = cli.getChartAreaBoundingBox();
+        if (!bbox || !bbox.width || !bbox.height) {
+          return;
+        }
+
+        var eras = [
+          {
+            label: 'COVID',
+            start: new Date('2020-03-01T00:00:00Z'),
+            end: new Date('2022-04-01T00:00:00Z'),
+            fill: isDark ? 'rgba(245, 158, 11, 0.10)' : 'rgba(245, 158, 11, 0.12)',
+            stroke: isDark ? 'rgba(245, 158, 11, 0.32)' : 'rgba(217, 119, 6, 0.35)',
+            text: isDark ? 'rgba(251, 191, 36, 0.78)' : 'rgba(180, 83, 9, 0.82)'
+          },
+          {
+            label: 'AI Boom',
+            start: new Date('2022-11-30T00:00:00Z'),
+            end: maxHorizon,
+            fill: isDark ? 'rgba(168, 85, 247, 0.11)' : 'rgba(147, 51, 234, 0.10)',
+            stroke: isDark ? 'rgba(168, 85, 247, 0.35)' : 'rgba(147, 51, 234, 0.32)',
+            text: isDark ? 'rgba(192, 132, 252, 0.85)' : 'rgba(126, 34, 206, 0.85)'
+          }
+        ];
+
+        var ns = 'http://www.w3.org/2000/svg';
+        var group = document.createElementNS(ns, 'g');
+        group.setAttribute('class', 'gmw-era-overlay');
+        group.setAttribute('style', 'pointer-events: none;');
+
+        var leftBound = bbox.left;
+        var rightBound = bbox.left + bbox.width;
+
+        eras.forEach(function (era) {
+          var rawX1 = cli.getXLocation(era.start);
+          var rawX2 = cli.getXLocation(era.end);
+          if (typeof rawX1 !== 'number' || typeof rawX2 !== 'number' || isNaN(rawX1) || isNaN(rawX2)) {
+            return;
+          }
+
+          var x1 = Math.max(leftBound, Math.min(rightBound, rawX1));
+          var x2 = Math.max(leftBound, Math.min(rightBound, rawX2));
+          var width = x2 - x1;
+          if (width <= 2) {
+            return;
+          }
+
+          var rect = document.createElementNS(ns, 'rect');
+          rect.setAttribute('x', x1);
+          rect.setAttribute('y', bbox.top);
+          rect.setAttribute('width', width);
+          rect.setAttribute('height', bbox.height);
+          rect.setAttribute('fill', era.fill);
+          group.appendChild(rect);
+
+          if (rawX1 >= leftBound && rawX1 <= rightBound) {
+            var startLine = document.createElementNS(ns, 'line');
+            startLine.setAttribute('x1', x1);
+            startLine.setAttribute('y1', bbox.top);
+            startLine.setAttribute('x2', x1);
+            startLine.setAttribute('y2', bbox.top + bbox.height);
+            startLine.setAttribute('stroke', era.stroke);
+            startLine.setAttribute('stroke-width', '1');
+            startLine.setAttribute('stroke-dasharray', '4 4');
+            group.appendChild(startLine);
+          }
+
+          if (rawX2 >= leftBound && rawX2 <= rightBound) {
+            var endLine = document.createElementNS(ns, 'line');
+            endLine.setAttribute('x1', x2);
+            endLine.setAttribute('y1', bbox.top);
+            endLine.setAttribute('x2', x2);
+            endLine.setAttribute('y2', bbox.top + bbox.height);
+            endLine.setAttribute('stroke', era.stroke);
+            endLine.setAttribute('stroke-width', '1');
+            endLine.setAttribute('stroke-dasharray', '4 4');
+            group.appendChild(endLine);
+          }
+
+          if (width >= 48) {
+            var label = document.createElementNS(ns, 'text');
+            label.setAttribute('x', x1 + 8);
+            label.setAttribute('y', bbox.top + 16);
+            label.setAttribute('fill', era.text);
+            label.setAttribute('font-family', 'JetBrains Mono, monospace');
+            label.setAttribute('font-size', '10');
+            label.setAttribute('font-weight', '600');
+            label.textContent = era.label;
+            group.appendChild(label);
+          }
+        });
+
+        svg.appendChild(group);
+      }
+
       function renderRepoChart() {
         var holder = document.getElementById('repoDetailsChart');
         if (!holder || typeof google === 'undefined' || !google.visualization || !google.visualization.ScatterChart) {
@@ -98,6 +215,7 @@
         var textColor = isDark ? '#94a3b8' : '#64748b';
         var accentColor = isDark ? '#38bdf8' : '#0284c7';
         var trendColor = isDark ? '#475569' : '#cbd5e1';
+        var maxHorizon = new Date(Date.now() + 1209600000);
 
         var options = {
           backgroundColor: 'transparent',
@@ -125,7 +243,7 @@
             gridlines: {color: gridColor},
             textStyle: {color: textColor},
             format: 'MMM yy',
-            maxValue: new Date(Date.now() + 1209600000)
+            maxValue: maxHorizon
           },
           legend: {position: 'none'},
           lineWidth: 3,
@@ -141,7 +259,28 @@
         };
 
         (new google.visualization.DateFormat({pattern: "MMM, yyyy"})).format(data, 0);
-        (new google.visualization.ScatterChart(holder)).draw(data, options);
+        var chart = new google.visualization.ScatterChart(holder);
+
+        google.visualization.events.addListener(chart, 'ready', function () {
+          drawEraOverlays(chart, holder, isDark, maxHorizon);
+        });
+
+        chart.draw(data, options);
+
+        if (!holder.__gmwZoomBound) {
+          holder.__gmwZoomBound = true;
+          ['mouseup', 'contextmenu', 'touchend'].forEach(function (evtName) {
+            holder.addEventListener(evtName, function () {
+              requestAnimationFrame(function () {
+                if (holder.__gmwChartInstance) {
+                  var darkNow = document.documentElement.getAttribute('data-theme') !== 'light';
+                  drawEraOverlays(holder.__gmwChartInstance, holder, darkNow, maxHorizon);
+                }
+              });
+            });
+          });
+        }
+        holder.__gmwChartInstance = chart;
       }
 
       window.__gmwRenderActiveChart = renderRepoChart;
