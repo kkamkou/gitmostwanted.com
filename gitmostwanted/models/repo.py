@@ -21,7 +21,7 @@ class RepoTopics(db.Model):
         db.ForeignKey('repos.id', name='fk_repos_topics_repo_id', ondelete='CASCADE'),
         nullable=False
     )
-    title = db.Column(db.String(30), nullable=False)
+    title = db.Column(db.String(30), nullable=False, index=True)
 
 
 class Repo(db.Model):

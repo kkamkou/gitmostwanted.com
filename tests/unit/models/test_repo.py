@@ -2,7 +2,7 @@ from datetime import date, datetime
 from unittest import TestCase
 
 from gitmostwanted.app import db
-from gitmostwanted.models.repo import Repo, RepoMean
+from gitmostwanted.models.repo import Repo, RepoMean, RepoTopics
 
 
 class ModelsRepoTestCase(TestCase):
@@ -61,3 +61,9 @@ class ModelsRepoTestCase(TestCase):
         db.session.flush()
         self.assertEqual(rm.created_at, date.today())
         db.session.rollback()
+
+    def test_repo_topics_index(self):
+        index_columns = [
+            set(col.name for col in idx.columns) for idx in RepoTopics.__table__.indexes
+        ]
+        self.assertIn({'title'}, index_columns)

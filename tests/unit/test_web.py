@@ -1,9 +1,11 @@
+from datetime import datetime
 from unittest import TestCase, skipIf
 
 import flask
 
 from gitmostwanted.app import db
 from gitmostwanted.blueprints.user_oauth import login, url_next
+from gitmostwanted.models.repo import Repo, RepoTopics
 from gitmostwanted.models.user import User
 from gitmostwanted.web import app
 
@@ -28,6 +30,32 @@ class WebTestCase(TestCase):
             '<title>The most interesting repositories (solid) - GitHub Explore</title>',
             self.app.get('/').data.decode('utf-8')
         )
+
+    def test_top_by_topic(self):
+        topic = 'python'
+        repo_matched = Repo(
+            id=101, full_name='org/matched', name='matched', html_url='https://example.com/1',
+            created_at=datetime.now(), mature=True, worth_max=9, worth=9, stargazers_count=100,
+            topics=[RepoTopics(id=1, title=topic)]
+        )
+        repo_other = Repo(
+            id=102, full_name='org/other', name='other', html_url='https://example.com/2',
+            created_at=datetime.now(), mature=True, worth_max=9, worth=9, stargazers_count=200,
+            topics=[RepoTopics(id=2, title='golang')]
+        )
+        db.session.add_all([repo_matched, repo_other])
+        db.session.commit()
+
+        details = self.app.get('/repository/details/101').data.decode('utf-8')
+        self.assertIn('/topic/{}/'.format(topic), details)
+
+        body = self.app.get('/topic/{}/'.format(topic)).data.decode('utf-8')
+        self.assertIn(repo_matched.full_name, body)
+        self.assertNotIn(repo_other.full_name, body)
+
+        db.session.delete(repo_matched)
+        db.session.delete(repo_other)
+        db.session.commit()
 
     def test_trending_ranges(self):
         for rng in ['week', 'month', 'quarter', 'year']:

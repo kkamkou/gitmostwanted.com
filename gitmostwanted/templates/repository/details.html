@@ -31,7 +31,9 @@
 
 <div style="margin-bottom: 10px;">
   {% for topic in entry.topics %}
-    <span class="label secondary">{{ topic.title }}</span>
+    <span class="label secondary">
+      <a href="{{ url_for('repo_rating.top', topic=topic.title) }}">{{ topic.title }}</a>
+    </span>
   {% endfor %}
 </div>
 

@@ -31,13 +31,17 @@
     {% call repository_filter(languages) %}
       <dl class="sub-nav">
         <dd {{ 'class=active' if sort_by == 'wanted' }}><a
-          href="{{ url_for('repo_rating.top', sort_by='wanted', page=1, filter_worth_by=filter_worth_by) }}">Wanted</a></dd>
+          href="{{ url_for('repo_rating.top', sort_by='wanted', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">Wanted</a></dd>
         <dd {{ 'class=active' if sort_by == 'stars' }}><a
-          href="{{ url_for('repo_rating.top', sort_by='stars', page=1, filter_worth_by=filter_worth_by) }}">Stars</a></dd>
+          href="{{ url_for('repo_rating.top', sort_by='stars', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">Stars</a></dd>
         <dd><a class="label radius {{ 'info' if filter_worth_by == 'solid' else 'secondary' }}"
-          href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='solid') }}">Solid</a></dd>
+          href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='solid', topic=topic) }}">Solid</a></dd>
         <dd><a class="label radius {{ 'info' if filter_worth_by == 'rising' else 'secondary' }}"
-          href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='rising') }}">Rising</a></dd>
+          href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='rising', topic=topic) }}">Rising</a></dd>
+        {% if topic %}
+          <dd><a class="label radius alert"
+            href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by=filter_worth_by) }}">{{ topic }} &times;</a></dd>
+        {% endif %}
       </dl>
     {% endcall %}
 
