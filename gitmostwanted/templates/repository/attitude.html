@@ -24,16 +24,22 @@
       {% endif %}
     </div>
 
+    {% set f_lang = request.args.get('lang') if request.args.get('lang') != 'All' else None %}
+    {% set f_status = request.args.get('status') %}
+    {% set f_mature = request.args.get('mature') %}
+    {% set f_term = request.args.get('term') or None %}
+    {% set has_any_filter = True if (f_lang or f_status or f_mature or f_term) else False %}
+
     {% call repository_filter(languages) %}
       <div class="subnav-cluster">
         <div class="segmented-control" role="tablist" aria-label="Filter by attitude">
           <a class="seg-item {{ 'active' if not attitude }}"
-             href="{{ url_for('user_attitude.list_unchecked') }}">
+             href="{{ url_for('user_attitude.list_unchecked', lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
             New
           </a>
           {% for r in ['like', 'dislike', 'neutral'] %}
             <a class="seg-item {{ 'active' if attitude == r }}"
-               href="{{ url_for('user_attitude.list_attitude', attitude=r) }}">
+               href="{{ url_for('user_attitude.list_attitude', attitude=r, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
               {{ r|capitalize() }}
             </a>
           {% endfor %}
@@ -62,6 +68,10 @@
       <div class="empty-state">
         <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         <p>No entries found</p>
+        {% if has_any_filter %}
+          <span class="empty-state-sub">No repositories matched the current search or filter criteria.</span>
+          <a href="{{ url_for('user_attitude.list_attitude', attitude=attitude) if attitude else url_for('user_attitude.list_unchecked') }}" class="btn btn-ghost btn-sm">Clear all filters</a>
+        {% endif %}
       </div>
     {% endif %}
   </section>

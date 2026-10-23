@@ -10,12 +10,24 @@
 {% from "macros/repository.html" import repository, repository_filter %}
 
 {% block body %}
+  {% set entry_list = entries.all() %}
+  {% set f_lang = request.args.get('lang') if request.args.get('lang') != 'All' else None %}
+  {% set f_status = request.args.get('status') %}
+  {% set f_mature = request.args.get('mature') %}
+  {% set f_term = request.args.get('term') or None %}
+  {% set has_any_filter = True if (f_lang or f_status or f_mature or f_term) else False %}
+
   <section class="page-section" id="gh-entries">
     <div class="page-intro">
       <div>
         <h1 class="page-heading">Trending Repositories</h1>
         <p class="page-subheading">Fastest growing GitHub projects over the past {{ rng }}</p>
       </div>
+      {% if entry_list %}
+        <div class="page-counter">
+          <span class="badge badge-mono">{{ entry_list|length }} {{ 'repository' if entry_list|length == 1 else 'repositories' }}</span>
+        </div>
+      {% endif %}
     </div>
 
     {% call repository_filter(languages) %}
@@ -23,7 +35,7 @@
         <div class="segmented-control" role="tablist" aria-label="Trending time range">
           {% for r in ['week', 'month', 'quarter', 'year'] %}
             <a class="seg-item {{ 'active' if rng == r }}"
-               href="{{ url_for('repo_trending.list_by_range', rng=r) }}">
+               href="{{ url_for('repo_trending.list_by_range', rng=r, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
               {{ r|capitalize() }}
             </a>
           {% endfor %}
@@ -32,7 +44,7 @@
     {% endcall %}
 
     <ul class="repo-grid">
-      {% for (entry, attitude) in entries %}
+      {% for (entry, attitude) in entry_list %}
         {% call(repo) repository(entry.repo) %}
           <div class="stat-group">
             <span class="delta-badge" title="New stars in {{ rng }}">
@@ -57,6 +69,10 @@
           <div class="empty-state">
             <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
             <p>No entries found</p>
+            {% if has_any_filter %}
+              <span class="empty-state-sub">No trending repositories matched the current search or filter criteria.</span>
+              <a href="{{ url_for('repo_trending.list_by_range', rng=rng) }}" class="btn btn-ghost btn-sm">Clear all filters</a>
+            {% endif %}
           </div>
         </li>
       {% endfor %}

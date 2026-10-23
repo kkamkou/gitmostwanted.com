@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}?v=4">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}?v=5">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script>
       (function () {
@@ -167,7 +167,7 @@
     {% endif %}
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}?v=4"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}?v=5"></script>
     {% block js %}{% endblock %}
   </body>
 </html>

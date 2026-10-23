@@ -30,33 +30,39 @@
       {% endif %}
     </div>
 
+    {% set f_lang = request.args.get('lang') if request.args.get('lang') != 'All' else None %}
+    {% set f_status = request.args.get('status') %}
+    {% set f_mature = request.args.get('mature') %}
+    {% set f_term = request.args.get('term') or None %}
+    {% set has_any_filter = True if (f_lang or f_status or f_mature or f_term or topic) else False %}
+
     {% call repository_filter(languages) %}
       <div class="subnav-cluster">
         <div class="segmented-control" role="tablist" aria-label="Sort repositories">
           <a class="seg-item {{ 'active' if sort_by == 'wanted' }}"
-             href="{{ url_for('repo_rating.top', sort_by='wanted', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">
+             href="{{ url_for('repo_rating.top', sort_by='wanted', page=1, filter_worth_by=filter_worth_by, topic=topic, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
             Wanted
           </a>
           <a class="seg-item {{ 'active' if sort_by == 'stars' }}"
-             href="{{ url_for('repo_rating.top', sort_by='stars', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">
+             href="{{ url_for('repo_rating.top', sort_by='stars', page=1, filter_worth_by=filter_worth_by, topic=topic, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
             Stars
           </a>
         </div>
 
         <div class="segmented-control segmented-subtle" role="tablist" aria-label="Filter by worth tier">
           <a class="seg-item {{ 'active' if filter_worth_by == 'solid' }}"
-             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='solid', topic=topic) }}">
+             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='solid', topic=topic, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
             Solid
           </a>
           <a class="seg-item {{ 'active' if filter_worth_by == 'rising' }}"
-             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='rising', topic=topic) }}">
+             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='rising', topic=topic, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
             Rising
           </a>
         </div>
 
         {% if topic %}
           <a class="topic-active-chip"
-             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by=filter_worth_by) }}"
+             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by=filter_worth_by, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}"
              title="Clear topic filter">
             <span>#{{ topic }}</span>
             <span class="chip-close">&times;</span>
@@ -86,6 +92,10 @@
       <div class="empty-state">
         <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <p>No entries found</p>
+        {% if has_any_filter %}
+          <span class="empty-state-sub">No repositories matched the current search or filter criteria.</span>
+          <a href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by=filter_worth_by) }}" class="btn btn-ghost btn-sm">Clear all filters</a>
+        {% endif %}
       </div>
     {% endif %}
   </section>

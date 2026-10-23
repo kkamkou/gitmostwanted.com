@@ -50,15 +50,22 @@
   {% endif %}
 
   {% if mean_rows %}
-    <div class="chart-era-legend" aria-label="Historical eras">
-      <span class="era-legend-item">
-        <span class="era-swatch era-swatch-covid"></span>
-        <span>COVID (2020&ndash;2022)</span>
-      </span>
-      <span class="era-legend-item">
-        <span class="era-swatch era-swatch-ai"></span>
-        <span>AI Boom (Late 2022&ndash;Present)</span>
-      </span>
+    <div class="chart-toolbar">
+      <div class="chart-era-legend" aria-label="Historical eras">
+        <span class="era-legend-item">
+          <span class="era-swatch era-swatch-popularity"></span>
+          <span>Popularity</span>
+        </span>
+        <span class="era-legend-item">
+          <span class="era-swatch era-swatch-covid"></span>
+          <span>COVID (2020&ndash;2022)</span>
+        </span>
+        <span class="era-legend-item">
+          <span class="era-swatch era-swatch-ai"></span>
+          <span>AI Boom (Late 2022&ndash;Present)</span>
+        </span>
+      </div>
+      <span class="chart-hint">Drag to zoom &middot; Right-click to reset</span>
     </div>
     <div id="repoDetailsChart" class="details-chart">Generating the popularity chart&hellip;</div>
   {% else %}
@@ -182,10 +189,22 @@
             group.appendChild(endLine);
           }
 
-          if (width >= 48) {
+          if (width >= 52) {
+            var badgeWidth = era.label.length * 6.5 + 12;
+            var badgeBg = document.createElementNS(ns, 'rect');
+            badgeBg.setAttribute('x', x1 + 6);
+            badgeBg.setAttribute('y', bbox.top + 6);
+            badgeBg.setAttribute('width', badgeWidth);
+            badgeBg.setAttribute('height', 16);
+            badgeBg.setAttribute('rx', '4');
+            badgeBg.setAttribute('fill', isDark ? 'rgba(9, 13, 22, 0.72)' : 'rgba(255, 255, 255, 0.82)');
+            badgeBg.setAttribute('stroke', era.stroke);
+            badgeBg.setAttribute('stroke-width', '1');
+            group.appendChild(badgeBg);
+
             var label = document.createElementNS(ns, 'text');
-            label.setAttribute('x', x1 + 8);
-            label.setAttribute('y', bbox.top + 16);
+            label.setAttribute('x', x1 + 12);
+            label.setAttribute('y', bbox.top + 17);
             label.setAttribute('fill', era.text);
             label.setAttribute('font-family', 'JetBrains Mono, monospace');
             label.setAttribute('font-size', '10');
@@ -285,16 +304,31 @@
 
       window.__gmwRenderActiveChart = renderRepoChart;
 
-      if (typeof google !== 'undefined' && google.charts) {
-        if (google.visualization && google.visualization.ScatterChart) {
-          setTimeout(renderRepoChart, 40);
+      function bootChart(attemptsLeft) {
+        if (typeof google !== 'undefined' && google.charts) {
+          if (google.visualization && google.visualization.ScatterChart) {
+            setTimeout(renderRepoChart, 30);
+          } else {
+            google.charts.load('current', {'packages': ['corechart']});
+            google.charts.setOnLoadCallback(function () {
+              setTimeout(renderRepoChart, 30);
+            });
+          }
+          return;
+        }
+        if (attemptsLeft > 0) {
+          setTimeout(function () {
+            bootChart(attemptsLeft - 1);
+          }, 120);
         } else {
-          google.charts.load('current', {'packages': ['corechart']});
-          google.charts.setOnLoadCallback(function () {
-            setTimeout(renderRepoChart, 40);
-          });
+          var holder = document.getElementById('repoDetailsChart');
+          if (holder) {
+            holder.textContent = 'Popularity chart could not be loaded.';
+          }
         }
       }
+
+      bootChart(40);
     })();
   </script>
 {% endif %}

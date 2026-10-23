@@ -86,6 +86,14 @@ a:hover {
   color: var(--text-primary);
 }
 
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -596,6 +604,22 @@ a:hover {
   background: var(--accent);
 }
 
+.filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: #090d16;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .filter-drawer {
   margin-top: 0.6rem;
   padding: 1rem 1.15rem;
@@ -721,6 +745,7 @@ a:hover {
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  min-width: 0;
   padding: 1.15rem 1.25rem;
   gap: 1rem;
 }
@@ -1050,6 +1075,12 @@ a:hover {
   font-weight: 700;
 }
 
+.page-btn.disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .page-ellipsis {
   color: var(--text-muted);
   padding: 0 0.35rem;
@@ -1075,8 +1106,15 @@ a:hover {
 
 .empty-state p {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.empty-state-sub {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  max-width: 380px;
 }
 
 .modal-backdrop {
@@ -1165,6 +1203,31 @@ a:hover {
   color: var(--text-secondary);
 }
 
+.modal-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 220px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-default);
+  border-top-color: var(--accent);
+  animation: gmw-spin 0.75s linear infinite;
+}
+
+@keyframes gmw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .modal-body h4 {
   color: var(--text-primary);
   margin: 1.25rem 0 0.5rem;
@@ -1222,15 +1285,30 @@ a:hover {
   font-size: 0.9rem;
 }
 
+.chart-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  margin-bottom: 0.55rem;
+}
+
 .chart-era-legend {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.5rem;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
   color: var(--text-muted);
+}
+
+.chart-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.8;
 }
 
 .era-legend-item {
@@ -1244,6 +1322,12 @@ a:hover {
   height: 12px;
   border-radius: 3px;
   display: inline-block;
+}
+
+.era-swatch-popularity {
+  height: 3px;
+  border-radius: 99px;
+  background: var(--accent);
 }
 
 .era-swatch-covid {
@@ -1611,5 +1695,38 @@ a:hover {
 
   .repo-grid {
     grid-template-columns: 1fr;
+  }
+
+  .filter-drawer-inner {
+    gap: 1rem;
+  }
+
+  .modal-backdrop {
+    padding: 0.75rem;
+  }
+
+  .modal-header,
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .details-chart {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-subtitle {
+    display: none;
+  }
+
+  .nav-item {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.82rem;
+  }
+
+  .pagination-list {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

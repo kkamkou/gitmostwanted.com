@@ -84,7 +84,11 @@
 
 {% macro repository_filter(languages) -%}
   {% set has_search = True if request.args.get('term') else False %}
-  {% set has_preset = True if (request.args.get('lang', 'All') != 'All' or request.args.get('status') in ('promising', 'hopeless') or 'mature' in request.args) else False %}
+  {% set has_lang = True if (request.args.get('lang') and request.args.get('lang') != 'All') else False %}
+  {% set has_status = True if request.args.get('status') in ('promising', 'hopeless') else False %}
+  {% set has_mature = True if request.args.get('mature') else False %}
+  {% set preset_count = (1 if has_lang else 0) + (1 if has_status else 0) + (1 if has_mature else 0) %}
+  {% set has_preset = preset_count > 0 %}
 
   <div class="toolbar-wrapper">
     <form class="repository-filter" method="get">
@@ -109,11 +113,12 @@
           </div>
 
           <button type="button" data-section="preset"
+                  aria-expanded="{{ 'true' if has_preset else 'false' }}"
                   class="btn btn-sm filter-toggle-btn repository-filter {{ 'active' if has_preset else '' }}">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
             <span>Filters</span>
             {% if has_preset %}
-              <span class="filter-dot"></span>
+              <span class="filter-count">{{ preset_count }}</span>
             {% endif %}
           </button>
         </div>
@@ -134,7 +139,7 @@
           <div class="filter-group">
             <span class="filter-label">Momentum</span>
             <div class="filter-chips">
-              <label class="chip-toggle" title="Showonly Promising (Rising) repositories with star growth momentum">
+              <label class="chip-toggle" title="Show only Promising (Rising) repositories with star growth momentum">
                 <input id="statusPromising" type="radio" value="promising" name="status"
                        {{ 'checked' if request.args.get('status') == 'promising' }}>
                 <span class="chip-body">

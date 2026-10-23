@@ -20,6 +20,7 @@
     }
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
   }
 
   function closeModal(modal) {
@@ -28,6 +29,9 @@
     }
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
+    if (!document.querySelector('.modal-backdrop.open')) {
+      document.body.style.overflow = '';
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -79,16 +83,15 @@
 
       var radios = formFilter.querySelectorAll('input[type="radio"]');
       radios.forEach(function (radio) {
-        var wasChecked = radio.checked;
+        radio.__wasChecked = radio.checked;
         radio.addEventListener('click', function () {
-          if (wasChecked) {
+          if (radio.__wasChecked) {
             radio.checked = false;
-            wasChecked = false;
+            radio.__wasChecked = false;
           } else {
             radios.forEach(function (other) {
               other.__wasChecked = (other === radio);
             });
-            wasChecked = true;
           }
           formFilter.submit();
         });
@@ -127,6 +130,7 @@
           if (section) {
             var hidden = section.classList.toggle('hide');
             btn.classList.toggle('active', !hidden);
+            btn.setAttribute('aria-expanded', !hidden ? 'true' : 'false');
           }
         });
       });
@@ -170,13 +174,39 @@
         if (!modal || !content) {
           return;
         }
-        content.innerHTML = '<div class="modal-body">Loading repository details&hellip;</div>';
+        content.innerHTML =
+          '<div class="modal-header">' +
+          '<h3 class="modal-title">Repository Analytics</h3>' +
+          '<button type="button" class="modal-close" data-modal-close aria-label="Close">&times;</button>' +
+          '</div>' +
+          '<div class="modal-body modal-loading">' +
+          '<span class="loading-spinner" aria-hidden="true"></span>' +
+          '<span>Loading repository details&hellip;</span>' +
+          '</div>';
         openModal(modalId);
         fetch(link.getAttribute('href'), { credentials: 'same-origin' })
-          .then(function (res) { return res.text(); })
+          .then(function (res) {
+            if (!res.ok) {
+              throw new Error('Failed to load');
+            }
+            return res.text();
+          })
           .then(function (html) {
             content.innerHTML = html;
             executeScripts(content);
+          })
+          .catch(function () {
+            content.innerHTML =
+              '<div class="modal-header">' +
+              '<h3 class="modal-title">Repository Analytics</h3>' +
+              '<button type="button" class="modal-close" data-modal-close aria-label="Close">&times;</button>' +
+              '</div>' +
+              '<div class="modal-body">' +
+              '<div class="empty-state">' +
+              '<p>Could not load repository details.</p>' +
+              '<span class="empty-state-sub">Please check your connection and try again.</span>' +
+              '</div>' +
+              '</div>';
           });
       });
     });
