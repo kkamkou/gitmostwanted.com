@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% if rng in ['week', 'month', 'quarter', 'year']  %}
+{% if rng in ['week', 'month', 'quarter', 'year'] %}
   {% set page_title = 'Trending ({})'.format(rng) %}
 {% else %}
   {% set page_title = 'Trending' %}
@@ -10,56 +10,53 @@
 {% from "macros/repository.html" import repository, repository_filter %}
 
 {% block body %}
-  <ul class="breadcrumbs">
-    {% for r in ['week', 'month', 'quarter', 'year'] %}
-      <li {{ 'class=unavailable' if rng == r }}>
-        <a href="{{ url_for('repo_trending.list_by_range', rng=r) }}">{{ r|capitalize() }}</a>
-      </li>
-    {% endfor %}
-    <li><a href="{{ url_for('repo_rating.top') }}">Top&uarr;</a></li>
-    {% if g.user %}
-      <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude&rarr;</a></li>
-    {% else %}
-      <li>
-        <a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude&rarr;</a>
-      </li>
-    {% endif %}
-  </ul>
-
-  <div class="row" id="gh-entries">
+  <section class="page-section" id="gh-entries">
     {% call repository_filter(languages) %}
+      <div class="subnav-cluster">
+        <div class="segmented-control" role="tablist" aria-label="Trending time range">
+          {% for r in ['week', 'month', 'quarter', 'year'] %}
+            <a class="seg-item {{ 'active' if rng == r }}"
+               href="{{ url_for('repo_trending.list_by_range', rng=r) }}">
+              {{ r|capitalize() }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
     {% endcall %}
 
-    <div class="small-12 columns">
-      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
-        {% for (entry, attitude) in entries %}
-          {% call(repo) repository(entry.repo) %}
-
-            <div class="right">
-              <span class="label secondary">
-                +{{ entry.cnt_watch|number_humanize }} <i class="fi-star"></i>
-              </span>
-              {% if repo.mature %}
-                <span class="label info">
-                  <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}" title="Details"
-                    data-reveal-id="repoDetailsModal" data-reveal-ajax="true">
-                    {{ repo.stargazers_count|number_humanize }} <i class="fi-graph-bar"></i>
-                  </a>
-                </span>
-              {% endif %}
-            </div>
-
-            {% if g.user %}
-                {{ user_attitude(repo.id, attitude) }}
+    <ul class="repo-grid">
+      {% for (entry, attitude) in entries %}
+        {% call(repo) repository(entry.repo) %}
+          {% if g.user %}
+            {{ user_attitude(repo.id, attitude) }}
+          {% endif %}
+          <div class="stat-group">
+            <span class="delta-badge" title="New stars in {{ rng }}">
+              +{{ entry.cnt_watch|number_humanize }}
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </span>
+            {% if repo.mature %}
+              <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
+                 class="stat-btn" title="View popularity analytics"
+                 data-ajax-modal="repoDetailsModal">
+                <span>{{ repo.stargazers_count|number_humanize }}</span>
+                <svg class="stat-chart-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              </a>
             {% endif %}
-          {% endcall %}
-        {% else %}
-          <p class="alert-box secondary">No entries found</p>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
+          </div>
+        {% endcall %}
+      {% else %}
+        <li class="empty-state-item">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+            <p>No entries found</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
 
-  <div id="repoDetailsModal" class="reveal-modal" data-reveal data-options="animation:false"
-    aria-labelledby="repoDetailsModal" aria-hidden="true" role="dialog"></div>
+  <div id="repoDetailsModal" class="modal-backdrop" aria-labelledby="repoDetailsModalTitle" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg" id="repoDetailsModalContent"></div>
+  </div>
 {% endblock %}

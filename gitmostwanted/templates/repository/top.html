@@ -17,56 +17,70 @@
 {% from "macros/repository.html" import repository, repository_filter %}
 
 {% block body %}
-  <ul class="breadcrumbs">
-    <li><a href="{{ url_for('repo_trending.list_by_range') }}">&larr;Trending</a></li>
-    <li class="unavailable"><a href="#">Top</a></li>
-    {% if g.user %}
-      <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude&rarr;</a></li>
-    {% else %}
-      <li><a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}">Attitude&rarr;</a></li>
-    {% endif %}
-  </ul>
-
-  <div class="row" id="gh-entries">
+  <section class="page-section" id="gh-entries">
     {% call repository_filter(languages) %}
-      <dl class="sub-nav">
-        <dd {{ 'class=active' if sort_by == 'wanted' }}><a
-          href="{{ url_for('repo_rating.top', sort_by='wanted', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">Wanted</a></dd>
-        <dd {{ 'class=active' if sort_by == 'stars' }}><a
-          href="{{ url_for('repo_rating.top', sort_by='stars', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">Stars</a></dd>
-        <dd><a class="label radius {{ 'info' if filter_worth_by == 'solid' else 'secondary' }}"
-          href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='solid', topic=topic) }}">Solid</a></dd>
-        <dd><a class="label radius {{ 'info' if filter_worth_by == 'rising' else 'secondary' }}"
-          href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='rising', topic=topic) }}">Rising</a></dd>
+      <div class="subnav-cluster">
+        <div class="segmented-control" role="tablist" aria-label="Sort repositories">
+          <a class="seg-item {{ 'active' if sort_by == 'wanted' }}"
+             href="{{ url_for('repo_rating.top', sort_by='wanted', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">
+            Wanted
+          </a>
+          <a class="seg-item {{ 'active' if sort_by == 'stars' }}"
+             href="{{ url_for('repo_rating.top', sort_by='stars', page=1, filter_worth_by=filter_worth_by, topic=topic) }}">
+            Stars
+          </a>
+        </div>
+
+        <div class="segmented-control segmented-subtle" role="tablist" aria-label="Filter by worth tier">
+          <a class="seg-item {{ 'active' if filter_worth_by == 'solid' }}"
+             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='solid', topic=topic) }}">
+            Solid
+          </a>
+          <a class="seg-item {{ 'active' if filter_worth_by == 'rising' }}"
+             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by='rising', topic=topic) }}">
+            Rising
+          </a>
+        </div>
+
         {% if topic %}
-          <dd><a class="label radius alert"
-            href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by=filter_worth_by) }}">{{ topic }} &times;</a></dd>
+          <a class="topic-active-chip"
+             href="{{ url_for('repo_rating.top', sort_by=sort_by, page=1, filter_worth_by=filter_worth_by) }}"
+             title="Clear topic filter">
+            <span>#{{ topic }}</span>
+            <span class="chip-close">&times;</span>
+          </a>
         {% endif %}
-      </dl>
+      </div>
     {% endcall %}
 
-    <div class="small-12 columns">
-      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+    {% if repos.items %}
+      <ul class="repo-grid">
         {% for (repo, attitude) in repos.items %}
           {% call(repo) repository(repo) %}
-            <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
-              class="button tiny secondary right" title="Details"
-              data-reveal-id="repoDetailsModal"
-              data-reveal-ajax="true">{{ repo.stargazers_count|number_humanize }}
-              <i class="fi-graph-bar"></i></a>
             {% if g.user %}
               {{ user_attitude(repo.id, attitude) }}
             {% endif %}
+            <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
+               class="stat-btn" title="View popularity analytics"
+               data-ajax-modal="repoDetailsModal">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>{{ repo.stargazers_count|number_humanize }}</span>
+              <svg class="stat-chart-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </a>
           {% endcall %}
-        {% else %}
-          <p class="alert-box secondary">No entries found</p>
         {% endfor %}
       </ul>
-    </div>
-  </div>
+    {% else %}
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <p>No entries found</p>
+      </div>
+    {% endif %}
+  </section>
 
-  <div id="repoDetailsModal" class="reveal-modal" data-reveal data-options="animation:false"
-    aria-labelledby="repoDetailsModal" aria-hidden="true" role="dialog"></div>
+  <div id="repoDetailsModal" class="modal-backdrop" aria-labelledby="repoDetailsModalTitle" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg" id="repoDetailsModalContent"></div>
+  </div>
 
   {{
     pagination(

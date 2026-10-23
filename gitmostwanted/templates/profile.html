@@ -5,65 +5,98 @@
 {% from "macros/messages.html" import flashed_messages %}
 
 {% block body %}
-  <ul class="breadcrumbs">
-    <li><a href="/">&larr;Trending</a></li>
-    <li><a href="{{ url_for('repo_rating.top') }}">Top&uarr;</a></li>
-    <li class="unavailable"><a href="#">Profile</a></li>
-    <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Attitude&rarr;</a></li>
-  </ul>
+  {{ flashed_messages() }}
 
-  {{  flashed_messages() }}
+  <section class="profile-header-card">
+    <div class="profile-identity">
+      <div class="profile-avatar">{{ account.username[0]|upper }}</div>
+      <div class="profile-info">
+        <h1 class="profile-username">
+          <a href="https://github.com/{{ account.username }}" target="_blank" rel="noopener">
+            <span>{{ account.username }}</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </h1>
+        <p class="profile-meta">{{ repos.count() }} liked {{ 'repository' if repos.count() == 1 else 'repositories' }}</p>
+      </div>
+    </div>
 
-  <div class="row">
-    <h2>
-      <i class="fi-social-github"></i>
-      <a href="https://github.com/{{ account.username }}" target="_blank">{{ account.username }}</a>
+    {% if g.user and account.id == g.user.id %}
+      <div class="profile-actions">
+        <a class="btn btn-primary btn-sm"
+           href="{{ url_for('user_oauth.login', next=url_for('user_profile.github_sync'), scope='public_repo') }}">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          <span>Synchronise with GitHub</span>
+        </a>
+        <a class="btn btn-danger btn-sm" id="profile-remove"
+           href="{{ url_for('user_profile.remove', im_sure=False) }}">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span>Delete account</span>
+        </a>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="profile-repos-section">
+    <h2 class="section-heading">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span>Liked Repositories</span>
     </h2>
-    {% if account.id == g.user.id %}
-      <ul class="button-group">
-        <li>
-          <a class="tiny button success"
-            href="{{ url_for('user_oauth.login', next=url_for('user_profile.github_sync'), scope='public_repo') }}">
-            <i class="fi-loop"></i> Synchronise with GitHub
-          </a>
-        </li>
-        <li>
-          <a class="tiny button alert" id="profile-remove"
-            href="{{ url_for('user_profile.remove', im_sure=False) }}">
-            <i class="fi-trash"></i> Delete account
-          </a>
-        </li>
-      </ul>
-    {% endif %}
-  </div>
 
-  <div class="row">
-    <h3 class="subheader"><i class="fi-star"></i> Liked Repositories</h3>
     {% if repos.count() %}
-      <table>
-        {% for repo in repos %}
-          <tr>
-            <td>
-              <a href="{{ repo.html_url }}" target="_blank">{{ repo.full_name | truncate(28, True) }}</a>
-            </td>
-            <td>{{ repo.language or 'N/A' }}</td>
-          </tr>
-        {% endfor %}
-      </table>
+      <div class="table-card">
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Repository</th>
+              <th>Language</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for repo in repos %}
+              <tr>
+                <td>
+                  <a href="{{ repo.html_url }}" target="_blank" rel="noopener" class="table-repo-link">
+                    {{ repo.full_name | truncate(48, True) }}
+                  </a>
+                </td>
+                <td>
+                  {% if repo.language %}
+                    <span class="lang-badge">
+                      <span class="lang-dot" data-lang="{{ repo.language|lower }}"></span>
+                      <span>{{ repo.language }}</span>
+                    </span>
+                  {% else %}
+                    <span class="text-muted">N/A</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     {% else %}
-      <p class="alert-box secondary">No entries found</p>
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <p>No entries found</p>
+      </div>
     {% endif %}
-  </div>
+  </section>
 {% endblock %}
 
 {% block js %}
   <script type="text/javascript">
-    $('#profile-remove').click(function () {
-      if (!confirm('Are you sure you want to delete your profile? (no way to restore it later)')) {
-        return false;
+    (function () {
+      var removeBtn = document.getElementById('profile-remove');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function (e) {
+          if (!confirm('Are you sure you want to delete your profile? (no way to restore it later)')) {
+            e.preventDefault();
+            return false;
+          }
+          this.setAttribute('href', this.getAttribute('href').replace('im_sure=False', 'im_sure=True'));
+        });
       }
-      $(this).attr('href', $(this).attr('href').replace('im_sure=False', 'im_sure=True'));
-      return true;
-    });
+    })();
   </script>
 {% endblock %}

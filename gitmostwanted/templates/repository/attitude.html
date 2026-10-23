@@ -11,43 +11,52 @@
 {% from "macros/repository.html" import repository, repository_filter %}
 
 {% block body %}
-  <ul class="breadcrumbs">
-    <li><a href="{{ url_for('repo_trending.list_by_range') }}">&larr;Trending</a></li>
-    <li {{ 'class=unavailable' if not attitude }}><a
-      href="{{ url_for('user_attitude.list_unchecked') }}">New</a></li>
-    {% for r in ['like', 'dislike', 'neutral'] %}
-      <li {{ 'class=unavailable' if attitude == r }}>
-        <a href="{{ url_for('user_attitude.list_attitude', attitude=r) }}">{{ r|capitalize() }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <div class="row" id="gh-entries">
+  <section class="page-section" id="gh-entries">
     {% call repository_filter(languages) %}
+      <div class="subnav-cluster">
+        <div class="segmented-control" role="tablist" aria-label="Filter by attitude">
+          <a class="seg-item {{ 'active' if not attitude }}"
+             href="{{ url_for('user_attitude.list_unchecked') }}">
+            New
+          </a>
+          {% for r in ['like', 'dislike', 'neutral'] %}
+            <a class="seg-item {{ 'active' if attitude == r }}"
+               href="{{ url_for('user_attitude.list_attitude', attitude=r) }}">
+              {{ r|capitalize() }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
     {% endcall %}
 
-    <div class="small-12 columns">
-      <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+    {% if repos.items %}
+      <ul class="repo-grid">
         {% for (repo, attitude) in repos.items %}
           {% call(repo) repository(repo) %}
+            {{ user_attitude(repo.id, attitude) }}
             {% if repo.mature %}
               <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
-                 class="button tiny secondary right" title="Details"
-                 data-reveal-id="repoDetailsModal"
-                 data-reveal-ajax="true">{{ repo.stargazers_count|number_humanize }}
-                <i class="fi-graph-bar"></i></a>
+                 class="stat-btn" title="View popularity analytics"
+                 data-ajax-modal="repoDetailsModal">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>{{ repo.stargazers_count|number_humanize }}</span>
+                <svg class="stat-chart-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              </a>
             {% endif %}
-            {{ user_attitude(repo.id, attitude) }}
           {% endcall %}
-        {% else %}
-          <p class="alert-box secondary">No entries found</p>
         {% endfor %}
       </ul>
-    </div>
-  </div>
+    {% else %}
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        <p>No entries found</p>
+      </div>
+    {% endif %}
+  </section>
 
-  <div id="repoDetailsModal" class="reveal-modal" data-reveal data-options="animation:false"
-    aria-labelledby="repoDetailsModal" aria-hidden="true" role="dialog"></div>
+  <div id="repoDetailsModal" class="modal-backdrop" aria-labelledby="repoDetailsModalTitle" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg" id="repoDetailsModalContent"></div>
+  </div>
 
   {{
     pagination(
