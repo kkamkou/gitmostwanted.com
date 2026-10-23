@@ -1,26 +1,54 @@
 {% macro pagination(paginator) -%}
-
-  {% set view_args = request.view_args %}
-  {% do view_args.pop('page') %}
+  {% set view_args = request.view_args.copy() if request.view_args else {} %}
+  {% do view_args.pop('page', None) %}
   {% do view_args.update(kwargs) %}
 
-  <hr>
+  {% if paginator.pages > 1 %}
+    <nav class="pagination-bar" aria-label="Pagination">
+      <ul class="pagination-list">
+        <li>
+          {% if paginator.has_prev %}
+            <a href="{{ url_for(request.endpoint, page=paginator.prev_num, **view_args) }}"
+               class="page-btn page-nav-btn" aria-label="Previous page" title="Previous page">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </a>
+          {% else %}
+            <span class="page-btn page-nav-btn disabled" aria-disabled="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </span>
+          {% endif %}
+        </li>
 
-  <ul class="button-group text-center">
-    {% for page in paginator.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) -%}
-      {% if page %}
-        {% if page != paginator.page %}
-          <li>
-            <a href="{{ url_for(request.endpoint, page=page, **view_args) }}"
-              class="button tiny secondary">{{ page }}</a>
-          </li>
-        {% else %}
-          <li class="current"><a href="javascript:void(0)"
-            class="button tiny disabled">{{ page }}</a></li>
-        {% endif %}
-      {% else %}
-        <li class="unavailable">&nbsp;</li>
-      {% endif %}
-    {%- endfor %}
-  </ul>
+        {% for page in paginator.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) -%}
+          {% if page %}
+            {% if page != paginator.page %}
+              <li>
+                <a href="{{ url_for(request.endpoint, page=page, **view_args) }}"
+                   class="page-btn">{{ page }}</a>
+              </li>
+            {% else %}
+              <li>
+                <span class="page-btn active" aria-current="page">{{ page }}</span>
+              </li>
+            {% endif %}
+          {% else %}
+            <li class="page-ellipsis" aria-hidden="true">&hellip;</li>
+          {% endif %}
+        {%- endfor %}
+
+        <li>
+          {% if paginator.has_next %}
+            <a href="{{ url_for(request.endpoint, page=paginator.next_num, **view_args) }}"
+               class="page-btn page-nav-btn" aria-label="Next page" title="Next page">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          {% else %}
+            <span class="page-btn page-nav-btn disabled" aria-disabled="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+  {% endif %}
 {%- endmacro %}

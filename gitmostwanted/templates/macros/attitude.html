@@ -1,15 +1,21 @@
 {% macro user_attitude(repo_id, attitude=None) -%}
-  <div class="user-attitude">
+  <div class="user-attitude" role="group" aria-label="Repository rating">
     <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='like') }}"
-      class="button tiny attitude {{ 'success' if attitude == 'like' else 'secondary' }}"
-      data-active-class="success" title="Like it"><i class="fi-like"></i></a>
+       class="attitude-btn attitude {{ 'active-like' if attitude == 'like' else 'secondary' }}"
+       data-active-class="active-like" title="Like it">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+    </a>
 
     <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='neutral') }}"
-      class="button tiny attitude {{ 'info' if attitude == 'neutral' else 'secondary' }}"
-      data-active-class="info" title="Not sure"><i class="fi-check"></i></a>
+       class="attitude-btn attitude {{ 'active-neutral' if attitude == 'neutral' else 'secondary' }}"
+       data-active-class="active-neutral" title="Not sure">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </a>
 
     <a href="{{ url_for('user_attitude.change', repo_id=repo_id, attitude='dislike') }}"
-      class="button tiny attitude {{ 'alert' if attitude == 'dislike' else 'secondary' }}"
-      data-active-class="alert" title="Useless"><i class="fi-dislike"></i></a>
+       class="attitude-btn attitude {{ 'active-dislike' if attitude == 'dislike' else 'secondary' }}"
+       data-active-class="active-dislike" title="Useless">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>
+    </a>
   </div>
 {%- endmacro %}

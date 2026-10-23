@@ -1,112 +1,173 @@
 <!DOCTYPE html>
-<html>
-  <head lang="en">
+<html lang="en" data-theme="dark">
+  <head>
     <meta charset="UTF-8">
-
     <title>{{ '%s - ' % page_title if page_title }}GitHub Explore</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Advanced explore of github.com. The main goal is to highlight the most interesting repositories and exclude others.">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/normalize.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}?v=5">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('gmw-theme');
+          if (saved === 'light' || saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', saved);
+          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
 
   <body>
-    <div class="wrapper">
-      <nav class="top-bar" data-topbar data-options="is_hover: false" role="navigation" style="margin-bottom: 2px">
-        <ul class="title-area">
-          <li class="name">
-            <h1><a href="{{ url_for('repo_rating.top') }}">GitHub Explore</a></h1>
-          </li>
-          <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-        </ul>
+    <div class="app-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <div class="brand-group">
+            <a href="{{ url_for('repo_rating.top') }}" class="brand-link">
+              <span class="brand-logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </span>
+              <span class="brand-text">
+                <span class="brand-title">GitHub Explore</span>
+                <span class="brand-subtitle">gitmostwanted</span>
+              </span>
+            </a>
 
-        <!-- what is GMW modal -->
-        <div id="whatIsGmwModal" class="reveal-modal" data-reveal aria-labelledby="whatIsGmwModalTitle"
-          aria-hidden="true" role="dialog">
-          <h3 id="whatIsGmwModalTitle">What's It All About?</h3>
+            <nav class="primary-nav" aria-label="Main Navigation">
+              <a href="{{ url_for('repo_rating.top') }}"
+                 class="nav-item {{ 'active' if request.blueprint == 'repo_rating' }}">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                <span>Top</span>
+              </a>
+              <a href="{{ url_for('repo_trending.list_by_range') }}"
+                 class="nav-item {{ 'active' if request.blueprint == 'repo_trending' }}">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                <span>Trending</span>
+              </a>
+              {% if g.user %}
+                <a href="{{ url_for('user_attitude.list_unchecked') }}"
+                   class="nav-item {{ 'active' if request.blueprint == 'user_attitude' }}">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span>Attitude</span>
+                </a>
+              {% else %}
+                <a href="{{ url_for('user_oauth.login', next=url_for('user_attitude.list_unchecked')) }}"
+                   class="nav-item">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span>Attitude</span>
+                </a>
+              {% endif %}
+            </nav>
+          </div>
+
+          <div class="header-actions">
+            <button type="button" class="icon-btn" id="themeToggle" title="Toggle color theme" aria-label="Toggle color theme">
+              <svg class="icon-sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              <svg class="icon-moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+
+            <a href="https://github.com/kkamkou/gitmostwanted.com" target="_blank" rel="noopener" class="icon-btn" title="Fork on GitHub" aria-label="Fork on GitHub">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </a>
+
+            {% if not g.user %}
+              <button type="button" class="btn btn-ghost btn-sm" data-modal-open="whatIsGmwModal">
+                What is it?
+              </button>
+              <a href="{{ url_for('user_oauth.login', scope='user:email') }}" class="btn btn-primary btn-sm">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Login via GitHub</span>
+              </a>
+            {% else %}
+              <div class="user-dropdown">
+                <button type="button" class="user-menu-trigger" aria-expanded="false">
+                  <span class="user-avatar">{{ g.user.username[0]|upper }}</span>
+                  <span class="user-name">{{ g.user.username }}</span>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="dropdown-menu">
+                  <a href="{{ url_for('user_profile.overview', name=g.user.username) }}" class="dropdown-item">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Profile</span>
+                  </a>
+                  <a href="{{ url_for('user_attitude.list_unchecked') }}" class="dropdown-item">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span>Unchecked</span>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a href="{{ url_for('user_oauth.logout') }}" class="dropdown-item dropdown-item-danger">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Log-out</span>
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </header>
+
+      <main class="site-main container">
+        {% block body %}{% endblock %}
+      </main>
+
+      {% include 'footer.html' %}
+    </div>
+
+    <div id="whatIsGmwModal" class="modal-backdrop" aria-labelledby="whatIsGmwModalTitle" aria-hidden="true" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 id="whatIsGmwModalTitle" class="modal-title">What's It All About?</h3>
+          <button type="button" class="modal-close" data-modal-close aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
           <p>
             Repositories often get hyped when they are created or promoted by big companies. Marketing, events, or other tricks
-            can also push some projects into the spotlight. But this doesn’t always mean the repositories are actually useful.<br>
+            can also push some projects into the spotlight. But this doesn’t always mean the repositories are actually useful.
+          </p>
+          <p>
             For example, compare:
             <a href="{{ url_for('repo_rating.top') }}">Top</a> vs
-            <a href="https://github.com/search?o=desc&q=stars%3A%3E10000&s=stars&type=Repositories" target="_blank">GitHub search</a>
+            <a href="https://github.com/search?o=desc&q=stars%3A%3E10000&s=stars&type=Repositories" target="_blank" rel="noopener">GitHub search</a>
             ordered by stars.
           </p>
           <p>
-            The <strong>gitmostwanted.com</strong> project looks at
-            <a href="https://www.githubarchive.org/" target="_blank">githubarchive</a> and highlights the most interesting
-            repositories while filtering out the rest. You can read more in the
-            <a href="https://github.com/kkamkou/gitmostwanted.com/wiki" target="_blank">Wiki</a>.
+            The <strong>gitmostwanted.com</strong> project analyzes
+            <a href="https://www.githubarchive.org/" target="_blank" rel="noopener">GH Archive</a> activity and highlights the most interesting
+            repositories while filtering out noise. Read more in the
+            <a href="https://github.com/kkamkou/gitmostwanted.com/wiki" target="_blank" rel="noopener">Wiki</a>.
           </p>
-          <h3>Why login?</h3>
+          <h4>Why login?</h4>
           <p>
-            GMW is like your own database where you save <code>liked</code> repositories.
-            Once there are 200+ users, it will also suggest people with similar preferences.
-            For now, you can sync your GitHub stars and share your public profile link
+            GMW acts as your personal radar where you curate <code>liked</code> repositories.
+            Once there are 200+ users, it also suggests developers with similar preferences.
+            You can sync your GitHub stars and share your public profile link
             (<code>https://gitmostwanted.com/USER_NAME</code>) with friends or teammates. Have fun!
           </p>
-          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
         </div>
-
-        <section class="top-bar-section">
-          <ul class="right">
-            <li>
-              <a href="https://github.com/kkamkou/gitmostwanted.com" target="_blank">
-                <i class="fi-social-github" title="Fork it!"></i>
-                <span class="visible-for-small-only">Fork it!</span>
-              </a>
-            </li>
-            <!--<li><a href="{{ url_for('static_content.sponsorship') }}">Sponsorship</a></li>-->
-            {% if not g.user %}
-              <li><a href="#" data-reveal-id="whatIsGmwModal">What is it?</a></li>
-              <li><a href="{{ url_for('user_oauth.login', scope='user:email') }}">Login via GitHub</a></li>
-            {% else %}
-              <li class="has-dropdown">
-                <a href="#">{{ g.user.username }}</a>
-                <ul class="dropdown">
-                    <li><a href="{{ url_for('user_profile.overview', name=g.user.username) }}">Profile</a></li>
-                    <li><a href="{{ url_for('user_attitude.list_unchecked') }}">Unchecked</a></li>
-                    <li><a href="{{ url_for('user_oauth.logout') }}">Log-out</a></li>
-                </ul>
-              </li>
-            {% endif %}
-          </ul>
-        </section>
-      </nav>
-
-      {% block body %}{% endblock %}
-
-      <div class="footer-push"></div>
+      </div>
     </div>
 
-    {% include 'footer.html' %}
+    {% if not config.DEBUG %}
+      <script type="text/javascript">
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-62018427-1', 'auto');
+        ga('send', 'pageview');
+      </script>
+    {% endif %}
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}?v=5"></script>
+    {% block js %}{% endblock %}
   </body>
-
-  {% if not config.DEBUG %}
-    <!-- ga -->
-    <script type="text/javascript">
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-62018427-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-    <!-- /ga -->
-  {% endif %}
-
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/js/vendor/jquery.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/js/vendor/modernizr.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/js/foundation.min.js"></script>
-  <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}?v=2"></script>
-  <script type="text/javascript">
-    $(document).foundation();
-  </script>
-
-  {% block js %}{% endblock %}
 </html>
