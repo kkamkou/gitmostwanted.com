@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% set page_title = account.username %}
+{% set liked_repos = repos.all() %}
 
 {% from "macros/messages.html" import flashed_messages %}
 
@@ -17,7 +18,7 @@
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
           </a>
         </h1>
-        <p class="profile-meta">{{ repos.count() }} liked {{ 'repository' if repos.count() == 1 else 'repositories' }}</p>
+        <p class="profile-meta">{{ liked_repos|length }} liked {{ 'repository' if liked_repos|length == 1 else 'repositories' }}</p>
       </div>
     </div>
 
@@ -43,22 +44,28 @@
       <span>Liked Repositories</span>
     </h2>
 
-    {% if repos.count() %}
+    {% if liked_repos %}
       <div class="table-card">
         <table class="modern-table">
           <thead>
             <tr>
               <th>Repository</th>
               <th>Language</th>
+              <th class="text-right">Stars</th>
             </tr>
           </thead>
           <tbody>
-            {% for repo in repos %}
+            {% for repo in liked_repos %}
               <tr>
                 <td>
-                  <a href="{{ repo.html_url }}" target="_blank" rel="noopener" class="table-repo-link">
-                    {{ repo.full_name | truncate(48, True) }}
-                  </a>
+                  <div class="table-repo-cell">
+                    <a href="{{ repo.html_url }}" target="_blank" rel="noopener" class="table-repo-link" title="{{ repo.full_name }}">
+                      {{ repo.full_name | truncate(48, True) }}
+                    </a>
+                    {% if repo.description %}
+                      <span class="table-repo-desc">{{ repo.description }}</span>
+                    {% endif %}
+                  </div>
                 </td>
                 <td>
                   {% if repo.language %}
@@ -69,6 +76,14 @@
                   {% else %}
                     <span class="text-muted">N/A</span>
                   {% endif %}
+                </td>
+                <td class="text-right">
+                  <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
+                     class="stat-btn" title="View popularity analytics"
+                     data-ajax-modal="repoDetailsModal">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <span>{{ repo.stargazers_count|number_humanize }}</span>
+                  </a>
                 </td>
               </tr>
             {% endfor %}
@@ -82,6 +97,10 @@
       </div>
     {% endif %}
   </section>
+
+  <div id="repoDetailsModal" class="modal-backdrop" aria-labelledby="repoDetailsModalTitle" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg" id="repoDetailsModalContent"></div>
+  </div>
 {% endblock %}
 
 {% block js %}

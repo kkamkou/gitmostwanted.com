@@ -11,6 +11,13 @@
 
 {% block body %}
   <section class="page-section" id="gh-entries">
+    <div class="page-intro">
+      <div>
+        <h1 class="page-heading">Trending Repositories</h1>
+        <p class="page-subheading">Fastest growing GitHub projects over the past {{ rng }}</p>
+      </div>
+    </div>
+
     {% call repository_filter(languages) %}
       <div class="subnav-cluster">
         <div class="segmented-control" role="tablist" aria-label="Trending time range">
@@ -27,9 +34,6 @@
     <ul class="repo-grid">
       {% for (entry, attitude) in entries %}
         {% call(repo) repository(entry.repo) %}
-          {% if g.user %}
-            {{ user_attitude(repo.id, attitude) }}
-          {% endif %}
           <div class="stat-group">
             <span class="delta-badge" title="New stars in {{ rng }}">
               +{{ entry.cnt_watch|number_humanize }}
@@ -44,6 +48,9 @@
               </a>
             {% endif %}
           </div>
+          {% if g.user %}
+            {{ user_attitude(repo.id, attitude) }}
+          {% endif %}
         {% endcall %}
       {% else %}
         <li class="empty-state-item">

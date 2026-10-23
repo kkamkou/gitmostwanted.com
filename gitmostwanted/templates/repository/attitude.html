@@ -12,6 +12,18 @@
 
 {% block body %}
   <section class="page-section" id="gh-entries">
+    <div class="page-intro">
+      <div>
+        <h1 class="page-heading">Repository Attitude</h1>
+        <p class="page-subheading">Curate your personal radar by rating discovered repositories</p>
+      </div>
+      {% if repos.total %}
+        <div class="page-counter">
+          <span class="badge badge-mono">{{ repos.total }} {{ 'repository' if repos.total == 1 else 'repositories' }}</span>
+        </div>
+      {% endif %}
+    </div>
+
     {% call repository_filter(languages) %}
       <div class="subnav-cluster">
         <div class="segmented-control" role="tablist" aria-label="Filter by attitude">
@@ -33,7 +45,6 @@
       <ul class="repo-grid">
         {% for (repo, attitude) in repos.items %}
           {% call(repo) repository(repo) %}
-            {{ user_attitude(repo.id, attitude) }}
             {% if repo.mature %}
               <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
                  class="stat-btn" title="View popularity analytics"
@@ -43,6 +54,7 @@
                 <svg class="stat-chart-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
               </a>
             {% endif %}
+            {{ user_attitude(repo.id, attitude) }}
           {% endcall %}
         {% endfor %}
       </ul>

@@ -1,6 +1,8 @@
+{% set mean_rows = means.all() if means else [] %}
+
 <div class="modal-header">
   <h3 id="repoDetailsModalTitle" class="modal-title">
-    <span class="details-title-toggle" onclick="var el=document.getElementById('repository-details');if(el)el.classList.toggle('hide');">{{ entry.full_name }}</span>
+    <span class="details-title-toggle" title="Click to toggle technical metadata" onclick="var el=document.getElementById('repository-details');if(el)el.classList.toggle('hide');">{{ entry.full_name }}</span>
     <a href="{{ entry.html_url }}" target="_blank" rel="noopener" class="details-gh-link" title="Open on GitHub">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
     </a>
@@ -47,7 +49,13 @@
     <div class="details-description">{{ entry.description }}</div>
   {% endif %}
 
-  <div id="repoDetailsChart" class="details-chart">Generating the popularity chart&hellip;</div>
+  {% if mean_rows %}
+    <div id="repoDetailsChart" class="details-chart">Generating the popularity chart&hellip;</div>
+  {% else %}
+    <div id="repoDetailsChart" class="details-chart details-chart-empty">
+      <span>No historical popularity points recorded yet.</span>
+    </div>
+  {% endif %}
 
   {% if entry.topics %}
     <div class="topics-list">
@@ -70,17 +78,17 @@
   </div>
 </div>
 
-{% if means %}
+{% if mean_rows %}
   <script type="text/javascript">
     (function () {
       function renderRepoChart() {
         var holder = document.getElementById('repoDetailsChart');
-        if (!holder || typeof google === 'undefined' || !google.visualization) {
+        if (!holder || typeof google === 'undefined' || !google.visualization || !google.visualization.ScatterChart) {
           return;
         }
         var data = google.visualization.arrayToDataTable([
           ['Date', 'Popularity']
-          {% for mean in means %}
+          {% for mean in mean_rows %}
             , [new Date("{{ mean.created_at }}"), {{ '%.1f' | format(mean.value) }}]
           {% endfor %}
         ]);
@@ -136,13 +144,17 @@
         (new google.visualization.ScatterChart(holder)).draw(data, options);
       }
 
+      window.__gmwRenderActiveChart = renderRepoChart;
+
       if (typeof google !== 'undefined' && google.charts) {
-        if (!google.visualization || !google.visualization.ScatterChart) {
+        if (google.visualization && google.visualization.ScatterChart) {
+          setTimeout(renderRepoChart, 40);
+        } else {
           google.charts.load('current', {'packages': ['corechart']});
+          google.charts.setOnLoadCallback(function () {
+            setTimeout(renderRepoChart, 40);
+          });
         }
-        google.charts.setOnLoadCallback(function () {
-          setTimeout(renderRepoChart, 80);
-        });
       }
     })();
   </script>

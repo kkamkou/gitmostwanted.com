@@ -37,9 +37,23 @@
         var current = document.documentElement.getAttribute('data-theme') || 'dark';
         var next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('gmw-theme', next);
+        try {
+          localStorage.setItem('gmw-theme', next);
+        } catch (e) {}
+        if (typeof window.__gmwRenderActiveChart === 'function') {
+          window.__gmwRenderActiveChart();
+        }
       });
     }
+
+    window.addEventListener('resize', function () {
+      if (typeof window.__gmwRenderActiveChart === 'function') {
+        var openDetailsModal = document.querySelector('#repoDetailsModal.open');
+        if (openDetailsModal) {
+          window.__gmwRenderActiveChart();
+        }
+      }
+    });
 
     var userDropdown = document.querySelector('.user-dropdown');
     if (userDropdown) {
@@ -57,20 +71,26 @@
 
     var formFilter = document.querySelector('form.repository-filter');
     if (formFilter) {
-      formFilter.querySelectorAll('select, input[type="radio"], input[type="checkbox"]').forEach(function (input) {
+      formFilter.querySelectorAll('select, input[type="checkbox"]').forEach(function (input) {
         input.addEventListener('change', function () {
           formFilter.submit();
         });
       });
 
-      formFilter.querySelectorAll('input[type="radio"]').forEach(function (radio) {
+      var radios = formFilter.querySelectorAll('input[type="radio"]');
+      radios.forEach(function (radio) {
         var wasChecked = radio.checked;
         radio.addEventListener('click', function () {
           if (wasChecked) {
             radio.checked = false;
-            formFilter.submit();
+            wasChecked = false;
+          } else {
+            radios.forEach(function (other) {
+              other.__wasChecked = (other === radio);
+            });
+            wasChecked = true;
           }
-          wasChecked = radio.checked;
+          formFilter.submit();
         });
       });
 
@@ -175,6 +195,22 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         document.querySelectorAll('.modal-backdrop.open').forEach(closeModal);
+        if (userDropdown) {
+          userDropdown.classList.remove('open');
+        }
+        if (document.activeElement && document.activeElement.classList.contains('search-input')) {
+          document.activeElement.blur();
+        }
+        return;
+      }
+
+      if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes((document.activeElement || {}).tagName)) {
+        var searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        }
       }
     });
   });

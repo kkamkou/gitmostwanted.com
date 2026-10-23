@@ -1,39 +1,44 @@
 {% macro repository(repo) -%}
-  <li data-url="{{ repo.html_url }}" class="repo-card {{ repo.status }}">
+  <li data-url="{{ repo.html_url }}" class="repo-card {{ repo.status }} {{ 'is-solid-card' if repo.worth >= config.REPOSITORY_WORTH_SOLID }}">
     <div class="repo-card-inner">
       <div class="repo-card-top">
         <div class="repo-title-row">
           <h3 class="repo-title">
-            <a href="{{ repo.html_url }}" target="_blank" rel="noopener" class="repo-link {{ 'is-solid' if repo.worth >= config.REPOSITORY_WORTH_SOLID }}">
+            <a href="{{ repo.html_url }}" target="_blank" rel="noopener" title="{{ repo.full_name }}"
+               class="repo-link {{ 'is-solid' if repo.worth >= config.REPOSITORY_WORTH_SOLID }}">
               {% if '/' in repo.full_name %}
                 <span class="repo-owner">{{ repo.full_name.split('/')[0] }}/</span><span class="repo-name">{{ repo.full_name.split('/', 1)[1] }}</span>
               {% else %}
                 <span class="repo-name">{{ repo.full_name }}</span>
               {% endif %}
-              <span class="sr-only">{{ repo.full_name }}</span>
             </a>
           </h3>
 
           <div class="repo-badges">
             {% if repo.mature %}
-              <span class="status-pill pill-mature" title="Mature enough (Older than 3 months)">M</span>
+              <span class="status-pill pill-mature" title="Mature repository (Older than 3 months)">3m+</span>
             {% endif %}
 
-            {% if repo.status in ('promising', 'hopeless') %}
-              <span class="status-pill {{ 'pill-promising' if repo.status == 'promising' else 'pill-hopeless' }}"
-                    title="{{ 'Promising / Rising (Strong star growth momentum)' if repo.status == 'promising' else 'Hopeless (Declining star growth momentum)' }}">
-                {{ repo.status[0]|upper }}
+            {% if repo.status == 'promising' %}
+              <span class="status-pill pill-promising" title="Promising / Rising (Strong star growth momentum)">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <span>Rising</span>
+              </span>
+            {% elif repo.status == 'hopeless' %}
+              <span class="status-pill pill-hopeless" title="Hopeless (Declining star growth momentum)">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                <span>Cooling</span>
               </span>
             {% endif %}
 
             {% if repo.worth != config.REPOSITORY_WORTH_DEFAULT %}
               {% if repo.worth > config.REPOSITORY_WORTH_DEFAULT %}
-                <span class="status-pill pill-worth-up" title="Worth checking out">
-                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg>
+                <span class="status-pill pill-worth-up" title="Worth score: {{ repo.worth }} (Worth checking out)">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg>
                 </span>
               {% else %}
-                <span class="status-pill pill-worth-down" title="Losing popularity">
-                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>
+                <span class="status-pill pill-worth-down" title="Worth score: {{ repo.worth }} (Losing popularity)">
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
                 </span>
               {% endif %}
             {% endif %}
@@ -47,9 +52,9 @@
         {% endif %}
 
         {% if repo.homepage %}
-          <a href="{{ repo.homepage }}" target="_blank" rel="noopener" class="repo-homepage">
+          <a href="{{ repo.homepage }}" target="_blank" rel="noopener" class="repo-homepage" title="{{ repo.homepage }}">
             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-            <span>{{ repo.homepage }}</span>
+            <span>{{ repo.homepage | replace('https://', '') | replace('http://', '') | trim('/') }}</span>
           </a>
         {% endif %}
       </div>
@@ -60,6 +65,11 @@
             <span class="lang-badge">
               <span class="lang-dot" data-lang="{{ repo.language|lower }}"></span>
               <span>{{ repo.language }}</span>
+            </span>
+          {% else %}
+            <span class="lang-badge lang-badge-muted">
+              <span class="lang-dot"></span>
+              <span>Polyglot</span>
             </span>
           {% endif %}
         </div>
@@ -74,10 +84,10 @@
 
 {% macro repository_filter(languages) -%}
   {% set has_search = True if request.args.get('term') else False %}
-  {% set has_preset = True if (request.args.get('lang', 'All') != 'All' or 'status' in request.args or 'mature' in request.args) else False %}
+  {% set has_preset = True if (request.args.get('lang', 'All') != 'All' or request.args.get('status') in ('promising', 'hopeless') or 'mature' in request.args) else False %}
 
   <div class="toolbar-wrapper">
-    <form class="repository-filter">
+    <form class="repository-filter" method="get">
       <div class="toolbar-main">
         <div class="toolbar-slot">
           {{ caller() }}
@@ -93,6 +103,8 @@
                    aria-label="Search by name">
             {% if has_search %}
               <button type="button" class="search-clear" title="Clear search" data-clear-search aria-label="Clear search">&times;</button>
+            {% else %}
+              <kbd class="search-kbd" aria-hidden="true">/</kbd>
             {% endif %}
           </div>
 
@@ -120,14 +132,13 @@
           </div>
 
           <div class="filter-group">
-            <span class="filter-label">Momentum &amp; Maturity</span>
+            <span class="filter-label">Momentum</span>
             <div class="filter-chips">
-              <label class="chip-toggle" title="Show only Promising (Rising) repositories with star growth momentum">
+              <label class="chip-toggle" title="Showonly Promising (Rising) repositories with star growth momentum">
                 <input id="statusPromising" type="radio" value="promising" name="status"
                        {{ 'checked' if request.args.get('status') == 'promising' }}>
                 <span class="chip-body">
-                  <span class="status-pill pill-promising">P</span>
-                  <span>Promising</span>
+                  <span class="status-pill pill-promising">Rising</span>
                 </span>
               </label>
 
@@ -135,17 +146,21 @@
                 <input id="statusHopeless" type="radio" value="hopeless" name="status"
                        {{ 'checked' if request.args.get('status') == 'hopeless' }}>
                 <span class="chip-body">
-                  <span class="status-pill pill-hopeless">H</span>
-                  <span>Hopeless</span>
+                  <span class="status-pill pill-hopeless">Cooling</span>
                 </span>
               </label>
+            </div>
+          </div>
 
+          <div class="filter-group">
+            <span class="filter-label">Age</span>
+            <div class="filter-chips">
               <label class="chip-toggle" title="Show only mature enough (older than 3 months) repositories">
                 <input id="maturityFlag" type="checkbox" name="mature" value="1"
                        {{ 'checked' if request.args.get('mature') }}>
                 <span class="chip-body">
-                  <span class="status-pill pill-mature">M</span>
-                  <span>Mature (3m+)</span>
+                  <span class="status-pill pill-mature">3m+</span>
+                  <span>Mature only</span>
                 </span>
               </label>
             </div>
@@ -154,7 +169,7 @@
           <div class="filter-actions">
             <button type="button" class="btn btn-ghost btn-sm" data-reset-filters>
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-              <span>Reset</span>
+              <span>Reset All</span>
             </button>
           </div>
         </div>
