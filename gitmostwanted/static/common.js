@@ -21,6 +21,10 @@
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    var input = modal.querySelector('input.form-input');
+    if (input) {
+      input.focus();
+    }
   }
 
   function closeModal(modal) {
@@ -161,6 +165,10 @@
     document.querySelectorAll('[data-modal-open]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
+        if (userDropdown) {
+          userDropdown.classList.remove('open');
+          userDropdown.querySelector('.user-menu-trigger').setAttribute('aria-expanded', 'false');
+        }
         openModal(btn.getAttribute('data-modal-open'));
       });
     });
@@ -227,6 +235,7 @@
         document.querySelectorAll('.modal-backdrop.open').forEach(closeModal);
         if (userDropdown) {
           userDropdown.classList.remove('open');
+          userDropdown.querySelector('.user-menu-trigger').setAttribute('aria-expanded', 'false');
         }
         if (document.activeElement && document.activeElement.classList.contains('search-input')) {
           document.activeElement.blur();
