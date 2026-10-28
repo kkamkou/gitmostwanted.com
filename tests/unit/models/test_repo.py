@@ -48,6 +48,11 @@ class ModelsRepoTestCase(TestCase):
         entry.description = 'atext' * 60
         self.assertEqual(len(entry.description), 250)
 
+        limit = 10
+        entry.worth = limit + 5
+        self.assertEqual(entry.worth, limit)
+        self.assertEqual(entry.worth_max, limit)
+
     def test_handle_incorrect_status(self):
         self.assertRaises(ValueError, Repo, status='abc')
 

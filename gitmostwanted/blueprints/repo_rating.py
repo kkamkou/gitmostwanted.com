@@ -1,7 +1,9 @@
 from flask import Blueprint, g, render_template, request
+from sqlalchemy.sql import func
+
 from gitmostwanted.app import app, db
+from gitmostwanted.models.repo import Repo, RepoMean, RepoTopics
 from gitmostwanted.models.user import UserAttitude
-from gitmostwanted.models.repo import Repo, RepoTopics
 
 repo_rating = Blueprint('repo_rating', __name__)
 
@@ -16,8 +18,22 @@ repo_rating = Blueprint('repo_rating', __name__)
 @repo_rating.route('/topic/<topic>/<sort_by>/<filter_worth_by>/<int:page>')
 def top(page, sort_by, filter_worth_by, topic=None):
     query = Repo.filter_by_args(Repo.query, request.args).filter(Repo.mature.is_(True))
+    velocity = func.coalesce(
+        db.session.query(RepoMean.value)
+        .filter(RepoMean.repo_id == Repo.id)
+        .order_by(RepoMean.created_at.desc())
+        .limit(1)
+        .correlate(Repo)
+        .scalar_subquery(),
+        0.0
+    )
+    discovery = (
+        (velocity * 10 + Repo.forks_count * 2 + Repo.subscribers_count * 5) * 1000.0 /
+        (Repo.stargazers_count + 100)
+    )
     sorts = {
-        'wanted': [Repo.worth.desc(), Repo.stargazers_count.desc()],
+        'wanted': [Repo.worth.desc(), discovery.desc(), Repo.stargazers_count.desc()],
+        'momentum': [velocity.desc(), discovery.desc(), Repo.worth.desc()],
         'stars': [Repo.stargazers_count.desc()]
     }
 
@@ -42,6 +58,7 @@ def top(page, sort_by, filter_worth_by, topic=None):
     else:
         query = UserAttitude.join_by_user_and_repo(query, g.user.id, Repo.id)\
             .add_columns(UserAttitude.attitude)
+    query = query.add_columns(velocity.label('velocity'))
 
     entries = query.paginate(page=page if page > 0 else 1, per_page=20, error_out=False)
     if entries.pages and entries.pages < entries.page:

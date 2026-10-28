@@ -7,7 +7,7 @@ import responses
 
 from gitmostwanted.app import db
 from gitmostwanted.blueprints.user_oauth import login, url_next
-from gitmostwanted.models.repo import Repo, RepoTopics
+from gitmostwanted.models.repo import Repo, RepoMean, RepoTopics
 from gitmostwanted.models.user import User
 from gitmostwanted.web import app
 
@@ -57,6 +57,37 @@ class WebTestCase(TestCase):
 
         db.session.delete(repo_matched)
         db.session.delete(repo_other)
+        db.session.commit()
+
+    def test_top_discovery_and_momentum_ranking(self):
+        worth = 8
+        velocity = 14.5
+        passive = Repo(
+            id=103, full_name='org/passive', name='passive', html_url='https://example.com/3',
+            created_at=datetime.now(), mature=True, worth_max=worth, worth=worth,
+            stargazers_count=5000, forks_count=10, subscribers_count=5
+        )
+        emerging = Repo(
+            id=104, full_name='org/emerging', name='emerging', html_url='https://example.com/4',
+            created_at=datetime.now(), mature=True, worth_max=worth, worth=worth,
+            stargazers_count=300, forks_count=80, subscribers_count=40
+        )
+        mean = RepoMean(repo_id=emerging.id, value=velocity)
+        db.session.add_all([passive, emerging, mean])
+        db.session.commit()
+
+        wanted = self.app.get('/').data.decode('utf-8')
+        self.assertLess(wanted.index(emerging.full_name), wanted.index(passive.full_name))
+        self.assertIn('+{}/d'.format(velocity), wanted)
+        self.assertIn('<span>{}</span>'.format(worth), wanted)
+
+        momentum = self.app.get('/top/momentum/').data.decode('utf-8')
+        self.assertIn('The fastest growing repositories (solid)', momentum)
+        self.assertLess(momentum.index(emerging.full_name), momentum.index(passive.full_name))
+
+        db.session.delete(mean)
+        db.session.delete(passive)
+        db.session.delete(emerging)
         db.session.commit()
 
     def test_trending_ranges(self):

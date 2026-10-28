@@ -2,6 +2,8 @@
 
 {% if sort_by == 'stars' %}
   {% set page_title = 'The most popular repositories' %}
+{% elif sort_by == 'momentum' %}
+  {% set page_title = 'The fastest growing repositories' %}
 {% elif sort_by == 'wanted' %}
   {% set page_title = 'The most interesting repositories' %}
 {% endif %}
@@ -43,6 +45,10 @@
              href="{{ url_for('repo_rating.top', sort_by='wanted', page=1, filter_worth_by=filter_worth_by, topic=topic, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
             Wanted
           </a>
+          <a class="seg-item {{ 'active' if sort_by == 'momentum' }}"
+             href="{{ url_for('repo_rating.top', sort_by='momentum', page=1, filter_worth_by=filter_worth_by, topic=topic, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
+            Momentum
+          </a>
           <a class="seg-item {{ 'active' if sort_by == 'stars' }}"
              href="{{ url_for('repo_rating.top', sort_by='stars', page=1, filter_worth_by=filter_worth_by, topic=topic, lang=f_lang, status=f_status, mature=f_mature, term=f_term) }}">
             Stars
@@ -73,15 +79,22 @@
 
     {% if repos.items %}
       <ul class="repo-grid">
-        {% for (repo, attitude) in repos.items %}
+        {% for (repo, attitude, velocity) in repos.items %}
           {% call(repo) repository(repo) %}
-            <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
-               class="stat-btn" title="View popularity analytics"
-               data-ajax-modal="repoDetailsModal">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span>{{ repo.stargazers_count|number_humanize }}</span>
-              <svg class="stat-chart-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-            </a>
+            <div class="stat-group">
+              {% if velocity and velocity >= 1 %}
+                <span class="delta-badge" title="28-day activity velocity ({{ velocity|round(1) }} score/day)">
+                  +{{ velocity|round(1) }}/d
+                </span>
+              {% endif %}
+              <a href="{{ url_for('repo_information.details', repo_id=repo.id) }}"
+                 class="stat-btn" title="View popularity analytics"
+                 data-ajax-modal="repoDetailsModal">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>{{ repo.stargazers_count|number_humanize }}</span>
+                <svg class="stat-chart-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              </a>
+            </div>
             {% if g.user %}
               {{ user_attitude(repo.id, attitude) }}
             {% endif %}

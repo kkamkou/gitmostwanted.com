@@ -35,10 +35,12 @@
               {% if repo.worth > config.REPOSITORY_WORTH_DEFAULT %}
                 <span class="status-pill pill-worth-up" title="Worth score: {{ repo.worth }} (Worth checking out)">
                   <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg>
+                  <span>{{ repo.worth }}</span>
                 </span>
               {% else %}
                 <span class="status-pill pill-worth-down" title="Worth score: {{ repo.worth }} (Losing popularity)">
                   <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                  <span>{{ repo.worth }}</span>
                 </span>
               {% endif %}
             {% endif %}

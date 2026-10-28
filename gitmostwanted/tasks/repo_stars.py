@@ -55,7 +55,21 @@ def stars_mature(num_days):
 def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
     query = """
         SELECT
-            COUNT(1) AS stars,
+            CAST(
+                ROUND(
+                    SQRT(
+                        (
+                            COUNTIF(type = 'ForkEvent') * 3 +
+                            COUNTIF(type IN ('IssuesEvent', 'DiscussionEvent')) * 2 +
+                            COUNTIF(type = 'WatchEvent') + 1
+                        ) * (
+                            COUNTIF(type = 'ReleaseEvent') * 5 +
+                            COUNTIF(type IN ('PullRequestEvent', 'PullRequestReviewEvent')) * 3 +
+                            COUNTIF(type = 'PushEvent') + 1
+                        )
+                    ) - 1
+                ) AS INT64
+            ) AS stars,
             EXTRACT(YEAR FROM created_at) AS y,
             EXTRACT(DAYOFYEAR FROM created_at) AS doy,
             EXTRACT(MONTH FROM created_at) AS mon
@@ -63,7 +77,11 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
         WHERE
             _TABLE_SUFFIX BETWEEN '{start_suffix}' AND '{end_suffix}'
             AND repo.id = {id}
-            AND type IN ('WatchEvent', 'ForkEvent')
+            AND type IN (
+                'WatchEvent', 'ForkEvent', 'ReleaseEvent',
+                'PullRequestEvent', 'PullRequestReviewEvent',
+                'IssuesEvent', 'DiscussionEvent', 'PushEvent'
+            )
         GROUP BY y, mon, doy
     """
     return query.format(

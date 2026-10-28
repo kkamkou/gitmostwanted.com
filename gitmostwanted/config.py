@@ -6,6 +6,7 @@ class Config:
     DEBUG_FILE = '/tmp/gmw.log'
 
     # Application related
+    REPOSITORY_WORTH_MAX = 10
     REPOSITORY_WORTH_SOLID = 6
     REPOSITORY_WORTH_DEFAULT = 3
     REPOSITORY_STARS_MIN = 100

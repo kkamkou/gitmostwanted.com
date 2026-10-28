@@ -71,8 +71,10 @@ class Repo(db.Model):
         if key == 'description':
             value = str(TextWithoutSmilies(str(TextNormalized(value[:250])))) if value else None
 
-        if key == 'worth' and (self.worth_max or 0) < value:
-            self.worth_max = value
+        if key == 'worth':
+            value = min(value, app.config['REPOSITORY_WORTH_MAX'])
+            if (self.worth_max or 0) < value:
+                self.worth_max = value
 
         super().__setattr__(key, value)
 
