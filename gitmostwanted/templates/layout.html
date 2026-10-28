@@ -1,3 +1,4 @@
+{% from "macros/messages.html" import flashed_messages %}
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
   <head>
@@ -102,6 +103,10 @@
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
                     <span>Unchecked</span>
                   </a>
+                  <a href="#repoSubmitModal" class="dropdown-item" data-modal-open="repoSubmitModal">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Add Repository</span>
+                  </a>
                   <div class="dropdown-divider"></div>
                   <a href="{{ url_for('user_oauth.logout') }}" class="dropdown-item dropdown-item-danger">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -115,11 +120,40 @@
       </header>
 
       <main class="site-main container">
+        {{ flashed_messages() }}
         {% block body %}{% endblock %}
       </main>
 
       {% include 'footer.html' %}
     </div>
+
+    {% if g.user %}
+      <div id="repoSubmitModal" class="modal-backdrop" aria-labelledby="repoSubmitModalTitle" aria-hidden="true" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-header">
+            <h3 id="repoSubmitModalTitle" class="modal-title">Add Repository</h3>
+            <button type="button" class="modal-close" data-modal-close aria-label="Close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Submit a GitHub repository that is missing from our database. Eligible repositories must be public, non-forked, active, and have at least <code>{{ config.REPOSITORY_STARS_MIN }}</code> stars.
+            </p>
+            <form action="{{ url_for('repo_information.add') }}" method="post" class="repo-submit-form">
+              <div class="form-field">
+                <label class="filter-label" for="repoFullNameInput">Repository URL or Full Name</label>
+                <input id="repoFullNameInput" type="text" name="full_name" maxlength="150" required
+                       placeholder="owner/repository or https://github.com/owner/repository"
+                       class="form-input">
+              </div>
+              <div class="modal-actions">
+                <button type="button" class="btn btn-ghost btn-sm" data-modal-close>Cancel</button>
+                <button type="submit" class="btn btn-primary btn-sm">Submit Repository</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
 
     <div id="whatIsGmwModal" class="modal-backdrop" aria-labelledby="whatIsGmwModalTitle" aria-hidden="true" role="dialog">
       <div class="modal-dialog">

@@ -3,11 +3,7 @@
 {% set page_title = account.username %}
 {% set liked_repos = repos.all() %}
 
-{% from "macros/messages.html" import flashed_messages %}
-
 {% block body %}
-  {{ flashed_messages() }}
-
   <section class="profile-header-card">
     <div class="profile-identity">
       <div class="profile-avatar">{{ account.username[0]|upper }}</div>

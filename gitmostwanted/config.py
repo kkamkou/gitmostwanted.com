@@ -8,6 +8,7 @@ class Config:
     # Application related
     REPOSITORY_WORTH_SOLID = 6
     REPOSITORY_WORTH_DEFAULT = 3
+    REPOSITORY_STARS_MIN = 100
 
     # Flask
     DEBUG = True

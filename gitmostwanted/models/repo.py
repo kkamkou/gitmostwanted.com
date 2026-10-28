@@ -15,7 +15,7 @@ class RepoTopics(db.Model):
     __tablename__ = 'repos_topics'
     __table_args__ = (db.Index('ix_repos_topics_repo_id_title', 'repo_id', 'title'),)
 
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(db.BigInteger().with_variant(db.Integer, 'sqlite'), primary_key=True)
     repo_id = db.Column(
         db.BigInteger,
         db.ForeignKey('repos.id', name='fk_repos_topics_repo_id', ondelete='CASCADE'),
@@ -71,7 +71,7 @@ class Repo(db.Model):
         if key == 'description':
             value = str(TextWithoutSmilies(str(TextNormalized(value[:250])))) if value else None
 
-        if key == 'worth' and self.worth_max < value:
+        if key == 'worth' and (self.worth_max or 0) < value:
             self.worth_max = value
 
         super().__setattr__(key, value)
