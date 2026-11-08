@@ -2,12 +2,22 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from gitmostwanted.tasks.repo_most_starred import (
-    most_starred_week, most_starred_month, most_starred_quarter, most_starred_year,
-    most_starred_by_span
+    most_starred_day, most_starred_week, most_starred_month, most_starred_quarter,
+    most_starred_year, most_starred_by_span
 )
 
 
 class TasksRepoMostStarredTestCase(TestCase):
+    @patch('gitmostwanted.tasks.repo_most_starred.most_starred_sync')
+    def test_most_starred_day(self, mock_sync):
+        most_starred_day()
+        mock_sync.assert_called_once()
+        args, _ = mock_sync.call_args
+        self.assertEqual(args[0], 'ReportAllDaily')
+        self.assertIn("COUNTIF(type = 'ForkEvent') * 3", args[1])
+        self.assertIn('SQRT(', args[1])
+        self.assertNotIn("WHERE type = 'WatchEvent'", args[1])
+
     @patch('gitmostwanted.tasks.repo_most_starred.most_starred_sync')
     def test_most_starred_by_span(self, mock_sync):
         most_starred_by_span('ReportAllQuarterly', 'quarter')
@@ -15,6 +25,16 @@ class TasksRepoMostStarredTestCase(TestCase):
         args, _ = mock_sync.call_args
         self.assertEqual(args[0], 'ReportAllQuarterly')
         self.assertIn('_TABLE_SUFFIX BETWEEN', args[1])
+        self.assertIn("COUNTIF(type = 'ForkEvent') * 3", args[1])
+        self.assertIn('SQRT(', args[1])
+        self.assertNotIn("type = 'WatchEvent'\n", args[1])
+        for event in (
+            'PushEvent', 'CreateEvent', 'IssuesEvent', 'PullRequestReviewCommentEvent',
+            'ReleaseEvent', 'GollumEvent', 'MemberEvent', 'DiscussionEvent',
+            'PullRequestEvent', 'DeleteEvent', 'PullRequestReviewEvent', 'IssueCommentEvent',
+            'WatchEvent', 'ForkEvent', 'PublicEvent', 'CommitCommentEvent'
+        ):
+            self.assertIn(event, args[1])
 
     @patch('gitmostwanted.tasks.repo_most_starred.most_starred_by_span')
     def test_most_starred_tasks(self, mock_by_span):

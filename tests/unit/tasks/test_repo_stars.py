@@ -28,11 +28,16 @@ class TasksRepoStarsTestCase(TestCase):
         self.assertIn('repo.id = {}'.format(repo_id), query)
         self.assertIn("COUNTIF(type = 'ForkEvent') * 3", query)
         self.assertIn("COUNTIF(type IN ('IssuesEvent', 'DiscussionEvent')) * 2", query)
+        self.assertIn("COUNTIF(type IN ('WatchEvent', 'IssueCommentEvent')) + 1", query)
+        self.assertIn("COUNTIF(type IN ('ReleaseEvent', 'PublicEvent')) * 5", query)
+        self.assertIn("'PullRequestEvent', 'PullRequestReviewEvent', 'MemberEvent'", query)
+        self.assertIn("COUNTIF(type = 'GollumEvent') * 2", query)
         self.assertIn('SQRT(', query)
+        self.assertNotIn('AND type IN', query)
         for event in (
-            'WatchEvent', 'ForkEvent', 'ReleaseEvent',
-            'PullRequestEvent', 'PullRequestReviewEvent',
-            'IssuesEvent', 'DiscussionEvent', 'PushEvent'
+            'PushEvent', 'CreateEvent', 'IssuesEvent', 'PullRequestReviewCommentEvent',
+            'ReleaseEvent', 'GollumEvent', 'MemberEvent', 'DiscussionEvent',
+            'PullRequestEvent', 'DeleteEvent', 'PullRequestReviewEvent', 'IssueCommentEvent',
+            'WatchEvent', 'ForkEvent', 'PublicEvent', 'CommitCommentEvent'
         ):
             self.assertIn(event, query)
-

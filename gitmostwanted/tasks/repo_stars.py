@@ -61,11 +61,17 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
                         (
                             COUNTIF(type = 'ForkEvent') * 3 +
                             COUNTIF(type IN ('IssuesEvent', 'DiscussionEvent')) * 2 +
-                            COUNTIF(type = 'WatchEvent') + 1
+                            COUNTIF(type IN ('WatchEvent', 'IssueCommentEvent')) + 1
                         ) * (
-                            COUNTIF(type = 'ReleaseEvent') * 5 +
-                            COUNTIF(type IN ('PullRequestEvent', 'PullRequestReviewEvent')) * 3 +
-                            COUNTIF(type = 'PushEvent') + 1
+                            COUNTIF(type IN ('ReleaseEvent', 'PublicEvent')) * 5 +
+                            COUNTIF(type IN (
+                                'PullRequestEvent', 'PullRequestReviewEvent', 'MemberEvent'
+                            )) * 3 +
+                            COUNTIF(type = 'GollumEvent') * 2 +
+                            COUNTIF(type IN (
+                                'PushEvent', 'CreateEvent', 'DeleteEvent',
+                                'PullRequestReviewCommentEvent', 'CommitCommentEvent'
+                            )) + 1
                         )
                     ) - 1
                 ) AS INT64
@@ -77,11 +83,6 @@ def query_stars_by_repo(repo_id: int, date_from: datetime, date_to: datetime):
         WHERE
             _TABLE_SUFFIX BETWEEN '{start_suffix}' AND '{end_suffix}'
             AND repo.id = {id}
-            AND type IN (
-                'WatchEvent', 'ForkEvent', 'ReleaseEvent',
-                'PullRequestEvent', 'PullRequestReviewEvent',
-                'IssuesEvent', 'DiscussionEvent', 'PushEvent'
-            )
         GROUP BY y, mon, doy
     """
     return query.format(

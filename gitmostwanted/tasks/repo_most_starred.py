@@ -12,11 +12,32 @@ from gitmostwanted.services import bigquery
 
 SQL_MOST_STARRED_RANGE = """
     SELECT
-        repo.id, repo.name, COUNT(1) AS cnt
+        repo.id,
+        repo.name,
+        CAST(
+            ROUND(
+                SQRT(
+                    (
+                        COUNTIF(type = 'ForkEvent') * 3 +
+                        COUNTIF(type IN ('IssuesEvent', 'DiscussionEvent')) * 2 +
+                        COUNTIF(type IN ('WatchEvent', 'IssueCommentEvent')) + 1
+                    ) * (
+                        COUNTIF(type IN ('ReleaseEvent', 'PublicEvent')) * 5 +
+                        COUNTIF(type IN (
+                            'PullRequestEvent', 'PullRequestReviewEvent', 'MemberEvent'
+                        )) * 3 +
+                        COUNTIF(type = 'GollumEvent') * 2 +
+                        COUNTIF(type IN (
+                            'PushEvent', 'CreateEvent', 'DeleteEvent',
+                            'PullRequestReviewCommentEvent', 'CommitCommentEvent'
+                        )) + 1
+                    )
+                ) - 1
+            ) AS INT64
+        ) AS cnt
     FROM `githubarchive.day.2*`
     WHERE
         _TABLE_SUFFIX BETWEEN '{0}' AND '{1}'
-        AND type = 'WatchEvent'
     GROUP BY repo.id, repo.name
     ORDER BY cnt DESC
     LIMIT 50
@@ -36,9 +57,30 @@ def most_starred_day():
         'ReportAllDaily',
         """
             SELECT
-                repo.id, repo.name, COUNT(1) AS cnt
+                repo.id,
+                repo.name,
+                CAST(
+                    ROUND(
+                        SQRT(
+                            (
+                                COUNTIF(type = 'ForkEvent') * 3 +
+                                COUNTIF(type IN ('IssuesEvent', 'DiscussionEvent')) * 2 +
+                                COUNTIF(type IN ('WatchEvent', 'IssueCommentEvent')) + 1
+                            ) * (
+                                COUNTIF(type IN ('ReleaseEvent', 'PublicEvent')) * 5 +
+                                COUNTIF(type IN (
+                                    'PullRequestEvent', 'PullRequestReviewEvent', 'MemberEvent'
+                                )) * 3 +
+                                COUNTIF(type = 'GollumEvent') * 2 +
+                                COUNTIF(type IN (
+                                    'PushEvent', 'CreateEvent', 'DeleteEvent',
+                                    'PullRequestReviewCommentEvent', 'CommitCommentEvent'
+                                )) + 1
+                            )
+                        ) - 1
+                    ) AS INT64
+                ) AS cnt
             FROM `githubarchive.day.{0}`
-            WHERE type = 'WatchEvent'
             GROUP BY repo.id, repo.name
             ORDER BY cnt DESC
             LIMIT 50
